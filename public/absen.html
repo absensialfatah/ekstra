@@ -101,13 +101,19 @@
           ⚠️ NISN belum ditemukan pada daftar anggota ekskul ini. Mohon cek kembali nomor NISN yang Anda ketik.
         </div>
 
+        <!-- Anti-Titip Absen Device Lock Alert -->
+        <div id="studentDeviceLockedHint" style="display: none; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: #be123c; line-height: 1.45;">
+          ⛔ <strong>Peringatan Anti-Titip Absen:</strong><br>
+          <span id="deviceLockedMessage">HP ini sudah terikat untuk presensi siswa lain. 1 HP hanya dapat digunakan untuk 1 siswa.</span>
+        </div>
+
         <button type="submit" class="btn btn-primary btn-lg" id="btnSubmitCheckin" style="width: 100%; border-radius: 12px; padding: 0.9rem; font-size: 1.05rem;" disabled>
           ✓ Konfirmasi Hadir Sekarang
         </button>
       </form>
 
       <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 1rem;">
-        🔒 Presensi divalidasi langsung oleh sistem MTs Al Fatah. Satu akun hanya dapat absen 1 kali per sesi.
+        🔒 Dilindungi Sistem Anti-Titip Absen MTs Al Fatah. 1 HP hanya dapat digunakan untuk 1 siswa.
       </p>
     </div>
 
@@ -157,6 +163,6 @@
 
   </div>
 
-  <script src="/js/student.js?v=2"></script>
+  <script src="/js/student.js?v=3"></script>
 </body>
 </html>

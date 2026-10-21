@@ -651,9 +651,16 @@ app.get('/api/session/stream/:sessionId', (req, res) => {
 
 // API: Student Check-in via QR Scan
 app.post('/api/attendance/scan', (req, res) => {
-  const { sessionId, token, nis } = req.body;
+  const { sessionId, token, nis, deviceId } = req.body;
   if (!sessionId || !token || !nis) {
     return res.status(400).json({ error: 'Data absensi tidak lengkap (sessionId, token, atau NIS kosong).' });
+  }
+
+  const cleanDeviceId = String(deviceId || '').trim();
+  if (!cleanDeviceId) {
+    return res.status(400).json({
+      error: 'ID Perangkat tidak terdeteksi. Silakan muat ulang (refresh) halaman presensi di browser HP Anda.'
+    });
   }
 
   const db = readDB();
@@ -713,6 +720,21 @@ app.post('/api/attendance/scan', (req, res) => {
     });
   }
 
+  // 1 HP = 1 Siswa Check (Anti-Titip Absen Device Lock)
+  // Periksa apakah perangkat ini sudah pernah digunakan untuk presensi siswa lain pada tanggal hari ini
+  const deviceUsed = db.attendances.find(a => {
+    if (a.date !== session.date) return false;
+    if (!a.deviceId || a.deviceId !== cleanDeviceId) return false;
+    const isSameStudent = (a.nisn && a.nisn === studentKey) || (a.nis && a.nis === studentKey);
+    return !isSameStudent;
+  });
+
+  if (deviceUsed) {
+    return res.status(403).json({
+      error: `⛔ Akses Ditolak (Anti-Titip Absen): HP ini sudah digunakan untuk presensi siswa lain (${deviceUsed.studentName} - ${deviceUsed.class}). 1 HP hanya boleh digunakan untuk 1 siswa!`
+    });
+  }
+
   // Create attendance record
   const record = {
     id: `att-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
@@ -729,7 +751,8 @@ app.post('/api/attendance/scan', (req, res) => {
     method: 'qr_scan',
     timestamp: new Date().toISOString(),
     ip: req.ip || req.headers['x-forwarded-for'] || '127.0.0.1',
-    userAgent: req.headers['user-agent'] || ''
+    userAgent: req.headers['user-agent'] || '',
+    deviceId: cleanDeviceId
   };
 
   db.attendances.push(record);

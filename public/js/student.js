@@ -32,6 +32,53 @@ document.addEventListener('DOMContentLoaded', async () => {
   const receiptTime = document.getElementById('receiptTime');
   const btnDoneClose = document.getElementById('btnDoneClose');
 
+  const studentDeviceLockedHint = document.getElementById('studentDeviceLockedHint');
+  const deviceLockedMessage = document.getElementById('deviceLockedMessage');
+
+  // --- Device Identifier Helper (Anti-Titip Absen: 1 HP = 1 Siswa) ---
+  function getOrCreateDeviceId() {
+    const STORAGE_KEY = 'mts_device_uuid';
+    const COOKIE_KEY = 'mts_dev_id';
+    let id = null;
+
+    try {
+      id = localStorage.getItem(STORAGE_KEY);
+    } catch (e) {}
+
+    if (!id) {
+      const match = document.cookie.match(new RegExp('(^|;\\s*)' + COOKIE_KEY + '=([^;]+)'));
+      if (match && match[2]) {
+        id = decodeURIComponent(match[2]);
+      }
+    }
+
+    if (!id) {
+      try {
+        id = sessionStorage.getItem(STORAGE_KEY);
+      } catch (e) {}
+    }
+
+    if (!id) {
+      const rand = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+      id = 'dev_' + Date.now().toString(36) + '_' + rand;
+    }
+
+    try { localStorage.setItem(STORAGE_KEY, id); } catch (e) {}
+    try { sessionStorage.setItem(STORAGE_KEY, id); } catch (e) {}
+    try {
+      document.cookie = `${COOKIE_KEY}=${encodeURIComponent(id)}; max-age=315360000; path=/; SameSite=Lax`;
+    } catch (e) {}
+
+    return id;
+  }
+
+  // Pre-initialize device ID
+  const currentDeviceId = getOrCreateDeviceId();
+
+  // Check if this device is already bound to a student
+  const boundNisn = (localStorage.getItem('mts_bound_nisn') || '').trim();
+  const boundStudentName = (localStorage.getItem('mts_bound_student_name') || '').trim();
+
   let sessionData = null;
   let enrolledStudents = [];
   let selectedStudent = null;
@@ -117,6 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const studentNis = String(student.nisn || student.nis || '').trim();
       studentIdentityPreview.style.display = 'block';
       if (studentNotFoundHint) studentNotFoundHint.style.display = 'none';
+      if (studentDeviceLockedHint) studentDeviceLockedHint.style.display = 'none';
       previewName.textContent = student.name;
       previewClass.textContent = `NISN: ${studentNis} • Kelas: ${student.class} • ${student.gender === 'L' ? 'Laki-laki' : 'Perempuan'}`;
       previewAvatar.textContent = student.name.charAt(0).toUpperCase();
@@ -133,7 +181,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!query) {
       selectStudent(null);
       if (studentNotFoundHint) studentNotFoundHint.style.display = 'none';
+      if (studentDeviceLockedHint) studentDeviceLockedHint.style.display = 'none';
       return;
+    }
+
+    // Anti-Titip Absen: Proteksi 1 HP = 1 Siswa
+    if (boundNisn && query !== boundNisn.toLowerCase()) {
+      selectStudent(null);
+      if (studentNotFoundHint) studentNotFoundHint.style.display = 'none';
+      if (studentDeviceLockedHint) {
+        studentDeviceLockedHint.style.display = 'block';
+        if (deviceLockedMessage) {
+          deviceLockedMessage.innerHTML = `Perangkat HP ini sudah terdaftar untuk presensi siswa: <strong>${boundStudentName || 'Siswa Lain'}</strong> (NISN: <code>${boundNisn}</code>).<br>1 HP hanya dapat digunakan untuk 1 siswa. Siswa lain yang tidak membawa HP dipersilakan melapor ke Guru Pembimbing untuk absensi manual.`;
+        }
+      }
+      return;
+    } else {
+      if (studentDeviceLockedHint) studentDeviceLockedHint.style.display = 'none';
     }
 
     const found = enrolledStudents.find(s => 
@@ -164,6 +228,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnSubmitCheckin.textContent = 'Memverifikasi Kehadiran...';
 
     try {
+      const activeDeviceId = getOrCreateDeviceId();
       const response = await fetch('/api/attendance/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -171,7 +236,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           sessionId,
           token,
           nis: String(selectedStudent.nisn || selectedStudent.nis || '').trim(),
-          nisn: String(selectedStudent.nisn || selectedStudent.nis || '').trim()
+          nisn: String(selectedStudent.nisn || selectedStudent.nis || '').trim(),
+          deviceId: activeDeviceId
         })
       });
 
@@ -184,14 +250,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       if (!response.ok) {
+        if (studentDeviceLockedHint && resData.error && resData.error.includes('Anti-Titip Absen')) {
+          studentDeviceLockedHint.style.display = 'block';
+          if (deviceLockedMessage) deviceLockedMessage.innerHTML = resData.error;
+        }
         alert(resData.error || 'Presensi gagal.');
         btnSubmitCheckin.disabled = false;
         btnSubmitCheckin.textContent = '✓ Konfirmasi Hadir Sekarang';
         return;
       }
 
-      // Save NISN to localStorage for next time
+      // Save NISN & Student Name to permanently bind device (Anti-Titip Absen)
       const studentNis = String(selectedStudent.nisn || selectedStudent.nis || '').trim();
+      localStorage.setItem('mts_device_uuid', activeDeviceId);
+      localStorage.setItem('mts_bound_nisn', studentNis);
+      localStorage.setItem('mts_bound_student_name', selectedStudent.name);
       localStorage.setItem('mts_extra_nisn', studentNis);
       localStorage.setItem('mts_extra_nis', studentNis);
 
@@ -218,3 +291,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.href = '/';
   });
 });
+
