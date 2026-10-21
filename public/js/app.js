@@ -1435,6 +1435,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Helper: Cek kecocokan ekskul siswa (fleksibel: mencocokkan ID ekskul maupun Nama Ekskul)
+  function studentMatchesEkskul(student, ekskulId) {
+    if (!student || !student.ekskuls || !Array.isArray(student.ekskuls)) return false;
+    if (!ekskulId || ekskulId === 'all') return true;
+    if (ekskulId === 'none') return student.ekskuls.length === 0;
+
+    const targetEkskul = (state.ekskuls || []).find(e => e.id === ekskulId);
+    const targetId = String(ekskulId).toLowerCase().trim();
+    const targetName = targetEkskul ? String(targetEkskul.name).toLowerCase().trim() : '';
+
+    return student.ekskuls.some(item => {
+      if (!item) return false;
+      const clean = String(item).toLowerCase().trim();
+      return clean === targetId || (targetName && clean === targetName);
+    });
+  }
+
   // Render Master Ekstrakurikuler di Tab 4 (Data Anggota & Ekskul)
   function renderMasterEkskuls() {
     const grid = document.getElementById('masterEkskulGrid');
@@ -1469,9 +1486,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ? '<span class="ekskul-method-badge badge-manual">✍️ Manual Guru</span>'
         : '<span class="ekskul-method-badge badge-qr">📱 Scan QR</span>';
 
-      const memberCount = e.memberCount !== undefined
-        ? e.memberCount
-        : allMasterStudents.filter(s => Array.isArray(s.ekskuls) && s.ekskuls.includes(e.id)).length;
+      // Hitung total anggota secara konsisten menggunakan studentMatchesEkskul
+      const memberCount = (allMasterStudents && allMasterStudents.length > 0)
+        ? allMasterStudents.filter(s => studentMatchesEkskul(s, e.id)).length
+        : (e.memberCount !== undefined ? e.memberCount : 0);
 
       card.innerHTML = `
         <div class="ekskul-card-header">
@@ -1489,23 +1507,21 @@ document.addEventListener('DOMContentLoaded', () => {
           <span>📍 <strong>Lokasi:</strong> ${e.lokasi || '-'}</span>
           <span>👥 <strong>Total Anggota:</strong> ${memberCount} Siswa</span>
         </div>
-        <div style="display: flex; gap: 0.5rem; border-top: 1px solid var(--border-light, #f1f5f9); padding-top: 0.75rem;">
-          <button type="button" class="btn btn-outline btn-sm btn-filter-ekskul-members" data-id="${e.id}" style="flex: 1; font-size: 0.78rem; font-weight: 600;">
+        <div style="border-top: 1px solid var(--border-light, #f1f5f9); padding-top: 0.75rem;">
+          <button type="button" class="btn btn-outline btn-sm btn-filter-ekskul-members" data-id="${e.id}" style="width: 100%; font-size: 0.78rem; font-weight: 600;">
             👥 Filter Siswa (${memberCount})
-          </button>
-          <button type="button" class="btn btn-primary btn-sm btn-edit-master-ekskul-direct" data-id="${e.id}" style="font-size: 0.78rem; font-weight: 600;">
-            ✏️ Edit
           </button>
         </div>
       `;
 
-      // Edit buttons
-      card.querySelectorAll('.btn-edit-master-ekskul, .btn-edit-master-ekskul-direct').forEach(b => {
-        b.addEventListener('click', (ev) => {
+      // Edit button (hanya dari tombol pensil di header kartu berdampingan dengan tombol hapus)
+      const btnEdit = card.querySelector('.btn-edit-master-ekskul');
+      if (btnEdit) {
+        btnEdit.addEventListener('click', (ev) => {
           ev.stopPropagation();
           openEkskulModal(e);
         });
-      });
+      }
 
       // Delete button
       const btnDel = card.querySelector('.btn-delete-master-ekskul');
@@ -1521,12 +1537,23 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btnFilter) {
         btnFilter.addEventListener('click', (ev) => {
           ev.stopPropagation();
+          // Jika tampilan section siswa sedang disembunyikan oleh sub-pill, tampilkan kembali
+          const sec = document.getElementById('sectionMasterSiswa');
+          if (sec && sec.style.display === 'none') {
+            const btnAll = document.getElementById('btnSubPillAll');
+            if (btnAll) {
+              subPillBtns.forEach(b => b.classList.remove('active'));
+              btnAll.classList.add('active');
+            }
+            if (sectionMasterEkskul) sectionMasterEkskul.style.display = 'block';
+            sec.style.display = 'block';
+          }
+
           if (siswaMasterEkskulFilter) {
             siswaMasterEkskulFilter.value = e.id;
             siswaPagination.currentPage = 1;
             renderSiswaMaster();
             // Scroll to student section
-            const sec = document.getElementById('sectionMasterSiswa');
             if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         });
@@ -1629,7 +1656,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (ekskulFilter === 'none') {
         matchEkskul = !s.ekskuls || s.ekskuls.length === 0;
       } else if (ekskulFilter !== 'all') {
-        matchEkskul = Array.isArray(s.ekskuls) && s.ekskuls.includes(ekskulFilter);
+        matchEkskul = studentMatchesEkskul(s, ekskulFilter);
       }
 
       const matchClass = classFilter === 'all' || s.class === classFilter;
@@ -1686,9 +1713,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const tr = document.createElement('tr');
       tr.style.borderBottom = '1px solid var(--border)';
 
-      const ekskulBadges = (s.ekskuls || []).map(ekskulId => {
-        const found = state.ekskuls.find(e => e.id === ekskulId);
-        const name = found ? found.name : ekskulId;
+      const ekskulBadges = (s.ekskuls || []).map(rawEkskul => {
+        const cleanRaw = String(rawEkskul).toLowerCase().trim();
+        const found = (state.ekskuls || []).find(e => 
+          (e.id && e.id.toLowerCase() === cleanRaw) || (e.name && e.name.toLowerCase().trim() === cleanRaw)
+        );
+        const name = found ? found.name : rawEkskul;
         const icon = found ? found.icon : '⭐';
         const isQr = found ? found.method === 'qr' : false;
         return `<span class="badge ${isQr ? 'badge-qr' : 'badge-manual'}" style="margin-right: 4px; display: inline-flex; align-items: center; gap: 3px;">${icon} ${name}</span>`;

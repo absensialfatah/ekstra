@@ -148,9 +148,15 @@ async function pullFromGoogleSheets(force = false) {
     if (json.data.students && json.data.students.length > 0) {
       db.students = json.data.students.map(s => {
         const nisnVal = String(s.nisn || s.nis || '').trim();
-        const ekskulList = typeof s.ekskul_diikuti__pisahkan_koma_ === 'string'
+        let ekskulList = typeof s.ekskul_diikuti__pisahkan_koma_ === 'string'
           ? s.ekskul_diikuti__pisahkan_koma_.split(',').map(x => x.trim()).filter(Boolean)
           : (Array.isArray(s.ekskuls) ? s.ekskuls : []);
+        // Normalisasi entri ekskul siswa ke ID ekskul terdaftar jika cocok via Nama / ID
+        ekskulList = ekskulList.map(raw => {
+          const clean = String(raw).toLowerCase().trim();
+          const match = db.ekskuls.find(e => (e.id && e.id.toLowerCase() === clean) || (e.name && e.name.toLowerCase().trim() === clean));
+          return match ? match.id : raw;
+        });
         return {
           nisn: nisnVal,
           nis: nisnVal,
@@ -247,6 +253,21 @@ function writeDB(data) {
   }
 }
 
+// Helper: Memeriksa apakah siswa terdaftar pada suatu ekskul (mencocokkan via ID maupun Nama Ekskul secara fleksibel)
+function matchesEkskul(studentEkskuls, targetEkskulId, ekskulsList = []) {
+  if (!Array.isArray(studentEkskuls) || studentEkskuls.length === 0) return false;
+  if (!targetEkskulId || targetEkskulId === 'all') return true;
+  const targetEkskul = (ekskulsList || []).find(e => e.id === targetEkskulId);
+  const targetId = String(targetEkskulId).toLowerCase().trim();
+  const targetName = targetEkskul ? String(targetEkskul.name).toLowerCase().trim() : '';
+
+  return studentEkskuls.some(item => {
+    if (!item) return false;
+    const clean = String(item).toLowerCase().trim();
+    return clean === targetId || (targetName && clean === targetName);
+  });
+}
+
 // Helper to get local network IPv4 address
 function getLocalIp() {
   const interfaces = os.networkInterfaces();
@@ -326,15 +347,16 @@ app.get('/api/info', (req, res) => {
   });
 });
 
-// API: Get extracurricular list (Auto-pulls from Google Sheets if database is empty)
+// API: Get extracurricular list (Auto-pulls from Google Sheets if database is empty or stale)
 app.get('/api/ekskul', async (req, res) => {
   let db = readDB();
-  if (db.ekskuls.length === 0) {
+  const now = Date.now();
+  if (db.ekskuls.length === 0 || (now - lastPullTime > 30000)) {
     await pullFromGoogleSheets();
     db = readDB();
   }
   const result = db.ekskuls.map(e => {
-    const memberCount = db.students.filter(s => s.ekskuls.includes(e.id)).length;
+    const memberCount = db.students.filter(s => matchesEkskul(s.ekskuls, e.id, db.ekskuls)).length;
     // Check if there is an active session
     const activeSession = db.sessions.find(s => s.ekskulId === e.id && s.status === 'active');
     return {
@@ -346,23 +368,24 @@ app.get('/api/ekskul', async (req, res) => {
   res.json(result);
 });
 
-// API: Get students (filter by ekskul) (Auto-pulls from Google Sheets if database is empty)
+// API: Get students (filter by ekskul) (Auto-pulls from Google Sheets if database is empty or stale)
 app.get('/api/students', async (req, res) => {
-  const { ekskul } = req.query;
+  const { ekskul, sync } = req.query;
   // Jika ekskul kosong/belum dipilih, kembalikan array kosong tanpa akses Google Sheets
   if (ekskul === '') {
     return res.json([]);
   }
   let db = readDB();
-  if (db.students.length === 0) {
-    await pullFromGoogleSheets();
+  const now = Date.now();
+  if (sync === '1' || db.students.length === 0 || (now - lastPullTime > 30000)) {
+    await pullFromGoogleSheets(sync === '1');
     db = readDB();
   }
   let students = db.students;
   if (ekskul === 'none') {
     students = students.filter(s => !s.ekskuls || s.ekskuls.length === 0);
   } else if (ekskul && ekskul !== 'all') {
-    students = students.filter(s => Array.isArray(s.ekskuls) && s.ekskuls.includes(ekskul));
+    students = students.filter(s => matchesEkskul(s.ekskuls, ekskul, db.ekskuls));
   }
   // Sort alphabetically by name
   students.sort((a, b) => a.name.localeCompare(b.name));
@@ -706,7 +729,7 @@ app.get('/api/session/status/:sessionId', async (req, res) => {
 
   // Attendees for this session
   const attendees = db.attendances.filter(a => a.sessionId === sessionId || (a.ekskulId === session.ekskulId && a.date === session.date));
-  const totalEnrolled = db.students.filter(s => s.ekskuls.includes(session.ekskulId)).length;
+  const totalEnrolled = db.students.filter(s => matchesEkskul(s.ekskuls, session.ekskulId, db.ekskuls)).length;
 
   // Generate QR code for current dynamic token
   const host = req.headers.host || `${getLocalIp()}:${PORT}`;
@@ -893,7 +916,7 @@ app.post('/api/attendance/scan', (req, res) => {
 
   // Broadcast to teacher's live screen instantly via SSE
   const currentAttendees = db.attendances.filter(a => a.sessionId === session.id || (a.ekskulId === session.ekskulId && a.date === session.date));
-  const totalEnrolled = db.students.filter(s => s.ekskuls.includes(session.ekskulId)).length;
+  const totalEnrolled = db.students.filter(s => matchesEkskul(s.ekskuls, session.ekskulId, db.ekskuls)).length;
 
   broadcastToSession(session.id, 'NEW_ATTENDANCE', {
     attendance: record,
@@ -945,7 +968,7 @@ app.post('/api/session/add-manual', (req, res) => {
   writeDB(db);
 
   const currentAttendees = db.attendances.filter(a => a.sessionId === session.id || (a.ekskulId === session.ekskulId && a.date === session.date));
-  const totalEnrolled = db.students.filter(s => s.ekskuls.includes(session.ekskulId)).length;
+  const totalEnrolled = db.students.filter(s => matchesEkskul(s.ekskuls, session.ekskulId, db.ekskuls)).length;
 
   broadcastToSession(session.id, 'NEW_ATTENDANCE', {
     attendance: record,
