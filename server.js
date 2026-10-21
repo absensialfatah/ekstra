@@ -327,7 +327,7 @@ app.get('/api/info', (req, res) => {
 // API: Get extracurricular list (Auto-pulls from Google Sheets if database is empty)
 app.get('/api/ekskul', async (req, res) => {
   let db = readDB();
-  if (db.ekskuls.length === 0 || db.students.length === 0) {
+  if (db.ekskuls.length === 0) {
     await pullFromGoogleSheets();
     db = readDB();
   }
@@ -347,6 +347,10 @@ app.get('/api/ekskul', async (req, res) => {
 // API: Get students (filter by ekskul) (Auto-pulls from Google Sheets if database is empty)
 app.get('/api/students', async (req, res) => {
   const { ekskul } = req.query;
+  // Jika ekskul kosong/belum dipilih, kembalikan array kosong tanpa akses Google Sheets
+  if (ekskul === '') {
+    return res.json([]);
+  }
   let db = readDB();
   if (db.students.length === 0) {
     await pullFromGoogleSheets();

@@ -1,7 +1,7 @@
 {
-  "name": "Presensi Ekskul - MTs Al Fatah",
+  "name": "Presensi Ekskul",
   "short_name": "Presensi Ekskul",
-  "description": "Presensi Ekskul - MTs Al Fatah",
+  "description": "Presensi Ekskul MTs Al Fatah",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,7 +9,10 @@
   "background_color": "#064e3b",
   "theme_color": "#065f46",
   "lang": "id",
-  "categories": ["education", "productivity"],
+  "categories": [
+    "education",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "/images/icon.svg",

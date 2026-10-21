@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnMarkAllPresent = document.getElementById('btnMarkAllPresent');
   const btnResetAllAlpa = document.getElementById('btnResetAllAlpa');
   const btnSaveDrumbandAttendance = document.getElementById('btnSaveDrumbandAttendance');
+  const manualSaveActionBar = document.getElementById('manualSaveActionBar');
   const sumHadirCount = document.getElementById('sumHadirCount');
   const sumIzinCount = document.getElementById('sumIzinCount');
   const sumAlpaCount = document.getElementById('sumAlpaCount');
@@ -248,6 +249,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // A. Populate Manual Ekskul Select (Tab 1)
       const manualEkskuls = state.ekskuls.filter(e => e.method === 'manual');
       manualEkskulSelect.innerHTML = '';
+      
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = '';
+      defaultOpt.textContent = '(-Pilih Eksul-)';
+      manualEkskulSelect.appendChild(defaultOpt);
+
       if (manualEkskuls.length === 0) {
         const opt = document.createElement('option');
         opt.value = '';
@@ -262,11 +269,14 @@ document.addEventListener('DOMContentLoaded', () => {
           manualEkskulSelect.appendChild(opt);
         });
 
-        if (!manualEkskuls.some(e => e.id === state.selectedManualEkskulId)) {
-          state.selectedManualEkskulId = manualEkskuls[0].id;
+        // Pertahankan ekskul hanya jika sebelumnya pengguna sudah memilih secara eksplisit
+        if (state.selectedManualEkskulId && manualEkskuls.some(e => e.id === state.selectedManualEkskulId)) {
+          manualEkskulSelect.value = state.selectedManualEkskulId;
+        } else {
+          state.selectedManualEkskulId = '';
+          manualEkskulSelect.value = '';
         }
       }
-      manualEkskulSelect.value = state.selectedManualEkskulId;
 
       // B. Populate QR Ekskul Selector Grid (Tab 2)
       const qrEkskuls = state.ekskuls.filter(e => e.method === 'qr');
@@ -358,38 +368,94 @@ document.addEventListener('DOMContentLoaded', () => {
       // Refresh data sesuai tab yang sedang aktif
       if (state.currentTab === 'tab-drumband') {
         updateManualEkskulInfo();
-        loadManualStudents();
+        if (state.selectedManualEkskulId) {
+          loadManualStudents();
+        } else {
+          renderEmptyManualState();
+        }
       } else if (state.currentTab === 'tab-rekap') {
         loadRekapData();
       } else if (state.currentTab === 'tab-siswa') {
         loadSiswaMaster();
       }
+      renderMasterEkskuls();
     } catch (err) {
       console.error('Error loading ekskuls:', err);
       showToast('Gagal memuat daftar ekstrakurikuler', 'error');
     }
   }
 
+  function renderEmptyManualState() {
+    state.manualStudents = [];
+    state.manualAttendance = {};
+    drumbandStudentsGrid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1.5rem; background: #ffffff; border-radius: 12px; border: 1.5px dashed var(--border); box-shadow: var(--shadow-sm);">
+        <div style="font-size: 2.75rem; margin-bottom: 0.75rem;">📋</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Silakan Pilih Ekstrakurikuler</h3>
+        <p style="font-size: 0.875rem; color: var(--text-muted); max-width: 450px; margin: 0 auto;">Pilih salah satu ekstrakurikuler pada menu <strong>(-Pilih Eksul-)</strong> di atas untuk memuat data siswa dan memulai presensi.</p>
+      </div>
+    `;
+    sumHadirCount.textContent = '0';
+    sumIzinCount.textContent = '0';
+    sumAlpaCount.textContent = '0';
+    drumbandTotalCount.textContent = '0 Siswa';
+    drumbandFilterCount.textContent = 'Pilih ekstrakurikuler terlebih dahulu';
+    const saveBar = manualSaveActionBar || document.querySelector('.save-action-bar');
+    if (saveBar) saveBar.style.display = 'none';
+  }
+
   function updateManualEkskulInfo() {
     const cur = state.ekskuls.find(e => e.id === state.selectedManualEkskulId);
     if (!cur) {
-      manualEkskulHeaderTitle.innerHTML = `<span>📋</span> Belum Ada Ekskul`;
+      manualEkskulHeaderTitle.innerHTML = `<span>📋</span> Presensi Manual Siswa`;
       drumbandPembimbing.textContent = '-';
       drumbandJadwal.textContent = '-';
       drumbandTotalCount.textContent = '0 Siswa';
+      drumbandFilterCount.textContent = 'Pilih ekstrakurikuler terlebih dahulu';
       btnSaveDrumbandAttendance.innerHTML = `💾 Simpan Presensi`;
+
+      if (btnMarkAllPresent) btnMarkAllPresent.disabled = true;
+      if (btnResetAllAlpa) btnResetAllAlpa.disabled = true;
+      if (drumbandSearch) {
+        drumbandSearch.disabled = true;
+        drumbandSearch.placeholder = 'Pilih ekskul terlebih dahulu...';
+        drumbandSearch.value = '';
+      }
+      if (drumbandClassFilter) {
+        drumbandClassFilter.disabled = true;
+        drumbandClassFilter.value = 'all';
+      }
+
+      const saveBar = manualSaveActionBar || document.querySelector('.save-action-bar');
+      if (saveBar) saveBar.style.display = 'none';
       return;
     }
+
     manualEkskulHeaderTitle.innerHTML = `<span>${cur.icon || '🥁'}</span> ${cur.name}`;
-    drumbandPembimbing.textContent = cur.pembimbing;
-    drumbandJadwal.textContent = cur.jadwal;
+    drumbandPembimbing.textContent = cur.pembimbing || '-';
+    drumbandJadwal.textContent = cur.jadwal || '-';
     btnSaveDrumbandAttendance.innerHTML = `💾 Simpan Presensi ${cur.name.split(' ')[0]}`;
+
+    if (btnMarkAllPresent) btnMarkAllPresent.disabled = false;
+    if (btnResetAllAlpa) btnResetAllAlpa.disabled = false;
+    if (drumbandSearch) {
+      drumbandSearch.disabled = false;
+      drumbandSearch.placeholder = 'Cari nama atau NISN siswa...';
+    }
+    if (drumbandClassFilter) drumbandClassFilter.disabled = false;
+
+    const saveBar = manualSaveActionBar || document.querySelector('.save-action-bar');
+    if (saveBar) saveBar.style.display = 'flex';
   }
 
   manualEkskulSelect.addEventListener('change', (e) => {
     state.selectedManualEkskulId = e.target.value;
     updateManualEkskulInfo();
-    loadManualStudents();
+    if (state.selectedManualEkskulId) {
+      loadManualStudents();
+    } else {
+      renderEmptyManualState();
+    }
   });
 
   // ==========================================
@@ -433,11 +499,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (state.ekskuls && state.ekskuls.length > 0) {
       if (targetTab === 'tab-drumband') {
         updateManualEkskulInfo();
-        loadManualStudents();
+        if (state.selectedManualEkskulId) {
+          loadManualStudents();
+        } else {
+          renderEmptyManualState();
+        }
       } else if (targetTab === 'tab-rekap') {
         loadRekapData();
       } else if (targetTab === 'tab-siswa') {
         loadSiswaMaster();
+        renderMasterEkskuls();
       }
     }
   }
@@ -553,8 +624,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // JIKA TIDAK DIKLIK, OTOMATIS ALPA.
   // ==========================================
   async function loadManualStudents() {
+    if (!state.selectedManualEkskulId) {
+      renderEmptyManualState();
+      return;
+    }
     try {
       const ekskulId = state.selectedManualEkskulId;
+      drumbandStudentsGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted);">
+          <div class="spinner" style="margin: 0 auto 1rem;"></div>
+          <p style="font-weight: 600;">Memuat daftar siswa & presensi...</p>
+        </div>
+      `;
       const res = await fetch(`/api/students?ekskul=${ekskulId}`);
       state.manualStudents = await res.json();
       drumbandTotalCount.textContent = `${state.manualStudents.length} Siswa`;
@@ -586,7 +667,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  drumbandDate.addEventListener('change', loadManualStudents);
+  drumbandDate.addEventListener('change', () => {
+    if (state.selectedManualEkskulId) {
+      loadManualStudents();
+    }
+  });
 
   function renderManualGrid() {
     const query = drumbandSearch.value.trim().toLowerCase();
@@ -604,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (filtered.length === 0) {
       const msg = state.manualStudents.length === 0
-        ? 'Belum ada anggota yang terdaftar di ekstrakurikuler ini.<br><a href="javascript:void(0)" onclick="document.getElementById(\'tabBtnSiswa\').click()" style="color: var(--primary); font-weight: 700; margin-top: 0.5rem; display: inline-block;">👉 Buka Tab Data Anggota untuk Menambahkan Siswa</a>'
+        ? 'Belum ada anggota yang terdaftar di ekstrakurikuler ini.<br><a href="javascript:void(0)" onclick="document.getElementById(\'tabBtnSiswa\').click()" style="color: var(--primary); font-weight: 700; margin-top: 0.5rem; display: inline-block;">👉 Buka Tab Data Anggota & Ekskul untuk Menambahkan Siswa</a>'
         : 'Tidak ada siswa yang cocok dengan filter pencarian.';
       drumbandStudentsGrid.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem; color: var(--text-muted); background: #ffffff; border-radius: 12px; border: 1px dashed var(--border);">
@@ -736,9 +821,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Tandai Semua Hadir
   btnMarkAllPresent.addEventListener('click', () => {
+    if (!state.selectedManualEkskulId) return showToast('Pilih ekstrakurikuler terlebih dahulu!', 'warning');
     state.manualStudents.forEach(s => {
-      if (!state.manualAttendance[s.nis]) state.manualAttendance[s.nis] = { status: 'Hadir', notes: '' };
-      state.manualAttendance[s.nis].status = 'Hadir';
+      const studentKey = String(s.nisn || s.nis || '').trim();
+      if (!state.manualAttendance[studentKey]) state.manualAttendance[studentKey] = { status: 'Hadir', notes: '' };
+      state.manualAttendance[studentKey].status = 'Hadir';
     });
     renderManualGrid();
     updateManualSummary();
@@ -747,9 +834,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Reset Semua ke Alpa
   btnResetAllAlpa.addEventListener('click', () => {
+    if (!state.selectedManualEkskulId) return showToast('Pilih ekstrakurikuler terlebih dahulu!', 'warning');
     state.manualStudents.forEach(s => {
-      if (!state.manualAttendance[s.nis]) state.manualAttendance[s.nis] = { status: 'Alpa', notes: '' };
-      state.manualAttendance[s.nis].status = 'Alpa';
+      const studentKey = String(s.nisn || s.nis || '').trim();
+      if (!state.manualAttendance[studentKey]) state.manualAttendance[studentKey] = { status: 'Alpa', notes: '' };
+      state.manualAttendance[studentKey].status = 'Alpa';
     });
     renderManualGrid();
     updateManualSummary();
@@ -758,6 +847,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Simpan Presensi Manual
   btnSaveDrumbandAttendance.addEventListener('click', async () => {
+    if (!state.selectedManualEkskulId) return showToast('Pilih ekstrakurikuler terlebih dahulu!', 'warning');
     const dateVal = drumbandDate.value;
     if (!dateVal) return showToast('Pilih tanggal kegiatan terlebih dahulu!', 'error');
 
@@ -1159,27 +1249,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Open modal buttons
   const btnOpenTab1 = document.getElementById('btnOpenAddEkskulModalTab1');
   const btnOpenTab2 = document.getElementById('btnOpenAddEkskulModalTab2');
+  const btnOpenTab4 = document.getElementById('btnOpenAddEkskulModalTab4');
+  const btnOpenTab4Inner = document.getElementById('btnOpenAddEkskulModalTab4Inner');
   if (btnOpenTab1) btnOpenTab1.addEventListener('click', () => openEkskulModal(null));
   if (btnOpenTab2) btnOpenTab2.addEventListener('click', () => openEkskulModal(null));
+  if (btnOpenTab4) btnOpenTab4.addEventListener('click', () => openEkskulModal(null));
+  if (btnOpenTab4Inner) btnOpenTab4Inner.addEventListener('click', () => openEkskulModal(null));
   if (btnOpenAddEkskulModal) btnOpenAddEkskulModal.addEventListener('click', () => openEkskulModal(null));
-
-  // Edit / Delete buttons in Tab 1
-  const btnEditManualEkskul = document.getElementById('btnEditManualEkskul');
-  const btnDeleteManualEkskul = document.getElementById('btnDeleteManualEkskul');
-  if (btnEditManualEkskul) {
-    btnEditManualEkskul.addEventListener('click', () => {
-      const cur = state.ekskuls.find(e => e.id === state.selectedManualEkskulId);
-      if (cur) openEkskulModal(cur);
-      else alert('Pilih ekstrakurikuler terlebih dahulu.');
-    });
-  }
-  if (btnDeleteManualEkskul) {
-    btnDeleteManualEkskul.addEventListener('click', () => {
-      const cur = state.ekskuls.find(e => e.id === state.selectedManualEkskulId);
-      if (cur) deleteEkskul(cur.id, cur.name);
-      else alert('Pilih ekstrakurikuler terlebih dahulu.');
-    });
-  }
 
   btnCloseAddEkskulModal.addEventListener('click', () => addEkskulModal.classList.remove('active'));
   btnCancelAddEkskul.addEventListener('click', () => addEkskulModal.classList.remove('active'));
@@ -1238,7 +1314,9 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast(mode === 'edit' ? `Ekstrakurikuler "${name}" berhasil diperbarui!` : `Ekstrakurikuler "${name}" berhasil ditambahkan!`, 'success');
 
       // Auto switch target tab
-      if (method === 'manual') {
+      if (state.currentTab === 'tab-siswa') {
+        // Tetap di Tab 4 (Data Anggota & Ekskul) agar pengguna dapat melihat perubahan langsung
+      } else if (method === 'manual') {
         state.selectedManualEkskulId = data.ekskul.id;
         document.getElementById('tabBtnDrumband').click();
       } else {
@@ -1247,6 +1325,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       await loadEkskuls();
+      renderMasterEkskuls();
     } catch (err) {
       alert(err.message);
     } finally {
@@ -1372,11 +1451,136 @@ document.addEventListener('DOMContentLoaded', () => {
       allMasterStudents = await res.json();
       updateClassDropdowns();
       renderSiswaMaster();
+      renderMasterEkskuls();
     } catch (err) {
       console.error('Error loading siswa master:', err);
       showToast('Gagal memuat data siswa', 'error');
     }
   }
+
+  // Render Master Ekstrakurikuler di Tab 4 (Data Anggota & Ekskul)
+  function renderMasterEkskuls() {
+    const grid = document.getElementById('masterEkskulGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const pillEkskulCount = document.getElementById('countPillEkskul');
+    if (pillEkskulCount) pillEkskulCount.textContent = state.ekskuls.length;
+
+    const pillSiswaCount = document.getElementById('countPillSiswa');
+    if (pillSiswaCount) pillSiswaCount.textContent = allMasterStudents.length;
+
+    if (!state.ekskuls || state.ekskuls.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; background: #ffffff; border-radius: 12px; border: 1.5px dashed var(--border);">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📋</div>
+          <h4 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Belum Ada Ekstrakurikuler Terdaftar</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Mulai buat ekstrakurikuler baru untuk madrasah Anda.</p>
+          <button type="button" class="btn btn-primary" onclick="openEkskulModal(null)" style="font-size: 0.85rem;">➕ Buat Ekskul Baru Sekarang</button>
+        </div>
+      `;
+      return;
+    }
+
+    state.ekskuls.forEach(e => {
+      const card = document.createElement('div');
+      card.className = 'ekskul-card';
+      card.style.cursor = 'default';
+
+      const isManual = e.method === 'manual';
+      const methodBadge = isManual
+        ? '<span class="ekskul-method-badge badge-manual">✍️ Manual Guru</span>'
+        : '<span class="ekskul-method-badge badge-qr">📱 Scan QR</span>';
+
+      const memberCount = e.memberCount !== undefined
+        ? e.memberCount
+        : allMasterStudents.filter(s => Array.isArray(s.ekskuls) && s.ekskuls.includes(e.id)).length;
+
+      card.innerHTML = `
+        <div class="ekskul-card-header">
+          <div class="ekskul-icon-wrap" style="color: ${e.color || '#059669'};">${e.icon || '⭐'}</div>
+          <div style="display: flex; gap: 0.35rem; align-items: center;">
+            <button type="button" class="btn-card-action btn-edit-master-ekskul" data-id="${e.id}" title="Edit Informasi Ekskul">✏️</button>
+            <button type="button" class="btn-card-action btn-delete-master-ekskul" data-id="${e.id}" title="Hapus Ekskul" style="color: #dc2626;">🗑️</button>
+            ${methodBadge}
+          </div>
+        </div>
+        <h3 class="ekskul-card-name" style="margin-bottom: 0.5rem;">${e.name}</h3>
+        <div class="ekskul-card-info" style="margin-bottom: 0.85rem;">
+          <span>👤 <strong>Pembimbing:</strong> ${e.pembimbing || '-'}</span>
+          <span>🕒 <strong>Jadwal:</strong> ${e.jadwal || '-'}</span>
+          <span>📍 <strong>Lokasi:</strong> ${e.lokasi || '-'}</span>
+          <span>👥 <strong>Total Anggota:</strong> ${memberCount} Siswa</span>
+        </div>
+        <div style="display: flex; gap: 0.5rem; border-top: 1px solid var(--border-light, #f1f5f9); padding-top: 0.75rem;">
+          <button type="button" class="btn btn-outline btn-sm btn-filter-ekskul-members" data-id="${e.id}" style="flex: 1; font-size: 0.78rem; font-weight: 600;">
+            👥 Filter Siswa (${memberCount})
+          </button>
+          <button type="button" class="btn btn-primary btn-sm btn-edit-master-ekskul-direct" data-id="${e.id}" style="font-size: 0.78rem; font-weight: 600;">
+            ✏️ Edit
+          </button>
+        </div>
+      `;
+
+      // Edit buttons
+      card.querySelectorAll('.btn-edit-master-ekskul, .btn-edit-master-ekskul-direct').forEach(b => {
+        b.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          openEkskulModal(e);
+        });
+      });
+
+      // Delete button
+      const btnDel = card.querySelector('.btn-delete-master-ekskul');
+      if (btnDel) {
+        btnDel.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          deleteEkskul(e.id, e.name);
+        });
+      }
+
+      // Filter members button
+      const btnFilter = card.querySelector('.btn-filter-ekskul-members');
+      if (btnFilter) {
+        btnFilter.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          if (siswaMasterEkskulFilter) {
+            siswaMasterEkskulFilter.value = e.id;
+            siswaPagination.currentPage = 1;
+            renderSiswaMaster();
+            // Scroll to student section
+            const sec = document.getElementById('sectionMasterSiswa');
+            if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+
+      grid.appendChild(card);
+    });
+  }
+
+  // Sub-navigation pills in Tab 4 (Data Anggota & Ekskul)
+  const subPillBtns = document.querySelectorAll('.sub-pill-btn');
+  const sectionMasterEkskul = document.getElementById('sectionMasterEkskul');
+  const sectionMasterSiswa = document.getElementById('sectionMasterSiswa');
+
+  subPillBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      subPillBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const view = btn.getAttribute('data-sub');
+      if (view === 'ekskul') {
+        if (sectionMasterEkskul) sectionMasterEkskul.style.display = 'block';
+        if (sectionMasterSiswa) sectionMasterSiswa.style.display = 'none';
+      } else if (view === 'siswa') {
+        if (sectionMasterEkskul) sectionMasterEkskul.style.display = 'none';
+        if (sectionMasterSiswa) sectionMasterSiswa.style.display = 'block';
+      } else {
+        if (sectionMasterEkskul) sectionMasterEkskul.style.display = 'block';
+        if (sectionMasterSiswa) sectionMasterSiswa.style.display = 'block';
+      }
+    });
+  });
 
   // Helper: Update Dynamic Class Dropdowns from Student Data / Sheets
   function updateClassDropdowns() {
