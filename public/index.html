@@ -18,6 +18,29 @@
   <link rel="icon" type="image/webp" href="/images/logo.webp">
 
   <link rel="stylesheet" href="/css/style.css?v=3">
+
+  <!-- Mobile Tab State Preserver (Mencegah loncat ke Tab 1 saat refresh/tarik layar di HP) -->
+  <script>
+    (function() {
+      try {
+        var hash = (window.location.hash || '').toLowerCase();
+        var map = {
+          '#manual': 'tab-drumband',
+          '#tab-drumband': 'tab-drumband',
+          '#qr': 'tab-qr',
+          '#tab-qr': 'tab-qr',
+          '#rekap': 'tab-rekap',
+          '#tab-rekap': 'tab-rekap',
+          '#siswa': 'tab-siswa',
+          '#tab-siswa': 'tab-siswa'
+        };
+        var target = map[hash] || localStorage.getItem('mts_active_tab') || sessionStorage.getItem('mts_active_tab');
+        if (target && target !== 'tab-drumband') {
+          document.documentElement.setAttribute('data-initial-tab', target);
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
 

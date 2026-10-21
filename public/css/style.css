@@ -236,6 +236,14 @@ body {
   display: block;
 }
 
+/* Pre-render instant active tab support (anti-flicker on mobile refresh) */
+html[data-initial-tab="tab-qr"] #tab-drumband { display: none !important; }
+html[data-initial-tab="tab-qr"] #tab-qr { display: block !important; }
+html[data-initial-tab="tab-rekap"] #tab-drumband { display: none !important; }
+html[data-initial-tab="tab-rekap"] #tab-rekap { display: block !important; }
+html[data-initial-tab="tab-siswa"] #tab-drumband { display: none !important; }
+html[data-initial-tab="tab-siswa"] #tab-siswa { display: block !important; }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }

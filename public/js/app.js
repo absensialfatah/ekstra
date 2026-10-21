@@ -1,12 +1,47 @@
 // Main Teacher Dashboard Application Logic
 document.addEventListener('DOMContentLoaded', () => {
+  // Mobile & Hash Tab Routing Configuration
+  const TAB_MAP = {
+    '#manual': 'tab-drumband',
+    '#tab-drumband': 'tab-drumband',
+    '#qr': 'tab-qr',
+    '#tab-qr': 'tab-qr',
+    '#rekap': 'tab-rekap',
+    '#tab-rekap': 'tab-rekap',
+    '#siswa': 'tab-siswa',
+    '#tab-siswa': 'tab-siswa'
+  };
+
+  const TAB_TO_HASH = {
+    'tab-drumband': '#manual',
+    'tab-qr': '#qr',
+    'tab-rekap': '#rekap',
+    'tab-siswa': '#siswa'
+  };
+
+  function getSavedTab() {
+    // 1. Cek Hash di URL browser (paling akurat saat refresh/tarik layar di HP)
+    const hash = (window.location.hash || '').toLowerCase();
+    if (TAB_MAP[hash]) return TAB_MAP[hash];
+
+    // 2. Cek localStorage (permanen di HP / browser)
+    try {
+      const stored = localStorage.getItem('mts_active_tab') || sessionStorage.getItem('mts_active_tab');
+      if (stored && document.getElementById(stored)) return stored;
+    } catch (e) {}
+
+    return 'tab-drumband';
+  }
+
+  const initialActiveTab = getSavedTab();
+
   // Application State
   const state = {
     info: null,
-    currentTab: 'tab-drumband',
+    currentTab: initialActiveTab,
     ekskuls: [],
-    selectedManualEkskulId: 'drumband',
-    selectedQrEkskulId: 'voli',
+    selectedManualEkskulId: '',
+    selectedQrEkskulId: '',
     manualStudents: [],
     manualAttendance: {}, // nis -> { status: 'Alpa' | 'Hadir' | 'Izin', notes: '' }
     activeSession: null,
@@ -197,6 +232,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/ekskul');
       state.ekskuls = await res.json();
 
+      // Jika data ekskul di server masih kosong, otomatis tarik dari Google Sheets
+      if (state.ekskuls.length === 0) {
+        try {
+          const syncRes = await fetch('/api/sync/pull', { method: 'POST' });
+          if (syncRes.ok) {
+            const recheck = await fetch('/api/ekskul');
+            state.ekskuls = await recheck.json();
+          }
+        } catch (e) {
+          console.warn('Auto-sync pull error:', e);
+        }
+      }
+
       // A. Populate Manual Ekskul Select (Tab 1)
       const manualEkskuls = state.ekskuls.filter(e => e.method === 'manual');
       manualEkskulSelect.innerHTML = '';
@@ -307,9 +355,15 @@ document.addEventListener('DOMContentLoaded', () => {
         siswaMasterEkskulFilter.value = prevSelectedSiswaEkskul || 'all';
       }
 
-      // Refresh current manual ekskul display
-      updateManualEkskulInfo();
-      loadManualStudents();
+      // Refresh data sesuai tab yang sedang aktif
+      if (state.currentTab === 'tab-drumband') {
+        updateManualEkskulInfo();
+        loadManualStudents();
+      } else if (state.currentTab === 'tab-rekap') {
+        loadRekapData();
+      } else if (state.currentTab === 'tab-siswa') {
+        loadSiswaMaster();
+      }
     } catch (err) {
       console.error('Error loading ekskuls:', err);
       showToast('Gagal memuat daftar ekstrakurikuler', 'error');
@@ -341,33 +395,64 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // NAVIGATION & 3-DOTS KEBAB MENU HANDLING
   // ==========================================
-  function switchTab(targetTab) {
+  function switchTab(targetTab, updateUrl = true) {
+    if (!targetTab) return;
+
     tabButtons.forEach(b => {
-      if (b.getAttribute('data-tab') === targetTab) {
-        b.classList.add('active');
-      } else {
-        b.classList.remove('active');
-      }
+      b.classList.toggle('active', b.getAttribute('data-tab') === targetTab);
     });
 
     kebabMenuItems.forEach(item => {
-      if (item.getAttribute('data-tab') === targetTab) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
+      item.classList.toggle('active', item.getAttribute('data-tab') === targetTab);
     });
 
-    tabPanels.forEach(p => p.classList.remove('active'));
-    const panel = document.getElementById(targetTab);
-    if (panel) panel.classList.add('active');
+    tabPanels.forEach(p => {
+      p.classList.toggle('active', p.id === targetTab);
+    });
+
     state.currentTab = targetTab;
+
+    // Simpan ke localStorage & sessionStorage agar tidak hilang saat ditarik/refresh di HP
+    try {
+      localStorage.setItem('mts_active_tab', targetTab);
+      sessionStorage.setItem('mts_active_tab', targetTab);
+    } catch (e) {}
+
+    // Perbarui URL hash secara halus tanpa jump
+    if (updateUrl && TAB_TO_HASH[targetTab]) {
+      try {
+        if (window.location.hash !== TAB_TO_HASH[targetTab]) {
+          history.replaceState(null, '', TAB_TO_HASH[targetTab]);
+        }
+      } catch (e) {}
+    }
 
     closeKebabMenu();
 
-    if (targetTab === 'tab-rekap') loadRekapData();
-    if (targetTab === 'tab-siswa') loadSiswaMaster();
+    // Jalankan pemuatan data tab jika daftar ekskul sudah siap
+    if (state.ekskuls && state.ekskuls.length > 0) {
+      if (targetTab === 'tab-drumband') {
+        updateManualEkskulInfo();
+        loadManualStudents();
+      } else if (targetTab === 'tab-rekap') {
+        loadRekapData();
+      } else if (targetTab === 'tab-siswa') {
+        loadSiswaMaster();
+      }
+    }
   }
+
+  // Aktifkan tab tersimpan secara instan saat inisialisasi awal
+  switchTab(initialActiveTab, false);
+  document.documentElement.removeAttribute('data-initial-tab');
+
+  // Dengarkan perubahan hash (misal navigasi tombol Back/Forward di browser HP)
+  window.addEventListener('hashchange', () => {
+    const hash = (window.location.hash || '').toLowerCase();
+    if (TAB_MAP[hash] && TAB_MAP[hash] !== state.currentTab) {
+      switchTab(TAB_MAP[hash], false);
+    }
+  });
 
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {

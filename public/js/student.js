@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     enrolledStudents = await studRes.json();
 
     // Setup Header Info
-    formEkskulBadge.textContent = `${sessionData.ekskulId === 'voli' ? '🏐' : '🏸'} ${sessionData.ekskulName}`;
+    formEkskulBadge.textContent = `${sessionData.icon || '📱'} ${sessionData.ekskulName}`;
     formEkskulTitle.textContent = `Presensi ${sessionData.ekskulName}`;
     formSessionDate.textContent = `Tanggal: ${new Date(sessionData.date).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
 

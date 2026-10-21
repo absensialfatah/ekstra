@@ -99,6 +99,118 @@ async function syncToGoogleSheets(action, payload) {
   }
 }
 
+// Global flag to prevent concurrent pulls
+let isPullingFromSheets = false;
+let lastPullTime = 0;
+
+// Pull all data (ekskuls, students, attendances) from Google Sheets into local JSON database
+async function pullFromGoogleSheets(force = false) {
+  if (!GS_WEBAPP_URL) {
+    return { success: false, error: 'GS_WEBAPP_URL belum dikonfigurasi.' };
+  }
+  const now = Date.now();
+  if (!force && isPullingFromSheets) {
+    return { success: true, message: 'Sinkronisasi sedang berlangsung di latar belakang.' };
+  }
+  if (!force && (now - lastPullTime < 15000)) {
+    return { success: true, message: 'Data baru saja disinkronkan dari Google Sheets (cache aktif).' };
+  }
+
+  isPullingFromSheets = true;
+  try {
+    const fetchRes = await fetch(`${GS_WEBAPP_URL}?action=getAll`);
+    const json = await fetchRes.json();
+    if (!json.success || !json.data) {
+      throw new Error(json.error || 'Gagal mengambil data dari Google Sheets.');
+    }
+    const db = readDB();
+    let updated = false;
+
+    // 1. Sinkronkan Ekstrakurikuler
+    if (json.data.ekskuls && json.data.ekskuls.length > 0) {
+      db.ekskuls = json.data.ekskuls.map(e => ({
+        id: e.id_ekskul || e.id,
+        name: e.nama_ekstrakurikuler || e.name,
+        pembimbing: e.guru_pembimbing || e.pembimbing,
+        jadwal: e.jadwal_rutin || e.jadwal,
+        lokasi: e.lokasi_latihan || e.lokasi,
+        method: e.metode__manual___qr_ || e.method || 'manual',
+        icon: e.ikon_emoji || e.icon || '⭐',
+        color: e.warna_tema || e.color || '#059669',
+        badge: (e.metode__manual___qr_ || e.method) === 'qr' ? 'Presensi Mandiri via QR Code' : 'Presensi Manual oleh Guru'
+      }));
+      updated = true;
+    }
+
+    // 2. Sinkronkan Siswa
+    if (json.data.students && json.data.students.length > 0) {
+      db.students = json.data.students.map(s => {
+        const nisnVal = String(s.nisn || s.nis || '').trim();
+        const ekskulList = typeof s.ekskul_diikuti__pisahkan_koma_ === 'string'
+          ? s.ekskul_diikuti__pisahkan_koma_.split(',').map(x => x.trim()).filter(Boolean)
+          : (Array.isArray(s.ekskuls) ? s.ekskuls : []);
+        return {
+          nisn: nisnVal,
+          nis: nisnVal,
+          name: s.nama_lengkap_siswa || s.name,
+          gender: s.jenis_kelamin__l_p_ || s.gender || 'L',
+          class: s.kelas || s.class || '',
+          ekskuls: ekskulList
+        };
+      });
+      updated = true;
+    }
+
+    // 3. Sinkronkan Riwayat Presensi (jika ada di Google Sheets)
+    if (json.data.attendances && json.data.attendances.length > 0) {
+      const sheetAttendances = json.data.attendances.map(a => {
+        const nisnVal = String(a.nisn || a.nis || '').trim();
+        return {
+          id: a.id_presensi || a.id || `att-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+          date: a.tanggal_kegiatan || a.date,
+          ekskulId: a.id_ekskul || a.ekskulId,
+          ekskulName: a.nama_ekstrakurikuler || a.ekskulName || '',
+          nisn: nisnVal,
+          nis: nisnVal,
+          studentName: a.nama_siswa || a.studentName || '',
+          class: a.kelas || a.class || '',
+          status: a.status__hadir___izin___alpa_ || a.status || 'Hadir',
+          method: a.metode__manual_guru___qr_scan_ || a.method || 'manual_guru',
+          timestamp: a.waktu_presensi ? (a.tanggal_kegiatan ? `${a.tanggal_kegiatan}T${a.waktu_presensi}` : new Date().toISOString()) : new Date().toISOString(),
+          notes: a.catatan___keterangan_izin || a.notes || ''
+        };
+      });
+
+      const existingIds = new Set(db.attendances.map(x => x.id));
+      for (const item of sheetAttendances) {
+        if (!existingIds.has(item.id)) {
+          db.attendances.push(item);
+          existingIds.add(item.id);
+        }
+      }
+      updated = true;
+    }
+
+    if (updated) {
+      writeDB(db);
+    }
+    lastPullTime = Date.now();
+    console.log(`✅ Sinkronisasi Google Sheets berhasil: ${db.students.length} siswa, ${db.ekskuls.length} ekskul, ${db.attendances.length} presensi.`);
+    return {
+      success: true,
+      message: `Sinkronisasi berhasil! Memuat ${db.students.length} siswa dan ${db.ekskuls.length} ekskul dari Google Sheets.`,
+      studentsCount: db.students.length,
+      ekskulsCount: db.ekskuls.length,
+      attendancesCount: db.attendances.length
+    };
+  } catch (err) {
+    console.error('❌ Gagal sinkronisasi dari Google Sheets:', err.message);
+    return { success: false, error: err.message };
+  } finally {
+    isPullingFromSheets = false;
+  }
+}
+
 // Database helper functions with safe file operations
 function readDB() {
   try {
@@ -212,9 +324,13 @@ app.get('/api/info', (req, res) => {
   });
 });
 
-// API: Get extracurricular list
-app.get('/api/ekskul', (req, res) => {
-  const db = readDB();
+// API: Get extracurricular list (Auto-pulls from Google Sheets if database is empty)
+app.get('/api/ekskul', async (req, res) => {
+  let db = readDB();
+  if (db.ekskuls.length === 0 || db.students.length === 0) {
+    await pullFromGoogleSheets();
+    db = readDB();
+  }
   const result = db.ekskuls.map(e => {
     const memberCount = db.students.filter(s => s.ekskuls.includes(e.id)).length;
     // Check if there is an active session
@@ -228,10 +344,14 @@ app.get('/api/ekskul', (req, res) => {
   res.json(result);
 });
 
-// API: Get students (filter by ekskul)
-app.get('/api/students', (req, res) => {
+// API: Get students (filter by ekskul) (Auto-pulls from Google Sheets if database is empty)
+app.get('/api/students', async (req, res) => {
   const { ekskul } = req.query;
-  const db = readDB();
+  let db = readDB();
+  if (db.students.length === 0) {
+    await pullFromGoogleSheets();
+    db = readDB();
+  }
   let students = db.students;
   if (ekskul === 'none') {
     students = students.filter(s => !s.ekskuls || s.ekskuls.length === 0);
@@ -311,6 +431,8 @@ app.put('/api/students/:nis', (req, res) => {
 
   writeDB(db);
 
+  syncToGoogleSheets('editStudent', { student: db.students[index] });
+
   res.json({
     success: true,
     message: `Data siswa ${db.students[index].name} berhasil diperbarui.`,
@@ -329,6 +451,8 @@ app.delete('/api/students/:nis', (req, res) => {
 
   db.students = db.students.filter(s => (s.nisn && s.nisn !== targetNis) && (s.nis && s.nis !== targetNis));
   writeDB(db);
+
+  syncToGoogleSheets('deleteStudent', { nis: targetNis, name: student.name });
 
   res.json({
     success: true,
@@ -522,6 +646,7 @@ app.post('/api/session/start', async (req, res) => {
     id: sessionId,
     ekskulId,
     ekskulName: ekskul.name,
+    icon: ekskul.icon || '📱',
     date: now.toISOString().split('T')[0],
     createdAt: now.toISOString(),
     expiresAt: expiresAt.toISOString(),
@@ -876,59 +1001,24 @@ app.get('/api/rekap', (req, res) => {
 
 // API: Sync pull data from Google Sheets into application database
 app.post('/api/sync/pull', async (req, res) => {
-  if (!GS_WEBAPP_URL) {
-    return res.status(400).json({ error: 'GS_WEBAPP_URL belum dikonfigurasi.' });
+  const result = await pullFromGoogleSheets(true);
+  if (!result.success) {
+    return res.status(500).json({ error: result.error });
   }
-  try {
-    const fetchRes = await fetch(`${GS_WEBAPP_URL}?action=getAll`);
-    const json = await fetchRes.json();
-    if (!json.success || !json.data) {
-      throw new Error(json.error || 'Gagal mengambil data dari Google Sheets.');
-    }
-    const db = readDB();
-    if (json.data.ekskuls && json.data.ekskuls.length > 0) {
-      db.ekskuls = json.data.ekskuls.map(e => ({
-        id: e.id_ekskul || e.id,
-        name: e.nama_ekstrakurikuler || e.name,
-        pembimbing: e.guru_pembimbing || e.pembimbing,
-        jadwal: e.jadwal_rutin || e.jadwal,
-        lokasi: e.lokasi_latihan || e.lokasi,
-        method: e.metode__manual___qr_ || e.method || 'manual',
-        icon: e.ikon_emoji || e.icon || '⭐',
-        color: e.warna_tema || e.color || '#059669',
-        badge: (e.metode__manual___qr_ || e.method) === 'qr' ? 'Presensi Mandiri via QR Code' : 'Presensi Manual oleh Guru'
-      }));
-    }
-    if (json.data.students && json.data.students.length > 0) {
-      db.students = json.data.students.map(s => {
-        const nisnVal = String(s.nisn || s.nis || '').trim();
-        const ekskulList = typeof s.ekskul_diikuti__pisahkan_koma_ === 'string'
-          ? s.ekskul_diikuti__pisahkan_koma_.split(',').map(x => x.trim()).filter(Boolean)
-          : (Array.isArray(s.ekskuls) ? s.ekskuls : []);
-        return {
-          nisn: nisnVal,
-          nis: nisnVal,
-          name: s.nama_lengkap_siswa || s.name,
-          gender: s.jenis_kelamin__l_p_ || s.gender || 'L',
-          class: s.kelas || s.class || '',
-          ekskuls: ekskulList
-        };
-      });
-    }
-    writeDB(db);
-    res.json({
-      success: true,
-      message: `Sinkronisasi berhasil! Memuat ${db.students.length} siswa dan ${db.ekskuls.length} ekskul dari Google Sheets.`,
-      studentsCount: db.students.length,
-      ekskulsCount: db.ekskuls.length
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json(result);
 });
 
 // Start server locally
 if (require.main === module || !process.env.VERCEL) {
+  // Cek dan lakukan sinkronisasi otomatis jika database lokal masih kosong
+  const currentDb = readDB();
+  if (currentDb.ekskuls.length === 0 || currentDb.students.length === 0) {
+    console.log('🔄 Menghubungkan ke Google Sheets untuk mengambil data awal...');
+    pullFromGoogleSheets().then(res => {
+      console.log('✅ Status inisialisasi awal:', res.message || res.error);
+    });
+  }
+
   app.listen(PORT, '0.0.0.0', () => {
     const localIp = getLocalIp();
     console.log(`=======================================================`);

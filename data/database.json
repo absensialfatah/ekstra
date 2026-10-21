@@ -1,6 +1,2945 @@
 {
-  "ekskuls": [],
-  "students": [],
+  "ekskuls": [
+    {
+      "id": "drumband_ayqv",
+      "name": "DRUMBAND",
+      "pembimbing": "ROZAK",
+      "jadwal": "SABTU, 13:30",
+      "lokasi": "LAPANGAN MTs",
+      "method": "manual",
+      "icon": "🥁",
+      "color": "#059669",
+      "badge": "Presensi Manual oleh Guru"
+    },
+    {
+      "id": "silat_clwy",
+      "name": "SILAT",
+      "pembimbing": "SAWUNG",
+      "jadwal": "MINGGU, 08:00",
+      "lokasi": "LAPANGAN MTs",
+      "method": "qr",
+      "icon": "🥋",
+      "color": "#059669",
+      "badge": "Presensi Mandiri via QR Code"
+    },
+    {
+      "id": "hadroh_c6my",
+      "name": "HADROH",
+      "pembimbing": "IRKHAM",
+      "jadwal": "KAMIS, 13:30",
+      "lokasi": "AULA",
+      "method": "manual",
+      "icon": "📖",
+      "color": "#059669",
+      "badge": "Presensi Manual oleh Guru"
+    }
+  ],
+  "students": [
+    {
+      "nisn": "0132247523",
+      "nis": "0132247523",
+      "name": "ACHMAD KAFIN MAULANA",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0147992676",
+      "nis": "0147992676",
+      "name": "AL MUHAMMAD NAJID NABIL GHANI",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139576414",
+      "nis": "0139576414",
+      "name": "AULIYA RENADA",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137310533",
+      "nis": "0137310533",
+      "name": "AZAHRA RIZKA AMELIA PUTRI",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0147417170",
+      "nis": "0147417170",
+      "name": "DITA SOFIANA",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0144015109",
+      "nis": "0144015109",
+      "name": "DWI DITA AULIA",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3141461651",
+      "nis": "3141461651",
+      "name": "ELDIANA WULANDARI",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137986704",
+      "nis": "0137986704",
+      "name": "GIVTO AFRIANI",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0134453038",
+      "nis": "0134453038",
+      "name": "HAIKAL FIKRI",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149663629",
+      "nis": "0149663629",
+      "name": "JANETA WAHYU PUJIANI",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3148941159",
+      "nis": "3148941159",
+      "name": "KAYSAN RAMADHAN",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133069180",
+      "nis": "0133069180",
+      "name": "LAELATUL KHASANAH",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132447226",
+      "nis": "0132447226",
+      "name": "M. ARIZQI MAULANA",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137526618",
+      "nis": "0137526618",
+      "name": "M. FACHRU NIZAM",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3147063628",
+      "nis": "3147063628",
+      "name": "M. FAIRUS UBAIDILLAH",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0134911618",
+      "nis": "0134911618",
+      "name": "MADINA SIVA LUTFIANA",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0144809037",
+      "nis": "0144809037",
+      "name": "MAULIDA KHASANAH",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136979628",
+      "nis": "0136979628",
+      "name": "MOHAMAD ZAKIRUN",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149511844",
+      "nis": "0149511844",
+      "name": "MOHAMMAD DANIEL HAQ",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0144786180",
+      "nis": "0144786180",
+      "name": "MUHAMAD ROBIUL AWAL",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0143053244",
+      "nis": "0143053244",
+      "name": "MUHAMMAD AKMAL REZA FATA",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139067537",
+      "nis": "0139067537",
+      "name": "MUHAMMAD AKSA APRILIO",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149873631",
+      "nis": "0149873631",
+      "name": "MUHAMMAD HAFIS SAPUTRA",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131528399",
+      "nis": "0131528399",
+      "name": "NADHIFA QUAESHA",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0145375295",
+      "nis": "0145375295",
+      "name": "NAILI ROHMAH",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149974696",
+      "nis": "0149974696",
+      "name": "NAIRA AULIA RAMADHANI",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0144243553",
+      "nis": "0144243553",
+      "name": "QAYLA NUR FADHILAH",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139383906",
+      "nis": "0139383906",
+      "name": "RAMADHANI FITRIYANA",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136154738",
+      "nis": "0136154738",
+      "name": "SYAKIRA IRNAINI AQNA",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132059010",
+      "nis": "0132059010",
+      "name": "TIAR DENTY PRATIWI",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0147376395",
+      "nis": "0147376395",
+      "name": "TURIP RAHMA WATY",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0147473454",
+      "nis": "0147473454",
+      "name": "ADELIA FEBRIANA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131035654",
+      "nis": "0131035654",
+      "name": "AISYI AURELIA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139214972",
+      "nis": "0139214972",
+      "name": "AKHMAD ULIL AZKA",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121286556",
+      "nis": "0121286556",
+      "name": "BERLIAN ZIVANNA SETYAWAN",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3134849037",
+      "nis": "3134849037",
+      "name": "CHIKA ARNI ANDIKA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137266014",
+      "nis": "0137266014",
+      "name": "EKA FAUZIATISSAFIRA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3134061475",
+      "nis": "3134061475",
+      "name": "HAFSAH ALISHA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149338630",
+      "nis": "0149338630",
+      "name": "IFA ADI ASTILA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0142285062",
+      "nis": "0142285062",
+      "name": "JIHAN TALITA ULFA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131687226",
+      "nis": "0131687226",
+      "name": "KAYLA YUGI SYIFATUL JANNAH",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3137858166",
+      "nis": "3137858166",
+      "name": "KHAJIA LAILATUL HAWA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3146270786",
+      "nis": "3146270786",
+      "name": "M. AGAM DARMAWAN SAPUTRA",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0145594701",
+      "nis": "0145594701",
+      "name": "M. DAFIT ASSAFI PUTRA",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3130125455",
+      "nis": "3130125455",
+      "name": "M. FENDI ARFIANSAH",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0148367045",
+      "nis": "0148367045",
+      "name": "MASRUROH",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3141238788",
+      "nis": "3141238788",
+      "name": "MUH REYFAN FADILLAH",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0123907263",
+      "nis": "0123907263",
+      "name": "MUHAMMAD ABDILLAH SYAFI`I",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3143416897",
+      "nis": "3143416897",
+      "name": "MUHAMMAD FAREL APRILIO",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3143185755",
+      "nis": "3143185755",
+      "name": "MUHAMMAD HAFIZH PRATAMA",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131857017",
+      "nis": "0131857017",
+      "name": "NABILA IZZA KHATUNISWAH",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0148644240",
+      "nis": "0148644240",
+      "name": "NAGITA ENISAFANA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136004043",
+      "nis": "0136004043",
+      "name": "NAILIS SA`ADAH",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3143320980",
+      "nis": "3143320980",
+      "name": "NAURA ASSYIFA AZZAHRA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137762045",
+      "nis": "0137762045",
+      "name": "NAYLA LATIFATUSSILVIANA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0138571747",
+      "nis": "0138571747",
+      "name": "NI`MATULLAILY SAADAH",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136626462",
+      "nis": "0136626462",
+      "name": "RETNO DWI ARYANI",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0135565685",
+      "nis": "0135565685",
+      "name": "REZA MAULANA AL AZRIL",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0146671285",
+      "nis": "0146671285",
+      "name": "SIVANA ALYA JAZILA",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3149025022",
+      "nis": "3149025022",
+      "name": "ZAHRAHTUN JANNAH",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139496883",
+      "nis": "0139496883",
+      "name": "AKIF ALFIAN MAULANA",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3130276473",
+      "nis": "3130276473",
+      "name": "ATIQA KHALIZA AZ-ZAHRA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0134105229",
+      "nis": "0134105229",
+      "name": "DWI RAHMADANI",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3144196786",
+      "nis": "3144196786",
+      "name": "FADYA DWI SYAKIRA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136470281",
+      "nis": "0136470281",
+      "name": "FATIMATUZZAHRA ASYIFA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132564573",
+      "nis": "0132564573",
+      "name": "GUSTIAN DWI NUGROHO",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0145600243",
+      "nis": "0145600243",
+      "name": "HANIA ZAKIRA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0146179379",
+      "nis": "0146179379",
+      "name": "KAYSA AZKIYA SALSABILA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137062551",
+      "nis": "0137062551",
+      "name": "KISAH HIRA SOFIYANA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133676459",
+      "nis": "0133676459",
+      "name": "LIA PURNAMA SARI",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0148525835",
+      "nis": "0148525835",
+      "name": "M. ARFAN ZAIDAN",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0141854349",
+      "nis": "0141854349",
+      "name": "M. BRIAN ARI SETYAWAN",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0148481269",
+      "nis": "0148481269",
+      "name": "M. HAIDAR KHASANI",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0145469313",
+      "nis": "0145469313",
+      "name": "MAHIRA HUSNA KAMILA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0145409327",
+      "nis": "0145409327",
+      "name": "MELISSA AZ ZAHRA ZAILANI",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0142400374",
+      "nis": "0142400374",
+      "name": "MUHAMAD HAFIS PRATAMA",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0143906944",
+      "nis": "0143906944",
+      "name": "MUHAMMAD AZRIL AMRULHAQ",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137157138",
+      "nis": "0137157138",
+      "name": "MUHAMMAD IKHSAN",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0134215722",
+      "nis": "0134215722",
+      "name": "MUHAMMAD WILDAN SHOLIHAN",
+      "gender": "L",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0146811600",
+      "nis": "0146811600",
+      "name": "NABILA KHANIFA ZAHRA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139205589",
+      "nis": "0139205589",
+      "name": "NAILAS SALWA AULIA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149824709",
+      "nis": "0149824709",
+      "name": "NAJWA ALLEANNA SALAFUDIN",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0146149485",
+      "nis": "0146149485",
+      "name": "NATASYA SEPTIANI",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3130199884",
+      "nis": "3130199884",
+      "name": "NOVA ELYSIA PUTRI",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0142561553",
+      "nis": "0142561553",
+      "name": "RAISSA AMALIA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149105726",
+      "nis": "0149105726",
+      "name": "SELFIA LIDIYASARI",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133765391",
+      "nis": "0133765391",
+      "name": "SITI ZAHRIYYATUL AFIFAH",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139164442",
+      "nis": "0139164442",
+      "name": "ULFATUN KANZA AULIA",
+      "gender": "P",
+      "class": "7C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0147646509",
+      "nis": "0147646509",
+      "name": "AIMAR RADINKA FAUSTIN",
+      "gender": "L",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0144327189",
+      "nis": "0144327189",
+      "name": "AIZAR FAUQI HADANI ROBBI",
+      "gender": "L",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0143970995",
+      "nis": "0143970995",
+      "name": "AMIL AWAMILUSSOLIKHA",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0146783839",
+      "nis": "0146783839",
+      "name": "AQILLA ZASKIA",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0141471365",
+      "nis": "0141471365",
+      "name": "BILQIS AULIA ZAHWA",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0134985543",
+      "nis": "0134985543",
+      "name": "BUNGA SYAFIRA",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149220687",
+      "nis": "0149220687",
+      "name": "FADIA SYAFIQOH",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136019009",
+      "nis": "0136019009",
+      "name": "KANZA NUR AZZAHRA",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0141275101",
+      "nis": "0141275101",
+      "name": "MUHAMMAD AFSAL FAIRUZ",
+      "gender": "L",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149482322",
+      "nis": "0149482322",
+      "name": "MUHAMMAD FIRDAUS RAMADHAN",
+      "gender": "L",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0144397663",
+      "nis": "0144397663",
+      "name": "NAOFAL AMRI HIDAYATULLAH",
+      "gender": "L",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0138765527",
+      "nis": "0138765527",
+      "name": "NAURA AQILIA AZZAHRA",
+      "gender": "L",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131462707",
+      "nis": "0131462707",
+      "name": "OKTAVIAN LIFIANO PRATAMA",
+      "gender": "L",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0148493496",
+      "nis": "0148493496",
+      "name": "SABILLA IRYANINGRUM",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139197685",
+      "nis": "0139197685",
+      "name": "SANTIKA NOVIANA SARI",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3147775393",
+      "nis": "3147775393",
+      "name": "SELFI WULANDARI",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0149653804",
+      "nis": "0149653804",
+      "name": "SYAKIRA ABIDAH",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136560265",
+      "nis": "0136560265",
+      "name": "UMI NASHIKHAH",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137487700",
+      "nis": "0137487700",
+      "name": "VANIA AZZANI",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0135340131",
+      "nis": "0135340131",
+      "name": "ZILA FAKHIROTUN NAFIA",
+      "gender": "P",
+      "class": "7D",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3129256968",
+      "nis": "3129256968",
+      "name": "AHMAD SOLEH",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3134589687",
+      "nis": "3134589687",
+      "name": "AHMAD ZIDANUL IBAD",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3127109774",
+      "nis": "3127109774",
+      "name": "AHMAT DAFA FATUROHMAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121083228",
+      "nis": "0121083228",
+      "name": "AHYUK SOTIM",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3122903753",
+      "nis": "3122903753",
+      "name": "ALANA SILVA",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3132316778",
+      "nis": "3132316778",
+      "name": "ALI MURTADHO",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127226434",
+      "nis": "0127226434",
+      "name": "AMELIA AZAHRA",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124234360",
+      "nis": "0124234360",
+      "name": "AMIRA MIKHAILA",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3139014654",
+      "nis": "3139014654",
+      "name": "AMRINA ROSADAH",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0123789610",
+      "nis": "0123789610",
+      "name": "ANNISA NIKMATUL KHASANAH",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137335075",
+      "nis": "0137335075",
+      "name": "ARUM CAHYA NINGSIH",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0097864228",
+      "nis": "0097864228",
+      "name": "DAFIT SEPTIAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3122058182",
+      "nis": "3122058182",
+      "name": "DANI OKTAVIAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0118706847",
+      "nis": "0118706847",
+      "name": "DAVA FASIKHUL IKHSAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127383797",
+      "nis": "0127383797",
+      "name": "DWI NOVA UTOMO",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133605982",
+      "nis": "0133605982",
+      "name": "FATHINA ADHIYAA BILQIS",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137019420",
+      "nis": "0137019420",
+      "name": "FENI WAHYU NITASARI",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125252169",
+      "nis": "0125252169",
+      "name": "FIA IZATUL MILAH",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0134920322",
+      "nis": "0134920322",
+      "name": "IHYAK NASHIRUDIN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0123489952",
+      "nis": "0123489952",
+      "name": "IKHWANUL ASROFAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132083128",
+      "nis": "0132083128",
+      "name": "JIHAN MELANI ARTANTI",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137770482",
+      "nis": "0137770482",
+      "name": "M. ALAM FIRMANSYAH",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3121275380",
+      "nis": "3121275380",
+      "name": "M. SHOUQI RAMADHAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3139483567",
+      "nis": "3139483567",
+      "name": "MOH. KENZIE AINNURACHMAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3131771755",
+      "nis": "3131771755",
+      "name": "MOHAMMAD BAGAS ZAKARIYA",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124591989",
+      "nis": "0124591989",
+      "name": "MUHAMAD AFIF MUZAKKI",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3131268775",
+      "nis": "3131268775",
+      "name": "MUHAMAD FENDI PRASETIO",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125339146",
+      "nis": "0125339146",
+      "name": "MUHAMAD RIFQI ADITYA",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0135363858",
+      "nis": "0135363858",
+      "name": "MUHAMMAD FADIL BAKHTIAR",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3129488697",
+      "nis": "3129488697",
+      "name": "MUHAMMAD FAUZAN",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129390481",
+      "nis": "0129390481",
+      "name": "MUHAMMAD IMAM BASKORO",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3131328279",
+      "nis": "3131328279",
+      "name": "MUHAMMAD IQBAL FAHMI",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3124799674",
+      "nis": "3124799674",
+      "name": "MUHAMMAD KHANAFI",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121497743",
+      "nis": "0121497743",
+      "name": "MUHAMMAD KHOERUN NIZAM",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124616408",
+      "nis": "0124616408",
+      "name": "MUHAMMAD ZAHRUL ABDILAH",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132622935",
+      "nis": "0132622935",
+      "name": "NAILA RAHMA",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133081884",
+      "nis": "0133081884",
+      "name": "NAILATIL KAMILA",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3126612369",
+      "nis": "3126612369",
+      "name": "NUR AINI",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139483428",
+      "nis": "0139483428",
+      "name": "QAIREEN ADEEVA AFSHEEN MYESA",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3132342109",
+      "nis": "3132342109",
+      "name": "RALINKA ROSYIFA FITRI",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3132517438",
+      "nis": "3132517438",
+      "name": "RIKY MAULANA",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128053710",
+      "nis": "0128053710",
+      "name": "ULUL AZMI",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136982160",
+      "nis": "0136982160",
+      "name": "ABDUL SAMSUL MUARIF",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131888776",
+      "nis": "0131888776",
+      "name": "ADIBA LAILA AZZAHRA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3137730730",
+      "nis": "3137730730",
+      "name": "AFINA RIZKYANA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137341365",
+      "nis": "0137341365",
+      "name": "AHMAD MINANURROHMAN",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124979269",
+      "nis": "0124979269",
+      "name": "ARIF AZZAKI ROMADHON",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128573065",
+      "nis": "0128573065",
+      "name": "ASHIFA DEA HUSNA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3129185996",
+      "nis": "3129185996",
+      "name": "ATIKA AMALIA PUTRI",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129635447",
+      "nis": "0129635447",
+      "name": "AUFAR RIZKY PRATAMA",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111507025",
+      "nis": "0111507025",
+      "name": "AZKYA NAISYA ANANTA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3134733102",
+      "nis": "3134733102",
+      "name": "AZZAHRA AULIA KHUSNA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0138871208",
+      "nis": "0138871208",
+      "name": "BADI`UL UMAM",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3133920513",
+      "nis": "3133920513",
+      "name": "DIFKA AFRIZZAN",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136387818",
+      "nis": "0136387818",
+      "name": "FADHILLA SETIA RIANY",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121378354",
+      "nis": "0121378354",
+      "name": "FATHIR ARFAN AZAMI",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129858284",
+      "nis": "0129858284",
+      "name": "FATIMATUZZAHRA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129317185",
+      "nis": "0129317185",
+      "name": "FAYZA ADI PRASETYO",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0138224010",
+      "nis": "0138224010",
+      "name": "FIQI HANA SAJIDHA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3137902034",
+      "nis": "3137902034",
+      "name": "KHAFIT RIDHO SOKHARI",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3139593982",
+      "nis": "3139593982",
+      "name": "LAILATUL ULFA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3127813343",
+      "nis": "3127813343",
+      "name": "M. ADIB AKMAL UNNUHA",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3123286173",
+      "nis": "3123286173",
+      "name": "M. AKROMUL HUDA",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128945346",
+      "nis": "0128945346",
+      "name": "M. ARFA AINUN NAJIB",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3128230940",
+      "nis": "3128230940",
+      "name": "M. AZZAM RAMADHAN",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3139784368",
+      "nis": "3139784368",
+      "name": "M. IZZA HAZIM",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3123774450",
+      "nis": "3123774450",
+      "name": "M. NUR FADILLAH",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0117031482",
+      "nis": "0117031482",
+      "name": "MAULINA AZZAHRA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121204264",
+      "nis": "0121204264",
+      "name": "MAYA NOVITA SARI",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3128776291",
+      "nis": "3128776291",
+      "name": "MIFTY KAMILATUL FIKRIYA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3133359084",
+      "nis": "3133359084",
+      "name": "MUHAMAD ALIFFULLAH",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125049855",
+      "nis": "0125049855",
+      "name": "MUHAMAD KHOIRUL FAHMI",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3127753925",
+      "nis": "3127753925",
+      "name": "MUHAMAD KHOIRUN NIZAM",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125861537",
+      "nis": "0125861537",
+      "name": "MUHAMMAD AFIF",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124120729",
+      "nis": "0124120729",
+      "name": "MUHAMMAD ALDIN MAULANA",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3122521482",
+      "nis": "3122521482",
+      "name": "MUHAMMAD FATIH SABILURROSYAD",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0116400201",
+      "nis": "0116400201",
+      "name": "MUHAMMAD NAUFAL BAIHAKI",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124760802",
+      "nis": "0124760802",
+      "name": "MUHAMMAD RAFFAKHUL FAHREZI",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139406606",
+      "nis": "0139406606",
+      "name": "NADIA SYARIFATUL HIDAYAH",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0118496431",
+      "nis": "0118496431",
+      "name": "NI`MATUL MAULAYA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139646890",
+      "nis": "0139646890",
+      "name": "RISMA SILVIANA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3138974737",
+      "nis": "3138974737",
+      "name": "RIZKIA RAMA GIOVANI",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0135971065",
+      "nis": "0135971065",
+      "name": "SYAKIRA MAZADA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0122635556",
+      "nis": "0122635556",
+      "name": "TINA MUTIYA",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133385348",
+      "nis": "0133385348",
+      "name": "AFIDAH ARDELIA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0122776145",
+      "nis": "0122776145",
+      "name": "AHMAD FAZA FATKHU RIZKY",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136378216",
+      "nis": "0136378216",
+      "name": "AHMAD MARSYA MAULANA",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3127443078",
+      "nis": "3127443078",
+      "name": "AISYA KAMILATUZZAHRA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121952569",
+      "nis": "0121952569",
+      "name": "ALFAN DWI RIZKIYANTO",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131861116",
+      "nis": "0131861116",
+      "name": "ALIF NUR HIDAYAH",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132705954",
+      "nis": "0132705954",
+      "name": "ANA SAYIDATUL LAILA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3128121309",
+      "nis": "3128121309",
+      "name": "CLARISA ADELYA PUTRI",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3134168020",
+      "nis": "3134168020",
+      "name": "DHANI ALFIANSYAH",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3127755938",
+      "nis": "3127755938",
+      "name": "DINA AULIA RAHMA AZZAHRI",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133293191",
+      "nis": "0133293191",
+      "name": "DYAH AYU LINTANG LARASATI",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3138194846",
+      "nis": "3138194846",
+      "name": "FATIMATUZZAHRA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132248204",
+      "nis": "0132248204",
+      "name": "KARINA NADIYATUSHUHUF",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0134414720",
+      "nis": "0134414720",
+      "name": "KATISTA NURUL HIDAYAH",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3135938505",
+      "nis": "3135938505",
+      "name": "KAYLA IFTINA ZABABIYA ZUKHRUF",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0131457981",
+      "nis": "0131457981",
+      "name": "KHAZILLA SHEZA AULIA RAMADANI",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3135103131",
+      "nis": "3135103131",
+      "name": "LAILATUL MUKAROMAH",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129623445",
+      "nis": "0129623445",
+      "name": "M. ABID ULIN NUHA",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121092291",
+      "nis": "0121092291",
+      "name": "M. ILMAN KHAQIQI",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0137924997",
+      "nis": "0137924997",
+      "name": "M. IQBAL MAULANA PUTRA",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127384318",
+      "nis": "0127384318",
+      "name": "M. RAFKA AFDIANSYAH",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0133880775",
+      "nis": "0133880775",
+      "name": "M. MUHIB HABIBUNA",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129482058",
+      "nis": "0129482058",
+      "name": "MILA DINARA SAFINA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0138982092",
+      "nis": "0138982092",
+      "name": "MOHAMAD TEGAR AZRIL",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0113330655",
+      "nis": "0113330655",
+      "name": "MUHAMAD DANI REFANDI SYAFA'AT",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132303431",
+      "nis": "0132303431",
+      "name": "MUHAMAD SABILATUR ROZAK",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3128019489",
+      "nis": "3128019489",
+      "name": "MUHAMMAD ADIL AUFA",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125250359",
+      "nis": "0125250359",
+      "name": "MUHAMMAD DZAKAULMIRZA",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3137633836",
+      "nis": "3137633836",
+      "name": "MUHAMMAD FARHAN DZULFADLI",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3125335618",
+      "nis": "3125335618",
+      "name": "MUHAMMAD GHUFRON",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0117293155",
+      "nis": "0117293155",
+      "name": "MUHAMMAD HANUM",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0132836772",
+      "nis": "0132836772",
+      "name": "MUHAMMAD WHANHUDA MUHTASIB",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3132632011",
+      "nis": "3132632011",
+      "name": "NADA TSANIA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127148848",
+      "nis": "0127148848",
+      "name": "NEVI LUTFIANA ZAHRA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3122143581",
+      "nis": "3122143581",
+      "name": "NOVAL DWI ANDRIYAN",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0136995932",
+      "nis": "0136995932",
+      "name": "NUR WANDA KHAMIDAH",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128829936",
+      "nis": "0128829936",
+      "name": "RAKA NOVIKA DARMAWAN",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3126372648",
+      "nis": "3126372648",
+      "name": "SANDI ARFAN",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3120608152",
+      "nis": "3120608152",
+      "name": "SENDI ALFAN",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0139831324",
+      "nis": "0139831324",
+      "name": "TIARA SITI UTAMI",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3122325592",
+      "nis": "3122325592",
+      "name": "WAFIK MAULANA",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127808067",
+      "nis": "0127808067",
+      "name": "YUSUF IBROHIM MOVIK",
+      "gender": "L",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126077135",
+      "nis": "0126077135",
+      "name": "ZILZI ZULFAZIMA",
+      "gender": "P",
+      "class": "8C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0122412289",
+      "nis": "0122412289",
+      "name": "AHMAD ABI KAHFI MAULANA",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127451286",
+      "nis": "0127451286",
+      "name": "AHMAD ROZAQ PRIYANTO",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126694079",
+      "nis": "0126694079",
+      "name": "AHMAD VATKHAN VAMULARQIV",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121517038",
+      "nis": "0121517038",
+      "name": "AINUN MIRZA ROHIM",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124315950",
+      "nis": "0124315950",
+      "name": "ARINA NURUL AMALIYA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0115091119",
+      "nis": "0115091119",
+      "name": "ASIFA REGINA PUTRI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0123937406",
+      "nis": "0123937406",
+      "name": "BAYU WIJAYA",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0117257177",
+      "nis": "0117257177",
+      "name": "CHACHA NINDY ANI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0123895029",
+      "nis": "0123895029",
+      "name": "DIMAS SETIAWAN",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126079340",
+      "nis": "0126079340",
+      "name": "DINI AFIKA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0115442307",
+      "nis": "0115442307",
+      "name": "DWI PUTRI RAMADANI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121426540",
+      "nis": "0121426540",
+      "name": "EFLIN NATASYA PUTRI ANINDITA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0119569823",
+      "nis": "0119569823",
+      "name": "FALASIFA AULIA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0117455773",
+      "nis": "0117455773",
+      "name": "FARA ANGGRAINI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125988295",
+      "nis": "0125988295",
+      "name": "FIKRI HAIKAL",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121561327",
+      "nis": "0121561327",
+      "name": "INTAN NURUL AI`SYAH",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125333263",
+      "nis": "0125333263",
+      "name": "IRZHA MAULANA",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124583084",
+      "nis": "0124583084",
+      "name": "ISTIANI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126717693",
+      "nis": "0126717693",
+      "name": "KEYLA APRILIYANTI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0118843487",
+      "nis": "0118843487",
+      "name": "KHOYIBAH ISWATUL CHALIM",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3124133131",
+      "nis": "3124133131",
+      "name": "M. ANGGA SAPUTRA",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3121762624",
+      "nis": "3121762624",
+      "name": "MARSYA ANINDIRA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0116039864",
+      "nis": "0116039864",
+      "name": "MIFTAHUL JANNAH",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121931639",
+      "nis": "0121931639",
+      "name": "MUHAMMAD AL FATIH",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128530474",
+      "nis": "0128530474",
+      "name": "MUHAMMAD ARJUNNAJA",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0112074454",
+      "nis": "0112074454",
+      "name": "MUHAMMAD DAVA IKHWAN PRAYOGI",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111255054",
+      "nis": "0111255054",
+      "name": "MUHAMMAD MAULANA RISKI",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124681921",
+      "nis": "0124681921",
+      "name": "NAILIL MUFIDDAH MEYLINA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126636859",
+      "nis": "0126636859",
+      "name": "NAUFAL AKBAR ZAKY",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3120952555",
+      "nis": "3120952555",
+      "name": "NAYLA SHOFA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128506936",
+      "nis": "0128506936",
+      "name": "NIKMATUL IZA LAELI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124598399",
+      "nis": "0124598399",
+      "name": "NISRINA NABIHAH",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127121595",
+      "nis": "0127121595",
+      "name": "NIZA KHAFIDZ LUKNI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111602202",
+      "nis": "0111602202",
+      "name": "NOR ACHMAD AVRIANTO",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0112762184",
+      "nis": "0112762184",
+      "name": "OKI WIBOWO",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0119701146",
+      "nis": "0119701146",
+      "name": "RADITYA ORIZA RAMADHANI",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125964207",
+      "nis": "0125964207",
+      "name": "RAFI FADZLI RAHMAN",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125706586",
+      "nis": "0125706586",
+      "name": "RENDI BAHTIAR",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0122031602",
+      "nis": "0122031602",
+      "name": "RIYANO IKHSAN EFENDI",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125716362",
+      "nis": "0125716362",
+      "name": "SALSA SABILA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0115590661",
+      "nis": "0115590661",
+      "name": "SILA VANESZA ZALEHA",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129402200",
+      "nis": "0129402200",
+      "name": "USWATUN KHASANAH",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111154820",
+      "nis": "0111154820",
+      "name": "VIRA ERLIYA ANGGRIANI",
+      "gender": "P",
+      "class": "9A",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111851516",
+      "nis": "0111851516",
+      "name": "ACHMAD GIBRAN NAKHARIN",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124805006",
+      "nis": "0124805006",
+      "name": "ADINDA ZULFA RAMADHANI",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0113064274",
+      "nis": "0113064274",
+      "name": "ADITYA EKA PURNAMA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124255349",
+      "nis": "0124255349",
+      "name": "AFFENDI ARYA PUTRA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0117367448",
+      "nis": "0117367448",
+      "name": "AHMAD BAGUS SETIAWAN",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121219747",
+      "nis": "0121219747",
+      "name": "AISYATUL HUSNA AZ`ZAHRO",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129747184",
+      "nis": "0129747184",
+      "name": "ANGGA WIJAYA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126523330",
+      "nis": "0126523330",
+      "name": "AZILA PRICILIA",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124630617",
+      "nis": "0124630617",
+      "name": "AZKA NIO NICOLA MIRYO",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111760280",
+      "nis": "0111760280",
+      "name": "DIAN RATRI RANGGASATI MAHARDIKA",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127891898",
+      "nis": "0127891898",
+      "name": "DINDA RIZIQI ZAQINAH",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127075730",
+      "nis": "0127075730",
+      "name": "FADLY ALFAH RIZI",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129448812",
+      "nis": "0129448812",
+      "name": "FAJAR YANUAR PRASETYO",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124312597",
+      "nis": "0124312597",
+      "name": "FEBRIANA TEGAR FAREZA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126587620",
+      "nis": "0126587620",
+      "name": "GEA AYU AZ ZIRA",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121543085",
+      "nis": "0121543085",
+      "name": "HANIF SAIFUL UMAR",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126675560",
+      "nis": "0126675560",
+      "name": "JUNI HELFIANIS",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0115175534",
+      "nis": "0115175534",
+      "name": "KEYLA KAMILA SARI",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127120994",
+      "nis": "0127120994",
+      "name": "M. ASKA ARYAPUTRA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121066205",
+      "nis": "0121066205",
+      "name": "M. NDIKRI MISBAHUN NAJAH",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0115804874",
+      "nis": "0115804874",
+      "name": "M. RAMADHAN MUBAROK",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125490573",
+      "nis": "0125490573",
+      "name": "M. RESTU ANGGI PRASETYO",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0122547406",
+      "nis": "0122547406",
+      "name": "MUH WILDAN ABDULLOH",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0119531252",
+      "nis": "0119531252",
+      "name": "MUHAMAD REZA PRASTIYO",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0119497336",
+      "nis": "0119497336",
+      "name": "MUHAMAD SUBCHAN SEPTIAN",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3120384885",
+      "nis": "3120384885",
+      "name": "MUHAMMAD FARHAN ADZKIYA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127307111",
+      "nis": "0127307111",
+      "name": "MUHAMMAD KENZI SYAFUTRA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0116027202",
+      "nis": "0116027202",
+      "name": "NARAYA FATHIYYATURACHMA DOMINIQUE",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129567757",
+      "nis": "0129567757",
+      "name": "NAUFA AULIA ZAHWA",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124090981",
+      "nis": "0124090981",
+      "name": "NAZILA AZZAHRA RAMADHANI",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125191514",
+      "nis": "0125191514",
+      "name": "NUR SAFA AISALIFAH",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0116308075",
+      "nis": "0116308075",
+      "name": "PUJI WAHYU KINANTI",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0118733820",
+      "nis": "0118733820",
+      "name": "QISHAFARA PRITARISA NADINE",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3122128282",
+      "nis": "3122128282",
+      "name": "RAFA KHAIRANIQ",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121881759",
+      "nis": "0121881759",
+      "name": "REVI MARISKA",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0118975198",
+      "nis": "0118975198",
+      "name": "SATRIA MASYAN FARDA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128973215",
+      "nis": "0128973215",
+      "name": "SHOLIKHAH HAZ EKA PUTRI",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126262980",
+      "nis": "0126262980",
+      "name": "SILVANIA",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0118384955",
+      "nis": "0118384955",
+      "name": "TALITHA NABILAH",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125863436",
+      "nis": "0125863436",
+      "name": "TASYA AULLIYA",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0112855281",
+      "nis": "0112855281",
+      "name": "TIO SYAH PRATAMA",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111299585",
+      "nis": "0111299585",
+      "name": "TRINITA RAMADHANI",
+      "gender": "P",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0119753647",
+      "nis": "0119753647",
+      "name": "WIDI ARDIANTO",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0104899938",
+      "nis": "0104899938",
+      "name": "AFILA RIGI PRATAMA",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126183388",
+      "nis": "0126183388",
+      "name": "AHMAD AKBAR",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0117186976",
+      "nis": "0117186976",
+      "name": "ALEA AMISYA PUTRI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125617285",
+      "nis": "0125617285",
+      "name": "ALI ZAENAL ABIDIN",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0115148893",
+      "nis": "0115148893",
+      "name": "ASIVA RISKIANI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128422193",
+      "nis": "0128422193",
+      "name": "AVIKA SYAIRILLAH",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0119351086",
+      "nis": "0119351086",
+      "name": "AYU FIRGIANI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0123744906",
+      "nis": "0123744906",
+      "name": "DITANI ANGGRAENI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111014231",
+      "nis": "0111014231",
+      "name": "DWI ZAHRA SEPTIANI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126550000",
+      "nis": "0126550000",
+      "name": "EVAILATUL INDAH KHUMALA SARI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127003607",
+      "nis": "0127003607",
+      "name": "FAJAR ISNAENI",
+      "gender": "LL",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0119764380",
+      "nis": "0119764380",
+      "name": "FEBRIAN MAULANA EFENDI",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128431488",
+      "nis": "0128431488",
+      "name": "GALIH FABIELTRA PERMANA",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "3116299505",
+      "nis": "3116299505",
+      "name": "HILDA PRISILIA RAMADHANI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0113816016",
+      "nis": "0113816016",
+      "name": "ILFA MILAKHUN NAIFA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129523950",
+      "nis": "0129523950",
+      "name": "KHAIRANA RAMADHANI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124947893",
+      "nis": "0124947893",
+      "name": "LAILATUL AIDA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129016494",
+      "nis": "0129016494",
+      "name": "M. VICKY HAKAM",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111896544",
+      "nis": "0111896544",
+      "name": "M. ZULKHAM FAZA",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0116574158",
+      "nis": "0116574158",
+      "name": "MARCELLA AULIL MAULANA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126245612",
+      "nis": "0126245612",
+      "name": "MOHAMMAD FADHLI",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121490874",
+      "nis": "0121490874",
+      "name": "MUHAMAD KHAIRIL FAIZ",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125954218",
+      "nis": "0125954218",
+      "name": "MUHAMAD RISKI SAPUTRA",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125572470",
+      "nis": "0125572470",
+      "name": "MUHAMMAD AINUN MUKAROM",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0129728616",
+      "nis": "0129728616",
+      "name": "MUHAMMAD ARSYAFIN SAPUTRA",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0113661764",
+      "nis": "0113661764",
+      "name": "MUHAMMAD NADHIF AL ARFAN",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125460490",
+      "nis": "0125460490",
+      "name": "MUHAMMAD SUBHAN CHOIRI",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0122940109",
+      "nis": "0122940109",
+      "name": "NAILATUL KHASANAH",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0127116300",
+      "nis": "0127116300",
+      "name": "NAJWA ALIYA SAFIRA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0117023553",
+      "nis": "0117023553",
+      "name": "NAVIZAR SHAFI AL MUMTAZA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125056681",
+      "nis": "0125056681",
+      "name": "NUR `AINI MUFIDAH",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126876077",
+      "nis": "0126876077",
+      "name": "NUR ANISA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126844390",
+      "nis": "0126844390",
+      "name": "PRATAMA AFAN KHOIRUL HADI",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0111421391",
+      "nis": "0111421391",
+      "name": "QUEENSHA HIDAYATUL AULIA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0115429851",
+      "nis": "0115429851",
+      "name": "RAFQI ARFAN MAULANA",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121905080",
+      "nis": "0121905080",
+      "name": "RAVA EKA ALFIANSYAH",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0124153015",
+      "nis": "0124153015",
+      "name": "REGIANA PUTRI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0121916223",
+      "nis": "0121916223",
+      "name": "RISQIYATUL FATIKHA",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0125133067",
+      "nis": "0125133067",
+      "name": "ROFIKA ASIH PRATIWI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0113082873",
+      "nis": "0113082873",
+      "name": "SITI MULIA SARI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0128116647",
+      "nis": "0128116647",
+      "name": "SYARIF BAIHAQI",
+      "gender": "L",
+      "class": "9C",
+      "ekskuls": []
+    },
+    {
+      "nisn": "0126903075",
+      "nis": "0126903075",
+      "name": "YUNITA LINTANG KIRANASASI",
+      "gender": "P",
+      "class": "9C",
+      "ekskuls": []
+    }
+  ],
   "sessions": [],
   "attendances": []
 }
