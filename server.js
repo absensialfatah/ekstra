@@ -325,6 +325,68 @@ app.post('/api/ekskul', (req, res) => {
   });
 });
 
+// API: Edit Extracurricular
+app.put('/api/ekskul/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, pembimbing, jadwal, lokasi, method, icon, color } = req.body;
+
+  const db = readDB();
+  const index = db.ekskuls.findIndex(e => e.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Ekstrakurikuler tidak ditemukan.' });
+  }
+
+  if (name) db.ekskuls[index].name = name.trim();
+  if (pembimbing) db.ekskuls[index].pembimbing = pembimbing.trim();
+  if (jadwal) db.ekskuls[index].jadwal = jadwal.trim();
+  if (lokasi) db.ekskuls[index].lokasi = lokasi.trim();
+  if (method) {
+    db.ekskuls[index].method = method === 'qr' ? 'qr' : 'manual';
+    db.ekskuls[index].badge = method === 'qr' ? 'Presensi Mandiri via QR Code' : 'Presensi Manual oleh Guru';
+  }
+  if (icon) db.ekskuls[index].icon = icon;
+  if (color) db.ekskuls[index].color = color;
+
+  writeDB(db);
+
+  syncToGoogleSheets('editEkskul', { ekskul: db.ekskuls[index] });
+
+  res.json({
+    success: true,
+    message: `Ekstrakurikuler "${db.ekskuls[index].name}" berhasil diperbarui!`,
+    ekskul: db.ekskuls[index]
+  });
+});
+
+// API: Delete Extracurricular
+app.delete('/api/ekskul/:id', (req, res) => {
+  const { id } = req.params;
+  const db = readDB();
+  const index = db.ekskuls.findIndex(e => e.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Ekstrakurikuler tidak ditemukan.' });
+  }
+
+  const deletedEkskul = db.ekskuls[index];
+  db.ekskuls.splice(index, 1);
+
+  // Remove this ekskul ID from students enrolled
+  db.students.forEach(s => {
+    if (Array.isArray(s.ekskuls)) {
+      s.ekskuls = s.ekskuls.filter(eid => eid !== id);
+    }
+  });
+
+  writeDB(db);
+
+  syncToGoogleSheets('deleteEkskul', { id, name: deletedEkskul.name });
+
+  res.json({
+    success: true,
+    message: `Ekstrakurikuler "${deletedEkskul.name}" berhasil dihapus dari sistem!`
+  });
+});
+
 // API: Save Manual Attendance (Hadir & Izin saja, siswa yang tidak diklik otomatis menjadi Alpa)
 app.post('/api/attendance/manual', (req, res) => {
   const { ekskulId, date, records } = req.body;

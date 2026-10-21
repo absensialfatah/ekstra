@@ -60,13 +60,16 @@
       <div class="card">
         <div class="card-header">
           <div>
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
               <h2 class="card-title" id="manualEkskulHeaderTitle" style="margin: 0;">
                 <span>🥁</span> Drumband Bahana Gita
               </h2>
               <select id="manualEkskulSelect" class="select-input" style="font-weight: 700; padding: 0.35rem 0.75rem; font-size: 0.88rem;">
                 <!-- Populated dynamically with all manual ekskuls -->
               </select>
+              <button type="button" class="btn btn-outline" id="btnEditManualEkskul" title="Edit Informasi Ekskul Ini" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;">✏️ Edit</button>
+              <button type="button" class="btn btn-outline" id="btnDeleteManualEkskul" title="Hapus Ekskul Ini" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; color: #dc2626; border-color: #fecaca;">🗑️ Hapus</button>
+              <button type="button" class="btn btn-primary" id="btnOpenAddEkskulModalTab1" style="padding: 0.35rem 0.75rem; font-size: 0.82rem;">➕ Tambah Ekskul</button>
             </div>
             <p class="card-subtitle">
               Siswa tidak membawa gawai. Guru cukup menandai siswa yang <strong>Hadir</strong> atau <strong>Izin</strong>. Siswa yang <em>tidak diklik otomatis tercatat Alpa</em>.
@@ -165,6 +168,11 @@
             <p class="card-subtitle">
               Siswa membawa HP dan melakukan pemindaian mandiri. Dilengkapi pengaman kadaluarsa waktu (Anti-Titip Absen via WhatsApp).
             </p>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary" id="btnOpenAddEkskulModalTab2" style="font-size: 0.85rem;">
+              ➕ Tambah Ekskul
+            </button>
           </div>
         </div>
 
@@ -526,13 +534,16 @@
   <div class="modal-backdrop" id="addEkskulModal">
     <div class="modal-card" style="max-width: 540px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #0f172a;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #0f172a;" id="ekskulModalTitle">
           ✨ Tambah Ekstrakurikuler Baru
         </h3>
         <button id="btnCloseAddEkskulModal" style="background: none; border: none; font-size: 1.6rem; cursor: pointer; color: var(--text-muted);">&times;</button>
       </div>
       
       <form id="formAddEkskul" onsubmit="return false;">
+        <input type="hidden" id="ekskulFormMode" value="add">
+        <input type="hidden" id="ekskulEditId" value="">
+
         <div style="margin-bottom: 1rem;">
           <label for="newEkskulName" style="display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">Nama Ekstrakurikuler:</label>
           <input type="text" id="newEkskulName" class="input-search" placeholder="Contoh: Futsal, Pramuka, Hadrah, Kaligrafi" required style="width: 100%;">

@@ -182,23 +182,43 @@ document.addEventListener('DOMContentLoaded', () => {
       // A. Populate Manual Ekskul Select (Tab 1)
       const manualEkskuls = state.ekskuls.filter(e => e.method === 'manual');
       manualEkskulSelect.innerHTML = '';
-      manualEkskuls.forEach(e => {
+      if (manualEkskuls.length === 0) {
         const opt = document.createElement('option');
-        opt.value = e.id;
-        opt.textContent = `${e.icon || '🥁'} ${e.name}`;
+        opt.value = '';
+        opt.textContent = '-- Belum Ada Ekskul Manual (Klik + Tambah) --';
         manualEkskulSelect.appendChild(opt);
-      });
+        state.selectedManualEkskulId = '';
+      } else {
+        manualEkskuls.forEach(e => {
+          const opt = document.createElement('option');
+          opt.value = e.id;
+          opt.textContent = `${e.icon || '🥁'} ${e.name}`;
+          manualEkskulSelect.appendChild(opt);
+        });
 
-      if (!manualEkskuls.some(e => e.id === state.selectedManualEkskulId) && manualEkskuls.length > 0) {
-        state.selectedManualEkskulId = manualEkskuls[0].id;
+        if (!manualEkskuls.some(e => e.id === state.selectedManualEkskulId)) {
+          state.selectedManualEkskulId = manualEkskuls[0].id;
+        }
       }
       manualEkskulSelect.value = state.selectedManualEkskulId;
 
       // B. Populate QR Ekskul Selector Grid (Tab 2)
       const qrEkskuls = state.ekskuls.filter(e => e.method === 'qr');
       qrEkskulSelectorGrid.innerHTML = '';
-      if (!qrEkskuls.some(e => e.id === state.selectedQrEkskulId) && qrEkskuls.length > 0) {
-        state.selectedQrEkskulId = qrEkskuls[0].id;
+      if (qrEkskuls.length === 0) {
+        state.selectedQrEkskulId = '';
+        qrEkskulSelectorGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; background: #ffffff; border-radius: 12px; border: 1.5px dashed var(--border);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📱</div>
+            <h4 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Belum Ada Ekstrakurikuler Mandiri (QR)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Tambahkan ekskul dengan metode QR (misal: Voli, Bulutangkis, Futsal, dll) agar siswa bisa presensi lewat scan HP.</p>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('btnOpenAddEkskulModalTab2').click()" style="font-size: 0.85rem;">➕ Buat Ekskul Baru Sekarang</button>
+          </div>
+        `;
+      } else {
+        if (!qrEkskuls.some(e => e.id === state.selectedQrEkskulId)) {
+          state.selectedQrEkskulId = qrEkskuls[0].id;
+        }
       }
 
       qrEkskuls.forEach(e => {
@@ -208,7 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = `
           <div class="ekskul-card-header">
             <div class="ekskul-icon-wrap" style="color: ${e.color || '#2563eb'};">${e.icon || '📱'}</div>
-            <span class="ekskul-method-badge badge-qr">QR Code</span>
+            <div style="display: flex; gap: 0.35rem; align-items: center;">
+              <button type="button" class="btn-card-action btn-edit-ekskul" data-id="${e.id}" title="Edit Ekskul">✏️</button>
+              <button type="button" class="btn-card-action btn-delete-ekskul" data-id="${e.id}" title="Hapus Ekskul" style="color: #dc2626;">🗑️</button>
+              <span class="ekskul-method-badge badge-qr">QR</span>
+            </div>
           </div>
           <h3 class="ekskul-card-name">${e.name}</h3>
           <div class="ekskul-card-info">
@@ -218,11 +242,26 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
 
+        // Card select
         card.addEventListener('click', () => {
           if (state.activeSession) return alert('Sesi absensi sedang berlangsung! Tutup sesi terlebih dahulu sebelum berganti ekskul.');
           document.querySelectorAll('#qrEkskulSelectorGrid .ekskul-card').forEach(c => c.classList.remove('selected'));
           card.classList.add('selected');
           state.selectedQrEkskulId = e.id;
+        });
+
+        // Edit button
+        const btnEdit = card.querySelector('.btn-edit-ekskul');
+        btnEdit.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          openEkskulModal(e);
+        });
+
+        // Delete button
+        const btnDel = card.querySelector('.btn-delete-ekskul');
+        btnDel.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          deleteEkskul(e.id, e.name);
         });
 
         qrEkskulSelectorGrid.appendChild(card);
@@ -261,7 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateManualEkskulInfo() {
     const cur = state.ekskuls.find(e => e.id === state.selectedManualEkskulId);
-    if (!cur) return;
+    if (!cur) {
+      manualEkskulHeaderTitle.innerHTML = `<span>📋</span> Belum Ada Ekskul`;
+      drumbandPembimbing.textContent = '-';
+      drumbandJadwal.textContent = '-';
+      drumbandTotalCount.textContent = '0 Siswa';
+      btnSaveDrumbandAttendance.innerHTML = `💾 Simpan Presensi`;
+      return;
+    }
     manualEkskulHeaderTitle.innerHTML = `<span>${cur.icon || '🥁'}</span> ${cur.name}`;
     drumbandPembimbing.textContent = cur.pembimbing;
     drumbandJadwal.textContent = cur.jadwal;
@@ -342,9 +388,12 @@ document.addEventListener('DOMContentLoaded', () => {
     drumbandStudentsGrid.innerHTML = '';
 
     if (filtered.length === 0) {
+      const msg = state.manualStudents.length === 0
+        ? 'Belum ada anggota yang terdaftar di ekstrakurikuler ini.<br><a href="javascript:void(0)" onclick="document.getElementById(\'tabBtnSiswa\').click()" style="color: var(--primary); font-weight: 700; margin-top: 0.5rem; display: inline-block;">👉 Buka Tab Data Anggota untuk Menambahkan Siswa</a>'
+        : 'Tidak ada siswa yang cocok dengan filter pencarian.';
       drumbandStudentsGrid.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem; color: var(--text-muted); background: #ffffff; border-radius: 12px; border: 1px dashed var(--border);">
-          Belum ada siswa yang terdaftar di ekstrakurikuler ini atau tidak cocok dengan filter pencarian.
+          ${msg}
         </div>
       `;
       return;
@@ -818,14 +867,101 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================
-  // FITUR: TAMBAH EKSTRAKURIKULER BARU
+  // FITUR: KELOLA EKSTRAKURIKULER (TAMBAH / EDIT / HAPUS)
   // ==========================================
-  btnOpenAddEkskulModal.addEventListener('click', () => {
-    formAddEkskul.reset();
-    state.selectedNewEmoji = '🥁';
-    emojiChoiceBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-emoji') === '🥁'));
+  function openEkskulModal(ekskul = null) {
+    const ekskulFormMode = document.getElementById('ekskulFormMode');
+    const ekskulEditId = document.getElementById('ekskulEditId');
+    const ekskulModalTitle = document.getElementById('ekskulModalTitle');
+    const btnSubmit = document.getElementById('btnSubmitAddEkskul');
+
+    if (ekskul) {
+      // Mode Edit
+      ekskulFormMode.value = 'edit';
+      ekskulEditId.value = ekskul.id;
+      ekskulModalTitle.textContent = `✏️ Edit Ekstrakurikuler: ${ekskul.name}`;
+      newEkskulName.value = ekskul.name;
+      newEkskulPembimbing.value = ekskul.pembimbing;
+      newEkskulJadwal.value = ekskul.jadwal || '';
+      newEkskulLokasi.value = ekskul.lokasi || '';
+
+      const methodRadio = document.querySelector(`input[name="newEkskulMethod"][value="${ekskul.method || 'manual'}"]`);
+      if (methodRadio) methodRadio.checked = true;
+
+      state.selectedNewEmoji = ekskul.icon || '⭐';
+      emojiChoiceBtns.forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-emoji') === state.selectedNewEmoji);
+      });
+
+      btnSubmit.textContent = 'Simpan Perubahan';
+    } else {
+      // Mode Tambah Baru
+      ekskulFormMode.value = 'add';
+      ekskulEditId.value = '';
+      ekskulModalTitle.textContent = '✨ Tambah Ekstrakurikuler Baru';
+      newEkskulName.value = '';
+      newEkskulPembimbing.value = '';
+      newEkskulJadwal.value = '';
+      newEkskulLokasi.value = '';
+
+      const defaultMethod = state.currentTab === 'tab-qr' ? 'qr' : 'manual';
+      const methodRadio = document.querySelector(`input[name="newEkskulMethod"][value="${defaultMethod}"]`);
+      if (methodRadio) methodRadio.checked = true;
+
+      state.selectedNewEmoji = defaultMethod === 'qr' ? '🏐' : '🥁';
+      emojiChoiceBtns.forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-emoji') === state.selectedNewEmoji);
+      });
+
+      btnSubmit.textContent = 'Simpan Ekstrakurikuler';
+    }
+
     addEkskulModal.classList.add('active');
-  });
+  }
+
+  async function deleteEkskul(id, name) {
+    if (!confirm(`Apakah Anda yakin ingin menghapus ekstrakurikuler "${name}"?\nSemua data anggota yang terhubung dengan ekskul ini akan otomatis dilepaskan.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/ekskul/${id}`, { method: 'DELETE' });
+      const text = await res.text();
+      let data = {};
+      try { data = JSON.parse(text); } catch(e) { throw new Error(`Respon server: ${text.slice(0, 100)}`); }
+      if (!res.ok) throw new Error(data.error || 'Gagal menghapus ekskul');
+
+      showToast(`Ekstrakurikuler "${name}" berhasil dihapus.`, 'info');
+      await loadEkskuls();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  // Open modal buttons
+  const btnOpenTab1 = document.getElementById('btnOpenAddEkskulModalTab1');
+  const btnOpenTab2 = document.getElementById('btnOpenAddEkskulModalTab2');
+  if (btnOpenTab1) btnOpenTab1.addEventListener('click', () => openEkskulModal(null));
+  if (btnOpenTab2) btnOpenTab2.addEventListener('click', () => openEkskulModal(null));
+  if (btnOpenAddEkskulModal) btnOpenAddEkskulModal.addEventListener('click', () => openEkskulModal(null));
+
+  // Edit / Delete buttons in Tab 1
+  const btnEditManualEkskul = document.getElementById('btnEditManualEkskul');
+  const btnDeleteManualEkskul = document.getElementById('btnDeleteManualEkskul');
+  if (btnEditManualEkskul) {
+    btnEditManualEkskul.addEventListener('click', () => {
+      const cur = state.ekskuls.find(e => e.id === state.selectedManualEkskulId);
+      if (cur) openEkskulModal(cur);
+      else alert('Pilih ekstrakurikuler terlebih dahulu.');
+    });
+  }
+  if (btnDeleteManualEkskul) {
+    btnDeleteManualEkskul.addEventListener('click', () => {
+      const cur = state.ekskuls.find(e => e.id === state.selectedManualEkskulId);
+      if (cur) deleteEkskul(cur.id, cur.name);
+      else alert('Pilih ekstrakurikuler terlebih dahulu.');
+    });
+  }
 
   btnCloseAddEkskulModal.addEventListener('click', () => addEkskulModal.classList.remove('active'));
   btnCancelAddEkskul.addEventListener('click', () => addEkskulModal.classList.remove('active'));
@@ -840,6 +976,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   formAddEkskul.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const mode = document.getElementById('ekskulFormMode').value;
+    const editId = document.getElementById('ekskulEditId').value;
     const name = newEkskulName.value.trim();
     const pembimbing = newEkskulPembimbing.value.trim();
     const method = document.querySelector('input[name="newEkskulMethod"]:checked').value;
@@ -853,8 +991,11 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSubmit.textContent = 'Menyimpan...';
 
     try {
-      const res = await fetch('/api/ekskul', {
-        method: 'POST',
+      const url = mode === 'edit' ? `/api/ekskul/${editId}` : '/api/ekskul';
+      const httpMethod = mode === 'edit' ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method: httpMethod,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
@@ -873,10 +1014,10 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) {
         throw new Error(`Server respon: ${text.slice(0, 120)}`);
       }
-      if (!res.ok) throw new Error(data.error || 'Gagal menambahkan ekskul');
+      if (!res.ok) throw new Error(data.error || 'Gagal menyimpan ekskul');
 
       addEkskulModal.classList.remove('active');
-      showToast(`Ekstrakurikuler "${name}" berhasil ditambahkan!`, 'success');
+      showToast(mode === 'edit' ? `Ekstrakurikuler "${name}" berhasil diperbarui!` : `Ekstrakurikuler "${name}" berhasil ditambahkan!`, 'success');
 
       // Auto switch target tab
       if (method === 'manual') {
@@ -892,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert(err.message);
     } finally {
       btnSubmit.disabled = false;
-      btnSubmit.textContent = 'Simpan Ekstrakurikuler';
+      btnSubmit.textContent = mode === 'edit' ? 'Simpan Perubahan' : 'Simpan Ekstrakurikuler';
     }
   });
 
@@ -1036,10 +1177,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     siswaMasterTableBody.innerHTML = '';
     if (filtered.length === 0) {
+      const msg = (state.students && state.students.length === 0)
+        ? 'Belum ada data siswa terdaftar. Silakan klik tombol <strong>"➕ Tambah Siswa Baru"</strong> di atas untuk mendaftarkan anggota.'
+        : 'Tidak ada siswa yang sesuai dengan kriteria pencarian / filter.';
       siswaMasterTableBody.innerHTML = `
         <tr>
           <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
-            Tidak ada siswa yang sesuai dengan kriteria filter.
+            ${msg}
           </td>
         </tr>
       `;
