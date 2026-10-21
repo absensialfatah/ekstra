@@ -1,0 +1,28 @@
+{
+  "name": "presensi-ekskul-mts-alfatah",
+  "version": "1.0.0",
+  "description": "Sistem Presensi Ekstrakurikuler MTs Al Fatah dengan Alur Ganda: Manual Guru dan QR Code Dinamis",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "presensi",
+    "ekstrakurikuler",
+    "qr-code",
+    "mts-alfatah",
+    "school-management"
+  ],
+  "author": "MTs Al Fatah",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "qrcode": "^1.5.4"
+  }
+}

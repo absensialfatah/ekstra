@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: presensi-ekskul-alfatah
+    runtime: node
+    plan: free
+    region: singapore # Lokasi server terdekat dengan Indonesia untuk performa tercepat
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: PORT
+        value: 10000
+      - key: GS_WEBAPP_URL
+        value: https://script.google.com/macros/s/AKfycbycSuDYDMnZirE2TVKI2dDvhBeU3RhBwsFguGetW1DUZPfRRc5Nld-JI1zCcsKCTOcC2w/exec
