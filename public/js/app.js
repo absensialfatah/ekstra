@@ -1230,9 +1230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Open modal buttons (Pusat di Tab 4: Data Anggota & Ekskul)
   const btnOpenTab4 = document.getElementById('btnOpenAddEkskulModalTab4');
-  const btnOpenTab4Inner = document.getElementById('btnOpenAddEkskulModalTab4Inner');
   if (btnOpenTab4) btnOpenTab4.addEventListener('click', () => openEkskulModal(null));
-  if (btnOpenTab4Inner) btnOpenTab4Inner.addEventListener('click', () => openEkskulModal(null));
 
   btnCloseAddEkskulModal.addEventListener('click', () => addEkskulModal.classList.remove('active'));
   btnCancelAddEkskul.addEventListener('click', () => addEkskulModal.classList.remove('active'));

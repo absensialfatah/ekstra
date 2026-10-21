@@ -541,14 +541,14 @@
           </div>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
             <button type="button" class="btn btn-primary" id="btnOpenAddEkskulModalTab4">
-              ➕ Tambah Ekskul Baru
+              + Tambah Ekskul Baru
+            </button>
+            <button type="button" class="btn btn-primary" id="btnOpenAddStudentModal">
+              + Tambah Siswa Baru
             </button>
             <button type="button" class="btn btn-outline" id="btnSyncFromSheets"
               title="Ambil/perbarui data siswa dari Google Spreadsheet">
               🔄 Sinkron dari Sheet
-            </button>
-            <button type="button" class="btn btn-primary" id="btnOpenAddStudentModal">
-              + Tambah Siswa Baru
             </button>
           </div>
         </div>
@@ -568,8 +568,7 @@
 
         <!-- Bagian 1: Master Ekstrakurikuler (Kelola & Tambah Ekskul) -->
         <div id="sectionMasterEkskul" style="margin-bottom: 2rem;">
-          <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+          <div style="margin-bottom: 1rem;">
             <div>
               <h3
                 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0;">
@@ -579,9 +578,6 @@
                 Kelola nama ekskul, metode presensi (Manual/QR), jadwal, guru pembimbing, dan lokasi kegiatan.
               </p>
             </div>
-            <button type="button" class="btn btn-primary btn-sm" id="btnOpenAddEkskulModalTab4Inner">
-              ➕ Tambah Ekskul Baru
-            </button>
           </div>
 
           <!-- Dynamic Master Ekskul Grid -->
