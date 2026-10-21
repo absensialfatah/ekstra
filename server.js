@@ -8,12 +8,41 @@ const QRCode = require('qrcode');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DB_FILE = path.join(__dirname, 'data', 'database.json');
+
+// Database file locations (uses /tmp on Vercel to allow write operations in serverless runtime)
+const DB_DIR = process.env.VERCEL ? '/tmp' : path.join(__dirname, 'data');
+const DB_FILE = path.join(DB_DIR, 'database.json');
+const SEED_FILE = path.join(__dirname, 'data', 'database.json');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Vercel Serverless Function URL normalizer
+app.use((req, res, next) => {
+  if (req.url === '/api/index.js' || req.url === '/api' || req.url === '/api/') {
+    const raw = req.headers['x-matched-path'] || req.headers['x-forwarded-uri'] || req.originalUrl;
+    if (raw && raw !== '/api/index.js') {
+      req.url = raw;
+    }
+  }
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Explicit page routes
+app.get('/', (req, res) => {
+  const p = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(p)) return res.sendFile(p);
+  res.send('Sistem Presensi Ekstrakurikuler MTs Al Fatah API Running');
+});
+
+app.get('/absen', (req, res) => {
+  const p = path.join(__dirname, 'public', 'absen.html');
+  if (fs.existsSync(p)) return res.sendFile(p);
+  res.redirect('/absen.html');
+});
 
 // Google Apps Script Web App Sync URL (Google Spreadsheet MTs Al Fatah)
 const GS_WEBAPP_URL = process.env.GS_WEBAPP_URL || 'https://script.google.com/macros/s/AKfycbycSuDYDMnZirE2TVKI2dDvhBeU3RhBwsFguGetW1DUZPfRRc5Nld-JI1zCcsKCTOcC2w/exec';
@@ -44,7 +73,16 @@ async function syncToGoogleSheets(action, payload) {
 function readDB() {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      return { ekskuls: [], students: [], sessions: [], attendances: [] };
+      if (fs.existsSync(SEED_FILE)) {
+        try {
+          if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
+          fs.copyFileSync(SEED_FILE, DB_FILE);
+        } catch (e) {
+          console.warn('Could not copy seed file to DB_FILE:', e.message);
+        }
+      } else {
+        return { ekskuls: [], students: [], sessions: [], attendances: [] };
+      }
     }
     const data = fs.readFileSync(DB_FILE, 'utf-8');
     return JSON.parse(data);
@@ -56,6 +94,9 @@ function readDB() {
 
 function writeDB(data) {
   try {
+    if (!fs.existsSync(DB_DIR)) {
+      fs.mkdirSync(DB_DIR, { recursive: true });
+    }
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
   } catch (err) {
     console.error('Error writing database:', err);
