@@ -287,8 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; background: #ffffff; border-radius: 12px; border: 1.5px dashed var(--border);">
             <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📱</div>
             <h4 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Belum Ada Ekstrakurikuler Mandiri (QR)</h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Tambahkan ekskul dengan metode QR (misal: Voli, Bulutangkis, Futsal, dll) agar siswa bisa presensi lewat scan HP.</p>
-            <button type="button" class="btn btn-primary" onclick="document.getElementById('btnOpenAddEkskulModalTab2').click()" style="font-size: 0.85rem;">➕ Buat Ekskul Baru Sekarang</button>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Tambahkan ekskul dengan metode QR (misal: Voli, Bulutangkis, Futsal, dll) pada tab Data Anggota & Ekskul agar siswa bisa presensi lewat scan HP.</p>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('tabBtnSiswa').click()" style="font-size: 0.85rem;">👉 Buka Tab Data Anggota & Ekskul</button>
           </div>
         `;
       } else {
@@ -304,11 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = `
           <div class="ekskul-card-header">
             <div class="ekskul-icon-wrap" style="color: ${e.color || '#2563eb'};">${e.icon || '📱'}</div>
-            <div style="display: flex; gap: 0.35rem; align-items: center;">
-              <button type="button" class="btn-card-action btn-edit-ekskul" data-id="${e.id}" title="Edit Ekskul">✏️</button>
-              <button type="button" class="btn-card-action btn-delete-ekskul" data-id="${e.id}" title="Hapus Ekskul" style="color: #dc2626;">🗑️</button>
-              <span class="ekskul-method-badge badge-qr">QR</span>
-            </div>
           </div>
           <h3 class="ekskul-card-name">${e.name}</h3>
           <div class="ekskul-card-info">
@@ -324,20 +319,6 @@ document.addEventListener('DOMContentLoaded', () => {
           document.querySelectorAll('#qrEkskulSelectorGrid .ekskul-card').forEach(c => c.classList.remove('selected'));
           card.classList.add('selected');
           state.selectedQrEkskulId = e.id;
-        });
-
-        // Edit button
-        const btnEdit = card.querySelector('.btn-edit-ekskul');
-        btnEdit.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-          openEkskulModal(e);
-        });
-
-        // Delete button
-        const btnDel = card.querySelector('.btn-delete-ekskul');
-        btnDel.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-          deleteEkskul(e.id, e.name);
         });
 
         qrEkskulSelectorGrid.appendChild(card);
@@ -573,6 +554,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (kebabBtnAddEkskul) {
     kebabBtnAddEkskul.addEventListener('click', () => {
       closeKebabMenu();
+      switchTab('tab-siswa');
       openEkskulModal();
     });
   }
@@ -1246,16 +1228,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Open modal buttons
-  const btnOpenTab1 = document.getElementById('btnOpenAddEkskulModalTab1');
-  const btnOpenTab2 = document.getElementById('btnOpenAddEkskulModalTab2');
+  // Open modal buttons (Pusat di Tab 4: Data Anggota & Ekskul)
   const btnOpenTab4 = document.getElementById('btnOpenAddEkskulModalTab4');
   const btnOpenTab4Inner = document.getElementById('btnOpenAddEkskulModalTab4Inner');
-  if (btnOpenTab1) btnOpenTab1.addEventListener('click', () => openEkskulModal(null));
-  if (btnOpenTab2) btnOpenTab2.addEventListener('click', () => openEkskulModal(null));
   if (btnOpenTab4) btnOpenTab4.addEventListener('click', () => openEkskulModal(null));
   if (btnOpenTab4Inner) btnOpenTab4Inner.addEventListener('click', () => openEkskulModal(null));
-  if (btnOpenAddEkskulModal) btnOpenAddEkskulModal.addEventListener('click', () => openEkskulModal(null));
 
   btnCloseAddEkskulModal.addEventListener('click', () => addEkskulModal.classList.remove('active'));
   btnCancelAddEkskul.addEventListener('click', () => addEkskulModal.classList.remove('active'));

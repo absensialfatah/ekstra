@@ -30,7 +30,9 @@ app.use((req, res, next) => {
   const isStaticFile = req.url.startsWith('/css') || 
                        req.url.startsWith('/js') || 
                        req.url.startsWith('/images') || 
+                       req.path === '/' ||
                        req.url === '/' || 
+                       req.url.startsWith('/?') || 
                        req.url.startsWith('/manifest.json') ||
                        req.url.startsWith('/sw.js') ||
                        req.url.endsWith('.html') ||
