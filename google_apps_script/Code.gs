@@ -362,6 +362,54 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
+    // E. Edit Ekstrakurikuler
+    if (action === "editEkskul") {
+      const sheet = ss.getSheetByName(SHEETS.EKSKUL);
+      const e = postData.ekskul;
+      const data = sheet.getDataRange().getValues();
+      let found = false;
+
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][0] === e.id || data[i][1] === e.name) {
+          sheet.getRange(i + 1, 2).setValue(e.name);
+          sheet.getRange(i + 1, 3).setValue(e.pembimbing);
+          sheet.getRange(i + 1, 4).setValue(e.jadwal);
+          sheet.getRange(i + 1, 5).setValue(e.lokasi);
+          sheet.getRange(i + 1, 6).setValue(e.method);
+          sheet.getRange(i + 1, 7).setValue(e.icon);
+          sheet.getRange(i + 1, 8).setValue(e.color || "#059669");
+          found = true;
+          break;
+        }
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        message: found ? `Ekskul ${e.name} berhasil diperbarui di Google Sheets!` : "Ekskul tidak ditemukan di baris sheet."
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // F. Hapus Ekstrakurikuler
+    if (action === "deleteEkskul") {
+      const sheet = ss.getSheetByName(SHEETS.EKSKUL);
+      const id = postData.id;
+      const data = sheet.getDataRange().getValues();
+      let deleted = false;
+
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][0] === id) {
+          sheet.deleteRow(i + 1);
+          deleted = true;
+          break;
+        }
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        message: deleted ? `Ekskul berhasil dihapus dari Google Sheets!` : "Ekskul tidak ditemukan."
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
     return ContentService.createTextOutput(JSON.stringify({
       success: false,
       error: "Aksi tidak dikenali."

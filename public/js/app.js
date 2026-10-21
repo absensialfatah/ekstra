@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnPrintReport = document.getElementById('btnPrintReport');
   const kpiRate = document.getElementById('kpiRate');
   const kpiHadir = document.getElementById('kpiHadir');
-  const kpiSakit = document.getElementById('kpiSakit');
   const kpiIzin = document.getElementById('kpiIzin');
   const kpiAlpa = document.getElementById('kpiAlpa');
   const rekapTableBody = document.getElementById('rekapTableBody');
@@ -80,6 +79,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const siswaMasterCount = document.getElementById('siswaMasterCount');
   const btnOpenAddStudentModal = document.getElementById('btnOpenAddStudentModal');
   const btnManageCurrentEkskulMembers = document.getElementById('btnManageCurrentEkskulMembers');
+
+  // 3-Dots Kebab Menu Elements (Mobile & Touch Screen)
+  const btnKebabMenu = document.getElementById('btnKebabMenu');
+  const kebabDropdown = document.getElementById('kebabDropdown');
+  const btnCloseKebab = document.getElementById('btnCloseKebab');
+  const kebabMenuItems = document.querySelectorAll('.kebab-menu-item');
+  const kebabBtnAddEkskul = document.getElementById('kebabBtnAddEkskul');
+  const kebabBtnInstallPwa = document.getElementById('kebabBtnInstallPwa');
+  const pwaInstallBanner = document.getElementById('pwaInstallBanner');
+  const btnBannerInstall = document.getElementById('btnBannerInstall');
+  const btnBannerClose = document.getElementById('btnBannerClose');
+
+  // Student Pagination Elements (Tab 4)
+  const siswaPaginationBar = document.getElementById('siswaPaginationBar');
+  const siswaPaginationInfo = document.getElementById('siswaPaginationInfo');
+  const siswaPageSizeSelect = document.getElementById('siswaPageSizeSelect');
+  const btnPageFirst = document.getElementById('btnPageFirst');
+  const btnPagePrev = document.getElementById('btnPagePrev');
+  const btnPageNext = document.getElementById('btnPageNext');
+  const btnPageLast = document.getElementById('btnPageLast');
+  const siswaPageNumbers = document.getElementById('siswaPageNumbers');
 
   // Student Add/Edit Modal Elements
   const studentModal = document.getElementById('studentModal');
@@ -320,21 +340,128 @@ document.addEventListener('DOMContentLoaded', () => {
     loadManualStudents();
   });
 
-  // Tab Navigation Handling
+  // ==========================================
+  // NAVIGATION & 3-DOTS KEBAB MENU HANDLING
+  // ==========================================
+  function switchTab(targetTab) {
+    tabButtons.forEach(b => {
+      if (b.getAttribute('data-tab') === targetTab) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+
+    kebabMenuItems.forEach(item => {
+      if (item.getAttribute('data-tab') === targetTab) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+
+    tabPanels.forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById(targetTab);
+    if (panel) panel.classList.add('active');
+    state.currentTab = targetTab;
+
+    closeKebabMenu();
+
+    if (targetTab === 'tab-rekap') loadRekapData();
+    if (targetTab === 'tab-siswa') loadSiswaMaster();
+  }
+
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
-      tabButtons.forEach(b => b.classList.remove('active'));
-      tabPanels.forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      const panel = document.getElementById(targetTab);
-      if (panel) panel.classList.add('active');
-      state.currentTab = targetTab;
-
-      if (targetTab === 'tab-rekap') loadRekapData();
-      if (targetTab === 'tab-siswa') loadSiswaMaster();
+      switchTab(targetTab);
     });
   });
+
+  kebabMenuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const targetTab = item.getAttribute('data-tab');
+      switchTab(targetTab);
+    });
+  });
+
+  function toggleKebabMenu() {
+    if (kebabDropdown) kebabDropdown.classList.toggle('active');
+  }
+
+  function closeKebabMenu() {
+    if (kebabDropdown) kebabDropdown.classList.remove('active');
+  }
+
+  if (btnKebabMenu) {
+    btnKebabMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleKebabMenu();
+    });
+  }
+
+  if (btnCloseKebab) {
+    btnCloseKebab.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeKebabMenu();
+    });
+  }
+
+  // Click outside to close dropdown
+  document.addEventListener('click', (e) => {
+    if (kebabDropdown && kebabDropdown.classList.contains('active')) {
+      if (!kebabDropdown.contains(e.target) && e.target !== btnKebabMenu) {
+        closeKebabMenu();
+      }
+    }
+  });
+
+  if (kebabBtnAddEkskul) {
+    kebabBtnAddEkskul.addEventListener('click', () => {
+      closeKebabMenu();
+      openEkskulModal();
+    });
+  }
+
+  // ==========================================
+  // PWA (PROGRESSIVE WEB APP) INSTALL LOGIC
+  // ==========================================
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (kebabBtnInstallPwa) kebabBtnInstallPwa.style.display = 'flex';
+    if (pwaInstallBanner) pwaInstallBanner.style.display = 'flex';
+  });
+
+  async function triggerPwaInstall() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      showToast('Aplikasi presensi berhasil dipasang di HP!', 'success');
+    }
+    deferredPrompt = null;
+    if (kebabBtnInstallPwa) kebabBtnInstallPwa.style.display = 'none';
+    if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
+  }
+
+  if (btnBannerInstall) btnBannerInstall.addEventListener('click', triggerPwaInstall);
+  if (kebabBtnInstallPwa) kebabBtnInstallPwa.addEventListener('click', triggerPwaInstall);
+  if (btnBannerClose) {
+    btnBannerClose.addEventListener('click', () => {
+      if (pwaInstallBanner) pwaInstallBanner.style.display = 'none';
+    });
+  }
+
+  // Register PWA Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch((err) => {
+        console.warn('SW register error:', err);
+      });
+    });
+  }
 
 
   // ==========================================
@@ -1056,7 +1183,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       kpiRate.textContent = `${data.summary.attendanceRate}%`;
       kpiHadir.textContent = data.summary.hadir;
-      kpiSakit.textContent = data.summary.sakit;
       kpiIzin.textContent = data.summary.izin;
       kpiAlpa.textContent = data.summary.alpa;
 
@@ -1159,6 +1285,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Student Master Pagination State
+  let siswaPagination = {
+    currentPage: 1,
+    pageSize: 10,
+    totalPages: 1
+  };
+
   function renderSiswaMaster() {
     const q = siswaMasterSearch.value.trim().toLowerCase();
     const ekskulFilter = siswaMasterEkskulFilter ? siswaMasterEkskulFilter.value : 'all';
@@ -1171,12 +1304,18 @@ document.addEventListener('DOMContentLoaded', () => {
       return matchQuery && matchEkskul && matchClass;
     });
 
+    const total = filtered.length;
+    siswaPagination.totalPages = Math.max(1, Math.ceil(total / siswaPagination.pageSize));
+    if (siswaPagination.currentPage > siswaPagination.totalPages) {
+      siswaPagination.currentPage = siswaPagination.totalPages;
+    }
+
     if (siswaMasterCount) {
-      siswaMasterCount.textContent = `Menampilkan ${filtered.length} dari ${allMasterStudents.length} siswa`;
+      siswaMasterCount.textContent = `Total: ${total} dari ${allMasterStudents.length} siswa`;
     }
 
     siswaMasterTableBody.innerHTML = '';
-    if (filtered.length === 0) {
+    if (total === 0) {
       const msg = (state.students && state.students.length === 0)
         ? 'Belum ada data siswa terdaftar. Silakan klik tombol <strong>"➕ Tambah Siswa Baru"</strong> di atas untuk mendaftarkan anggota.'
         : 'Tidak ada siswa yang sesuai dengan kriteria pencarian / filter.';
@@ -1187,10 +1326,23 @@ document.addEventListener('DOMContentLoaded', () => {
           </td>
         </tr>
       `;
+      if (siswaPaginationInfo) siswaPaginationInfo.innerHTML = 'Menampilkan <strong>0</strong> siswa';
+      renderSiswaPaginationNav(0, 1, 1);
       return;
     }
 
-    filtered.forEach(s => {
+    // Slicing for Pagination: only renders current page rows (super lightweight on mobile)
+    const startIdx = (siswaPagination.currentPage - 1) * siswaPagination.pageSize;
+    const endIdx = Math.min(startIdx + siswaPagination.pageSize, total);
+    const pagedStudents = filtered.slice(startIdx, endIdx);
+
+    if (siswaPaginationInfo) {
+      siswaPaginationInfo.innerHTML = `Menampilkan <strong>${startIdx + 1} - ${endIdx}</strong> dari <strong>${total}</strong> siswa (Halaman <strong>${siswaPagination.currentPage}</strong> / <strong>${siswaPagination.totalPages}</strong>)`;
+    }
+
+    renderSiswaPaginationNav(total, siswaPagination.totalPages, siswaPagination.currentPage);
+
+    pagedStudents.forEach(s => {
       const tr = document.createElement('tr');
       tr.style.borderBottom = '1px solid var(--border)';
       
@@ -1232,10 +1384,129 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Filter Listeners
-  siswaMasterSearch.addEventListener('input', renderSiswaMaster);
-  if (siswaMasterEkskulFilter) siswaMasterEkskulFilter.addEventListener('change', renderSiswaMaster);
-  if (siswaMasterClassFilter) siswaMasterClassFilter.addEventListener('change', renderSiswaMaster);
+  function renderSiswaPaginationNav(total, totalPages, currentPage) {
+    if (!siswaPageNumbers) return;
+    siswaPageNumbers.innerHTML = '';
+
+    if (btnPageFirst) btnPageFirst.disabled = currentPage <= 1;
+    if (btnPagePrev) btnPagePrev.disabled = currentPage <= 1;
+    if (btnPageNext) btnPageNext.disabled = currentPage >= totalPages;
+    if (btnPageLast) btnPageLast.disabled = currentPage >= totalPages;
+
+    if (total === 0 || totalPages <= 1) return;
+
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+
+    if (currentPage <= 3) {
+      endPage = Math.min(totalPages, 5);
+    }
+    if (currentPage >= totalPages - 2) {
+      startPage = Math.max(1, totalPages - 4);
+    }
+
+    if (startPage > 1) {
+      addPageBtn(1);
+      if (startPage > 2) {
+        const dots = document.createElement('span');
+        dots.textContent = '...';
+        dots.style.padding = '0 3px';
+        dots.style.color = 'var(--text-muted)';
+        siswaPageNumbers.appendChild(dots);
+      }
+    }
+
+    for (let p = startPage; p <= endPage; p++) {
+      addPageBtn(p);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        const dots = document.createElement('span');
+        dots.textContent = '...';
+        dots.style.padding = '0 3px';
+        dots.style.color = 'var(--text-muted)';
+        siswaPageNumbers.appendChild(dots);
+      }
+      addPageBtn(totalPages);
+    }
+
+    function addPageBtn(num) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `btn-page ${num === currentPage ? 'active' : ''}`;
+      btn.textContent = num;
+      btn.addEventListener('click', () => {
+        siswaPagination.currentPage = num;
+        renderSiswaMaster();
+      });
+      siswaPageNumbers.appendChild(btn);
+    }
+  }
+
+  // Pagination navigation button listeners
+  if (btnPageFirst) {
+    btnPageFirst.addEventListener('click', () => {
+      if (siswaPagination.currentPage > 1) {
+        siswaPagination.currentPage = 1;
+        renderSiswaMaster();
+      }
+    });
+  }
+
+  if (btnPagePrev) {
+    btnPagePrev.addEventListener('click', () => {
+      if (siswaPagination.currentPage > 1) {
+        siswaPagination.currentPage--;
+        renderSiswaMaster();
+      }
+    });
+  }
+
+  if (btnPageNext) {
+    btnPageNext.addEventListener('click', () => {
+      if (siswaPagination.currentPage < siswaPagination.totalPages) {
+        siswaPagination.currentPage++;
+        renderSiswaMaster();
+      }
+    });
+  }
+
+  if (btnPageLast) {
+    btnPageLast.addEventListener('click', () => {
+      if (siswaPagination.currentPage < siswaPagination.totalPages) {
+        siswaPagination.currentPage = siswaPagination.totalPages;
+        renderSiswaMaster();
+      }
+    });
+  }
+
+  if (siswaPageSizeSelect) {
+    siswaPageSizeSelect.addEventListener('change', () => {
+      const val = siswaPageSizeSelect.value;
+      siswaPagination.pageSize = val === 'all' ? 999999 : parseInt(val, 10);
+      siswaPagination.currentPage = 1;
+      renderSiswaMaster();
+    });
+  }
+
+  // Filter Listeners: reset to Page 1 when searching or filtering
+  siswaMasterSearch.addEventListener('input', () => {
+    siswaPagination.currentPage = 1;
+    renderSiswaMaster();
+  });
+  if (siswaMasterEkskulFilter) {
+    siswaMasterEkskulFilter.addEventListener('change', () => {
+      siswaPagination.currentPage = 1;
+      renderSiswaMaster();
+    });
+  }
+  if (siswaMasterClassFilter) {
+    siswaMasterClassFilter.addEventListener('change', () => {
+      siswaPagination.currentPage = 1;
+      renderSiswaMaster();
+    });
+  }
 
   // Quick Manage from Tab 1 (Presensi Guru)
   if (btnManageCurrentEkskulMembers) {

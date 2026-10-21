@@ -2,11 +2,22 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Sistem Presensi Ekstrakurikuler - MTs Al Fatah</title>
   <meta name="description" content="Aplikasi presensi ekstrakurikuler MTs Al Fatah dengan sistem ganda: Presensi Manual Guru untuk Drumband dan Presensi Mandiri QR Code Dinamis untuk Voli dan Bulutangkis.">
-  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- PWA & Mobile Meta Tags -->
+  <meta name="theme-color" content="#065f46">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Presensi MTs">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/images/icon.svg">
+  <link rel="icon" type="image/svg+xml" href="/images/icon.svg">
   <link rel="icon" type="image/jpeg" href="/images/logo.jpg">
+
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
@@ -21,13 +32,79 @@
         </div>
       </a>
       <div class="header-actions">
-        <button class="btn btn-primary" id="btnOpenAddEkskulModal" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+        <button class="btn btn-primary btn-header-ekskul" id="btnOpenAddEkskulModal" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
           + Tambah Ekskul
         </button>
-        <div class="ip-badge" id="lanIpBadge" title="Alamat akses untuk HP siswa di jaringan yang sama">
+        <div class="ip-badge ip-badge-header" id="lanIpBadge" title="Alamat akses untuk HP siswa di jaringan yang sama">
           <span class="pulse-dot"></span>
           <span id="serverIpText">Menghubungkan...</span>
         </div>
+
+        <!-- 3-Dots Kebab Menu Button (Pilih Menu di HP & Layar Sentuh) -->
+        <div class="kebab-menu-container" id="kebabMenuContainer">
+          <button type="button" class="btn-kebab" id="btnKebabMenu" aria-label="Menu Pilihan Presensi" title="Buka Menu Presensi">
+            <span>⋮</span>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div class="kebab-dropdown" id="kebabDropdown">
+            <div class="kebab-dropdown-header">
+              <div>
+                <span class="kebab-title">Menu Presensi</span>
+                <span class="kebab-subtitle">Pilih fitur aplikasi</span>
+              </div>
+              <button type="button" class="kebab-close-btn" id="btnCloseKebab" aria-label="Tutup Menu">&times;</button>
+            </div>
+            
+            <div class="kebab-menu-list">
+              <button type="button" class="kebab-menu-item active" data-tab="tab-drumband">
+                <span class="kebab-menu-icon">✍️</span>
+                <div class="kebab-menu-text">
+                  <div class="kebab-menu-name">Presensi Guru (Checklist)</div>
+                  <div class="kebab-menu-desc">Manual lapangan untuk Drumband & ekskul sejenis</div>
+                </div>
+                <span class="kebab-menu-active-mark">✓</span>
+              </button>
+
+              <button type="button" class="kebab-menu-item" data-tab="tab-qr">
+                <span class="kebab-menu-icon">📱</span>
+                <div class="kebab-menu-text">
+                  <div class="kebab-menu-name">Presensi Mandiri (QR)</div>
+                  <div class="kebab-menu-desc">Scan QR dinamis siswa (Voli, Bulutangkis)</div>
+                </div>
+                <span class="kebab-menu-active-mark">✓</span>
+              </button>
+
+              <button type="button" class="kebab-menu-item" data-tab="tab-rekap">
+                <span class="kebab-menu-icon">📊</span>
+                <div class="kebab-menu-text">
+                  <div class="kebab-menu-name">Rekapitulasi Presensi</div>
+                  <div class="kebab-menu-desc">Laporan, cetak & ekspor CSV</div>
+                </div>
+                <span class="kebab-menu-active-mark">✓</span>
+              </button>
+
+              <button type="button" class="kebab-menu-item" data-tab="tab-siswa">
+                <span class="kebab-menu-icon">👥</span>
+                <div class="kebab-menu-text">
+                  <div class="kebab-menu-name">Data Anggota Ekskul</div>
+                  <div class="kebab-menu-desc">Daftar siswa & kelola anggota</div>
+                </div>
+                <span class="kebab-menu-active-mark">✓</span>
+              </button>
+            </div>
+
+            <div class="kebab-dropdown-footer">
+              <button type="button" class="kebab-footer-btn" id="kebabBtnAddEkskul">
+                <span>➕</span> Tambah Ekskul Baru
+              </button>
+              <button type="button" class="kebab-footer-btn pwa-install-btn" id="kebabBtnInstallPwa" style="display: none;">
+                <span>📲</span> Pasang Aplikasi di HP (PWA)
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </header>
@@ -330,26 +407,22 @@
           </div>
         </div>
 
-        <!-- Summary KPIs -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;" class="no-print">
+        <!-- Summary KPIs (Hadir, Izin, Alpa) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;" class="no-print">
           <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1.1rem; border-radius: var(--radius-md);">
             <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Tingkat Kehadiran</p>
             <h3 style="font-size: 1.8rem; font-weight: 800; color: #059669; font-family: var(--font-heading);" id="kpiRate">0%</h3>
           </div>
           <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1.1rem; border-radius: var(--radius-md);">
-            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total Hadir</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total Hadir (✓)</p>
             <h3 style="font-size: 1.8rem; font-weight: 800; color: #10b981; font-family: var(--font-heading);" id="kpiHadir">0</h3>
           </div>
           <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1.1rem; border-radius: var(--radius-md);">
-            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total Sakit</p>
-            <h3 style="font-size: 1.8rem; font-weight: 800; color: #f59e0b; font-family: var(--font-heading);" id="kpiSakit">0</h3>
-          </div>
-          <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1.1rem; border-radius: var(--radius-md);">
-            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total Izin</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total Izin (ℹ)</p>
             <h3 style="font-size: 1.8rem; font-weight: 800; color: #3b82f6; font-family: var(--font-heading);" id="kpiIzin">0</h3>
           </div>
           <div style="background: #f8fafc; border: 1px solid var(--border); padding: 1.1rem; border-radius: var(--radius-md);">
-            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total Alpa</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Total Alpa (Otomatis)</p>
             <h3 style="font-size: 1.8rem; font-weight: 800; color: #ef4444; font-family: var(--font-heading);" id="kpiAlpa">0</h3>
           </div>
         </div>
@@ -469,6 +542,37 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls for Data Siswa (Ringan & Cepat di HP) -->
+        <div class="pagination-bar" id="siswaPaginationBar">
+          <div class="pagination-info" id="siswaPaginationInfo">
+            Menampilkan <strong>0 - 0</strong> dari <strong>0</strong> siswa
+          </div>
+          
+          <div class="pagination-controls">
+            <div class="pagination-size-select">
+              <label for="siswaPageSizeSelect" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Baris per hal:</label>
+              <select id="siswaPageSizeSelect" class="select-input pagination-select">
+                <option value="10" selected>10 siswa</option>
+                <option value="20">20 siswa</option>
+                <option value="50">50 siswa</option>
+                <option value="100">100 siswa</option>
+                <option value="all">Semua Siswa</option>
+              </select>
+            </div>
+            
+            <div class="pagination-nav" id="siswaPaginationNav">
+              <button type="button" class="btn-page" id="btnPageFirst" title="Halaman Pertama" disabled>&laquo;</button>
+              <button type="button" class="btn-page" id="btnPagePrev" title="Halaman Sebelumnya" disabled>&lsaquo;</button>
+              <div class="pagination-pages" id="siswaPageNumbers">
+                <!-- Page numbers generated dynamically -->
+              </div>
+              <button type="button" class="btn-page" id="btnPageNext" title="Halaman Berikutnya" disabled>&rsaquo;</button>
+              <button type="button" class="btn-page" id="btnPageLast" title="Halaman Terakhir" disabled>&raquo;</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -667,6 +771,21 @@
           <button type="submit" class="btn btn-primary" id="btnSubmitStudent">Simpan Data Siswa</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- PWA Install Banner (Muncul di layar HP saat aplikasi siap dipasang) -->
+  <div class="pwa-install-banner" id="pwaInstallBanner" style="display: none;">
+    <div class="pwa-banner-content">
+      <img src="/images/icon.svg" alt="Icon MTs Al Fatah" class="pwa-banner-icon">
+      <div class="pwa-banner-text">
+        <strong>Pasang Aplikasi Presensi MTs</strong>
+        <p>Akses cepat presensi langsung dari layar utama HP Anda tanpa perlu buka browser.</p>
+      </div>
+    </div>
+    <div class="pwa-banner-actions">
+      <button type="button" class="btn btn-primary btn-sm" id="btnBannerInstall">📲 Pasang Sekarang</button>
+      <button type="button" class="btn-banner-close" id="btnBannerClose" aria-label="Nanti saja">&times;</button>
     </div>
   </div>
 

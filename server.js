@@ -27,13 +27,38 @@ app.use((req, res, next) => {
     }
   }
   // Ensure requests routed to catch-all without /api prefix still match our /api routes
-  if (!req.url.startsWith('/api') && !req.url.startsWith('/css') && !req.url.startsWith('/js') && !req.url.startsWith('/images') && req.url !== '/' && !req.url.endsWith('.html')) {
+  const isStaticFile = req.url.startsWith('/css') || 
+                       req.url.startsWith('/js') || 
+                       req.url.startsWith('/images') || 
+                       req.url === '/' || 
+                       req.url.startsWith('/manifest.json') ||
+                       req.url.startsWith('/sw.js') ||
+                       req.url.endsWith('.html') ||
+                       req.url.endsWith('.json') ||
+                       req.url.endsWith('.js') ||
+                       req.url.endsWith('.svg') ||
+                       req.url.endsWith('.png') ||
+                       req.url.endsWith('.jpg') ||
+                       req.url.endsWith('.ico');
+
+  if (!req.url.startsWith('/api') && !isStaticFile) {
     req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
   }
   next();
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+// PWA Static Endpoints
+app.get('/manifest.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'manifest.json'));
+});
+
+app.get('/sw.js', (req, res) => {
+  res.setHeader('Service-Worker-Allowed', '/');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'public', 'sw.js'));
+});
 
 // Explicit page routes
 app.get('/', (req, res) => {
@@ -781,10 +806,9 @@ app.get('/api/rekap', (req, res) => {
   // Sort by date desc, then timestamp desc
   list.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
-  // Statistics
+  // Statistics: Strictly Hadir, Izin, and Alpa
   const totalRecords = list.length;
   const hadirCount = list.filter(a => a.status === 'Hadir').length;
-  const sakitCount = list.filter(a => a.status === 'Sakit').length;
   const izinCount = list.filter(a => a.status === 'Izin').length;
   const alpaCount = list.filter(a => a.status === 'Alpa').length;
   const attendanceRate = totalRecords > 0 ? Math.round((hadirCount / totalRecords) * 100) : 0;
@@ -793,7 +817,6 @@ app.get('/api/rekap', (req, res) => {
     totalRecords,
     summary: {
       hadir: hadirCount,
-      sakit: sakitCount,
       izin: izinCount,
       alpa: alpaCount,
       attendanceRate

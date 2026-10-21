@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#065f46" />
+      <stop offset="50%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#064e3b" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Rounded App Icon Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Outer Golden Border -->
+  <rect x="20" y="20" width="472" height="472" rx="96" fill="none" stroke="url(#goldGrad)" stroke-width="8" opacity="0.6" />
+
+  <!-- Inner Circle Shield -->
+  <circle cx="256" cy="256" r="190" fill="#ffffff" fill-opacity="0.06" stroke="url(#goldGrad)" stroke-width="4" stroke-dasharray="12 8" />
+
+  <!-- Central Star / Emblem Symbol -->
+  <g filter="url(#shadow)">
+    <!-- Checklist Shield -->
+    <path d="M256 80 L380 136 V264 C380 348 326 414 256 436 C186 414 132 348 132 264 V136 Z" 
+          fill="#ffffff" />
+    
+    <!-- Shield Accent -->
+    <path d="M256 100 L360 148 V256 C360 328 314 386 256 406 C198 386 152 328 152 256 V148 Z" 
+          fill="#f0fdf4" />
+
+    <!-- Big Checkmark -->
+    <path d="M200 252 L238 290 L318 200" 
+          fill="none" 
+          stroke="#059669" 
+          stroke-width="32" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+
+    <!-- Small Star Top -->
+    <polygon points="256,128 263,148 284,148 267,160 273,180 256,168 239,180 245,160 228,148 249,148" 
+             fill="#f59e0b" />
+  </g>
+
+  <!-- Text MTs AL FATAH -->
+  <text x="256" y="468" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="28" 
+        font-weight="800" 
+        letter-spacing="3" 
+        fill="#fef08a" 
+        text-anchor="middle">
+    MTs AL FATAH
+  </text>
+</svg>
