@@ -1,7 +1,7 @@
 {
-  "name": "Sistem Presensi Ekstrakurikuler - MTs Al Fatah",
-  "short_name": "Presensi MTs",
-  "description": "Aplikasi Presensi Ekstrakurikuler Guru & Siswa MTs Al Fatah dengan Alur Ganda: Manual Lapangan & QR Dinamis",
+  "name": "Presensi Ekskul - MTs Al Fatah",
+  "short_name": "Presensi Ekskul",
+  "description": "Presensi Ekskul - MTs Al Fatah",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
