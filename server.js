@@ -695,13 +695,18 @@ app.get('/api/rekap', (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
-  const localIp = getLocalIp();
-  console.log(`=======================================================`);
-  console.log(` SISTEM ABSENSI EKSTRAKURIKULER - MTS AL FATAH`);
-  console.log(` Server berjalan di port ${PORT}`);
-  console.log(` - Akses Lokal (Komputer Guru): http://localhost:${PORT}`);
-  console.log(` - Akses Jaringan/WiFi (HP Siswa): http://${localIp}:${PORT}`);
-  console.log(`=======================================================`);
-});
+// Start server locally
+if (require.main === module || !process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    const localIp = getLocalIp();
+    console.log(`=======================================================`);
+    console.log(` SISTEM ABSENSI EKSTRAKURIKULER - MTS AL FATAH`);
+    console.log(` Server berjalan di port ${PORT}`);
+    console.log(` - Akses Lokal (Komputer Guru): http://localhost:${PORT}`);
+    console.log(` - Akses Jaringan/WiFi (HP Siswa): http://${localIp}:${PORT}`);
+    console.log(`=======================================================`);
+  });
+}
+
+module.exports = app;
+
