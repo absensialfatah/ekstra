@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Presensi Mandiri Siswa - MTs Al Fatah</title>
+  <meta name="description" content="Halaman presensi mandiri siswa ekstrakurikuler MTs Al Fatah via scan QR code.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/jpeg" href="/images/logo.jpg">
+</head>
+<body class="student-page">
+
+  <div class="student-card-box" id="studentMainBox">
+    
+    <!-- School Header -->
+    <div class="student-school-header">
+      <img src="/images/logo.jpg" alt="Logo MTs Al Fatah" class="student-school-logo">
+      <h2 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #0f172a;">
+        MTs Al Fatah
+      </h2>
+      <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">
+        Sistem Presensi Digital Siswa
+      </p>
+    </div>
+
+    <!-- Loading State -->
+    <div id="stateLoading" style="padding: 2rem 1rem;">
+      <div class="pulse-dot" style="width: 24px; height: 24px; margin: 0 auto 1rem;"></div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Memverifikasi sesi absensi...</p>
+    </div>
+
+    <!-- Error State (e.g., Invalid QR, Expired, Missing Token) -->
+    <div id="stateError" style="display: none; padding: 1.5rem 0;">
+      <div style="font-size: 3rem; margin-bottom: 0.75rem;">⚠️</div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: #dc2626; font-weight: 700; margin-bottom: 0.5rem;" id="errorTitle">
+        Sesi Tidak Valid
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem;" id="errorMessage">
+        QR Code ini telah kadaluarsa atau tidak valid. Silakan lakukan pemindaian ulang pada layar Guru Pembimbing.
+      </p>
+      <a href="/" class="btn btn-outline" style="width: 100%;">
+        Buka Halaman Utama
+      </a>
+    </div>
+
+    <!-- Active Form State -->
+    <div id="stateForm" style="display: none; text-align: left;">
+      <div style="text-align: center; margin-bottom: 1.25rem;">
+        <span class="student-badge-ekskul" id="formEkskulBadge">
+          🏐 Bola Voli
+        </span>
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; color: #0f172a;" id="formEkskulTitle">
+          Konfirmasi Kehadiran
+        </h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted);" id="formSessionDate">
+          Tanggal: 21 Oktober 2026
+        </p>
+        <div class="timer-pill" id="formTimerPill" style="font-size: 0.8rem; padding: 0.25rem 0.75rem; margin-top: 0.5rem;">
+          ⏱️ Sisa waktu sesi: 12:45
+        </div>
+      </div>
+
+      <!-- Student Input Form -->
+      <form id="studentCheckinForm" onsubmit="return false;">
+        <div style="margin-bottom: 1.25rem;">
+          <label for="studentSelect" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: #1e293b;">
+            Pilih Nama Anda:
+          </label>
+          <select id="studentSelect" class="select-input" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; border-radius: 10px;">
+            <option value="">-- Pilih Nama dari Daftar Anggota --</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label for="studentNisInput" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: #1e293b;">
+            Atau Masukkan NIS:
+          </label>
+          <input type="text" id="studentNisInput" class="input-search" placeholder="Contoh: 2024003" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; border-radius: 10px;">
+        </div>
+
+        <!-- Student Identity Card Preview -->
+        <div id="studentIdentityPreview" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div id="previewAvatar" style="width: 42px; height: 42px; border-radius: 50%; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              A
+            </div>
+            <div>
+              <h4 id="previewName" style="font-size: 0.95rem; font-weight: 700; color: #0f172a;">Ahmad Rifai</h4>
+              <p id="previewClass" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">NIS: 2024001 • Kelas: 8A</p>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" id="btnSubmitCheckin" style="width: 100%; border-radius: 12px; padding: 0.9rem; font-size: 1.05rem;" disabled>
+          ✓ Konfirmasi Hadir Sekarang
+        </button>
+      </form>
+
+      <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 1rem;">
+        🔒 Presensi divalidasi langsung oleh sistem MTs Al Fatah. Satu akun hanya dapat absen 1 kali per sesi.
+      </p>
+    </div>
+
+    <!-- Success State / Digital Receipt -->
+    <div id="stateSuccess" style="display: none; padding: 0.5rem 0;">
+      <div class="verified-stamp">✓</div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; color: #059669; margin-bottom: 0.3rem;">
+        Presensi Berhasil!
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+        Kehadiran Anda telah resmi tercatat di pangkalan data madrasah.
+      </p>
+
+      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; text-align: left; margin-bottom: 1.5rem; font-size: 0.88rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.6rem;">
+          <span style="color: var(--text-muted);">Nama Siswa:</span>
+          <strong id="receiptName" style="color: #0f172a;">-</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.6rem;">
+          <span style="color: var(--text-muted);">NIS / Kelas:</span>
+          <strong id="receiptNisClass" style="color: #0f172a;">-</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.6rem;">
+          <span style="color: var(--text-muted);">Ekstrakurikuler:</span>
+          <strong id="receiptEkskul" style="color: #059669;">-</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.6rem;">
+          <span style="color: var(--text-muted);">Waktu Presensi:</span>
+          <strong id="receiptTime" style="color: #0f172a;">-</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-top: 0.6rem; border-top: 1px dashed var(--border);">
+          <span style="color: var(--text-muted);">Status Kehadiran:</span>
+          <span style="background: #10b981; color: #ffffff; padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem;">
+            HADIR
+          </span>
+        </div>
+      </div>
+
+      <p style="font-size: 0.82rem; color: #047857; font-weight: 600; margin-bottom: 1.25rem;">
+        Selamat beraktivitas dan berlatih dengan semangat!
+      </p>
+
+      <button class="btn btn-outline" id="btnDoneClose" style="width: 100%;">
+        Selesai
+      </button>
+    </div>
+
+  </div>
+
+  <script src="/js/student.js"></script>
+</body>
+</html>

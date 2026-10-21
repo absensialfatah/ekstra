@@ -1,0 +1,499 @@
+{
+  "ekskuls": [
+    {
+      "id": "drumband",
+      "name": "Drumband Bahana Gita Al Fatah",
+      "pembimbing": "Ust. M. Syarifuddin, S.Pd",
+      "jadwal": "Sabtu, 14:00 - 16:30 WIB",
+      "lokasi": "Lapangan Utama MTs Al Fatah",
+      "method": "manual",
+      "icon": "🥁",
+      "color": "#059669",
+      "badge": "Presensi Manual oleh Guru"
+    },
+    {
+      "id": "voli",
+      "name": "Bola Voli Putra/Putri",
+      "pembimbing": "Ust. Hendra Wijaya, S.Pd.I",
+      "jadwal": "Jumat, 15:30 - 17:30 WIB",
+      "lokasi": "Lapangan Voli MTs Al Fatah",
+      "method": "qr",
+      "icon": "🏐",
+      "color": "#2563eb",
+      "badge": "Presensi Mandiri via QR Code"
+    },
+    {
+      "id": "bulutangkis",
+      "name": "Bulutangkis PB Al Fatah",
+      "pembimbing": "Ust. Ahmad Fauzan, S.Pd",
+      "jadwal": "Ahad, 08:00 - 10:30 WIB",
+      "lokasi": "GOR Serbaguna Al Fatah",
+      "method": "qr",
+      "icon": "🏸",
+      "color": "#7c3aed",
+      "badge": "Presensi Mandiri via QR Code"
+    },
+    {
+      "id": "futsal_mts_al_fatah_ciw0",
+      "name": "Futsal MTs Al Fatah",
+      "pembimbing": "Ust. Rizky Pratama, S.Pd",
+      "jadwal": "Selasa, 15:30 WIB",
+      "lokasi": "Lapangan Futsal",
+      "method": "qr",
+      "icon": "⚽",
+      "color": "#059669",
+      "badge": "Presensi Mandiri via QR Code"
+    }
+  ],
+  "students": [
+    {
+      "nis": "2024001",
+      "name": "Ahmad Fauzi Ridho",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": [
+        "drumband",
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024002",
+      "name": "Aisyah Nur Aini",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024003",
+      "name": "Bagus Arya Pratama",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": [
+        "voli",
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024004",
+      "name": "Chandra Bayu Saputra",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024005",
+      "name": "Dewi Sartika Putri",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": [
+        "drumband",
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024006",
+      "name": "Dimas Wahyu Utomo",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": [
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024007",
+      "name": "Farhan Zulkarnain",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": [
+        "drumband",
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024008",
+      "name": "Fatimah Az-Zahra",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024009",
+      "name": "Gilang Ramadhan",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": [
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024010",
+      "name": "Habibie Akbar",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": [
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024011",
+      "name": "Indah Permatasari",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024012",
+      "name": "Jofan Alamsyah",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": [
+        "voli",
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024013",
+      "name": "Khadijah Marwah",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024014",
+      "name": "Lukman Hakim",
+      "gender": "L",
+      "class": "8A",
+      "ekskuls": [
+        "drumband",
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024015",
+      "name": "Maulana Malik Ibrahim",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": [
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024016",
+      "name": "Nabil Ahmad",
+      "gender": "L",
+      "class": "7B",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024017",
+      "name": "Nadira Salsabila",
+      "gender": "P",
+      "class": "8B",
+      "ekskuls": [
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024018",
+      "name": "Oki Setiawan",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": [
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024019",
+      "name": "Putri Rahmadani",
+      "gender": "P",
+      "class": "7A",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024020",
+      "name": "Qoriatul Hasanah",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": [
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024021",
+      "name": "Rizky Dwi Ananda",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": [
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024022",
+      "name": "Siti Nurhaliza",
+      "gender": "P",
+      "class": "7B",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024023",
+      "name": "Teguh Santoso",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": [
+        "drumband",
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024024",
+      "name": "Umar Al-Faruq",
+      "gender": "L",
+      "class": "9B",
+      "ekskuls": [
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024025",
+      "name": "Vina Anggraini",
+      "gender": "P",
+      "class": "8A",
+      "ekskuls": [
+        "drumband"
+      ]
+    },
+    {
+      "nis": "2024026",
+      "name": "Wahyu Tri Hidayat",
+      "gender": "L",
+      "class": "7A",
+      "ekskuls": [
+        "voli"
+      ]
+    },
+    {
+      "nis": "2024027",
+      "name": "Yusuf Habibi",
+      "gender": "L",
+      "class": "8B",
+      "ekskuls": [
+        "bulutangkis"
+      ]
+    },
+    {
+      "nis": "2024028",
+      "name": "Zaidan Ilham Pratama",
+      "gender": "L",
+      "class": "9A",
+      "ekskuls": [
+        "drumband",
+        "voli",
+        "bulutangkis"
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess_1792566393402_wz4g9",
+      "ekskulId": "voli",
+      "ekskulName": "Bola Voli Putra/Putri",
+      "date": "2026-10-21",
+      "createdAt": "2026-10-21T07:06:33.402Z",
+      "expiresAt": "2026-10-21T07:21:33.402Z",
+      "durationMinutes": 15,
+      "dynamicRotation": true,
+      "currentDynamicToken": "10e4aa6e",
+      "previousDynamicToken": "0c0620b1",
+      "lastTokenRotatedAt": "2026-10-21T07:21:04.853Z",
+      "status": "expired"
+    },
+    {
+      "id": "sess_1792567678404_uf5eu",
+      "ekskulId": "voli",
+      "ekskulName": "Bola Voli Putra/Putri",
+      "date": "2026-10-21",
+      "createdAt": "2026-10-21T07:27:58.404Z",
+      "expiresAt": "2026-10-21T07:42:58.404Z",
+      "durationMinutes": 15,
+      "dynamicRotation": true,
+      "currentDynamicToken": "b7a0d0dc",
+      "previousDynamicToken": "10364d01",
+      "lastTokenRotatedAt": "2026-10-21T07:42:35.337Z",
+      "status": "expired"
+    }
+  ],
+  "attendances": [
+    {
+      "id": "att-past-001",
+      "ekskulId": "drumband",
+      "date": "2026-10-17",
+      "nis": "2024001",
+      "studentName": "Ahmad Fauzi Ridho",
+      "class": "8A",
+      "status": "Hadir",
+      "method": "manual_guru",
+      "timestamp": "2026-10-17T14:15:00.000Z",
+      "notes": ""
+    },
+    {
+      "id": "att-past-002",
+      "ekskulId": "drumband",
+      "date": "2026-10-17",
+      "nis": "2024002",
+      "studentName": "Aisyah Nur Aini",
+      "class": "8B",
+      "status": "Hadir",
+      "method": "manual_guru",
+      "timestamp": "2026-10-17T14:15:00.000Z",
+      "notes": ""
+    },
+    {
+      "id": "att-past-003",
+      "ekskulId": "drumband",
+      "date": "2026-10-17",
+      "nis": "2024004",
+      "studentName": "Chandra Bayu Saputra",
+      "class": "7A",
+      "status": "Izin",
+      "method": "manual_guru",
+      "timestamp": "2026-10-17T14:15:00.000Z",
+      "notes": "Acara keluarga di luar kota"
+    },
+    {
+      "id": "att-past-004",
+      "ekskulId": "drumband",
+      "date": "2026-10-17",
+      "nis": "2024005",
+      "studentName": "Dewi Sartika Putri",
+      "class": "8A",
+      "status": "Sakit",
+      "method": "manual_guru",
+      "timestamp": "2026-10-17T14:15:00.000Z",
+      "notes": "Surat dokter ada di wali kelas"
+    },
+    {
+      "id": "att-past-005",
+      "ekskulId": "voli",
+      "date": "2026-10-16",
+      "nis": "2024003",
+      "studentName": "Bagus Arya Pratama",
+      "class": "9A",
+      "status": "Hadir",
+      "method": "qr_scan",
+      "timestamp": "2026-10-16T15:35:12.000Z",
+      "notes": ""
+    },
+    {
+      "id": "att-past-006",
+      "ekskulId": "voli",
+      "date": "2026-10-16",
+      "nis": "2024006",
+      "studentName": "Dimas Wahyu Utomo",
+      "class": "9B",
+      "status": "Hadir",
+      "method": "qr_scan",
+      "timestamp": "2026-10-16T15:36:04.000Z",
+      "notes": ""
+    },
+    {
+      "id": "att-past-007",
+      "ekskulId": "voli",
+      "date": "2026-10-16",
+      "nis": "2024009",
+      "studentName": "Gilang Ramadhan",
+      "class": "9A",
+      "status": "Hadir",
+      "method": "qr_scan",
+      "timestamp": "2026-10-16T15:37:45.000Z",
+      "notes": ""
+    },
+    {
+      "id": "att-1792566393458-hvnaos",
+      "sessionId": "sess_1792566393402_wz4g9",
+      "ekskulId": "voli",
+      "ekskulName": "Bola Voli Putra/Putri",
+      "date": "2026-10-21",
+      "nis": "2024003",
+      "studentName": "Bagus Arya Pratama",
+      "class": "9A",
+      "gender": "L",
+      "status": "Hadir",
+      "method": "qr_scan",
+      "timestamp": "2026-10-21T07:06:33.458Z",
+      "ip": "127.0.0.1",
+      "userAgent": ""
+    },
+    {
+      "id": "att-1792567359866-2c1d36",
+      "ekskulId": "drumband",
+      "ekskulName": "Drumband Bahana Gita Al Fatah",
+      "date": "2026-10-21",
+      "nis": "2024001",
+      "studentName": "Ahmad Fauzi Ridho",
+      "class": "8A",
+      "gender": "L",
+      "status": "Hadir",
+      "method": "manual_guru",
+      "timestamp": "2026-10-21T07:22:39.866Z",
+      "notes": ""
+    },
+    {
+      "id": "att-1792567359866-yc43lz",
+      "ekskulId": "drumband",
+      "ekskulName": "Drumband Bahana Gita Al Fatah",
+      "date": "2026-10-21",
+      "nis": "2024002",
+      "studentName": "Aisyah Nur Aini",
+      "class": "8B",
+      "gender": "P",
+      "status": "Izin",
+      "method": "manual_guru",
+      "timestamp": "2026-10-21T07:22:39.866Z",
+      "notes": "Izin ada urusan keluarga"
+    },
+    {
+      "id": "att-1792567359866-cdu7fy",
+      "ekskulId": "drumband",
+      "ekskulName": "Drumband Bahana Gita Al Fatah",
+      "date": "2026-10-21",
+      "nis": "2024004",
+      "studentName": "Chandra Bayu Saputra",
+      "class": "7A",
+      "gender": "L",
+      "status": "Alpa",
+      "method": "manual_guru",
+      "timestamp": "2026-10-21T07:22:39.866Z",
+      "notes": "Tidak ada keterangan (Alpa otomatis)"
+    },
+    {
+      "id": "att-1792567359866-mqox46",
+      "ekskulId": "drumband",
+      "ekskulName": "Drumband Bahana Gita Al Fatah",
+      "date": "2026-10-21",
+      "nis": "2024005",
+      "studentName": "Dewi Sartika Putri",
+      "class": "8A",
+      "gender": "P",
+      "status": "Alpa",
+      "method": "manual_guru",
+      "timestamp": "2026-10-21T07:22:39.866Z",
+      "notes": "Tidak ada keterangan (Alpa otomatis)"
+    }
+  ]
+}
