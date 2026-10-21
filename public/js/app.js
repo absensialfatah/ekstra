@@ -892,7 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       state.sseSource.onerror = () => {
-        // Jika SSE ditutup oleh serverless proxy (Vercel/Render), otomatis aktifkan polling tiap 4 detik
+        // Jika SSE ditutup oleh Vercel serverless proxy, otomatis aktifkan polling tiap 4 detik
         if (!state.pollingTimer && state.activeSession) {
           state.pollingTimer = setInterval(() => {
             if (state.activeSession) {
