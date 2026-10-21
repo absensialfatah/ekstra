@@ -476,6 +476,9 @@ document.addEventListener('DOMContentLoaded', () => {
       state.manualStudents = await res.json();
       drumbandTotalCount.textContent = `${state.manualStudents.length} Siswa`;
 
+      // Update class dropdown options dynamically from student list
+      updateClassDropdowns();
+
       // Check existing attendance for this date
       const dateVal = drumbandDate.value;
       const rekapRes = await fetch(`/api/rekap?ekskul=${ekskulId}&dateStart=${dateVal}&dateEnd=${dateVal}`);
@@ -484,8 +487,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Inisialisasi: Default ALPA jika belum ada data sebelumnya
       state.manualAttendance = {};
       state.manualStudents.forEach(s => {
-        const existing = rekapJson.records.find(r => r.nis === s.nis);
-        state.manualAttendance[s.nis] = {
+        const studentKey = String(s.nisn || s.nis || '').trim();
+        const existing = rekapJson.records.find(r => (r.nisn && r.nisn === studentKey) || (r.nis && r.nis === studentKey));
+        state.manualAttendance[studentKey] = {
           status: existing ? existing.status : 'Alpa', // Default Alpa jika belum diklik guru
           notes: existing ? existing.notes || '' : ''
         };
@@ -506,8 +510,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const classFilter = drumbandClassFilter.value;
 
     const filtered = state.manualStudents.filter(s => {
-      const matchQuery = s.name.toLowerCase().includes(query) || s.nis.includes(query);
-      const matchClass = classFilter === 'all' || s.class.startsWith(classFilter);
+      const studentNis = String(s.nisn || s.nis || '').toLowerCase();
+      const matchQuery = s.name.toLowerCase().includes(query) || studentNis.includes(query);
+      const matchClass = classFilter === 'all' || s.class === classFilter;
       return matchQuery && matchClass;
     });
 
@@ -527,10 +532,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     filtered.forEach(student => {
-      const currentAtt = state.manualAttendance[student.nis] || { status: 'Alpa', notes: '' };
+      const studentKey = String(student.nisn || student.nis || '').trim();
+      const currentAtt = state.manualAttendance[studentKey] || { status: 'Alpa', notes: '' };
       const card = document.createElement('div');
       card.className = `student-card status-${currentAtt.status.toLowerCase()}`;
-      card.id = `card-manual-${student.nis}`;
+      card.id = `card-manual-${studentKey}`;
 
       const avatarLetter = student.name.charAt(0).toUpperCase();
 
@@ -551,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="status-indicator-badge">${statusBadgeHtml}</div>
             </div>
             <div class="student-meta">
-              <span class="badge">NIS: ${student.nis}</span>
+              <span class="badge">NISN: ${studentKey}</span>
               <span class="badge">Kelas ${student.class}</span>
               <span class="badge">${student.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</span>
             </div>
@@ -560,16 +566,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <!-- HANYA DUA TOMBOL: HADIR DAN IZIN (KLIK ULANG = KEMBALI KE ALPA) -->
         <div class="status-btn-group">
-          <button type="button" class="status-btn btn-hadir ${currentAtt.status === 'Hadir' ? 'active' : ''}" data-nis="${student.nis}">
+          <button type="button" class="status-btn btn-hadir ${currentAtt.status === 'Hadir' ? 'active' : ''}" data-nis="${studentKey}">
             ✓ Hadir
           </button>
-          <button type="button" class="status-btn btn-izin ${currentAtt.status === 'Izin' ? 'active' : ''}" data-nis="${student.nis}">
+          <button type="button" class="status-btn btn-izin ${currentAtt.status === 'Izin' ? 'active' : ''}" data-nis="${studentKey}">
             ℹ Izin
           </button>
         </div>
 
         <div>
-          <input type="text" class="note-input" data-nis="${student.nis}" placeholder="Catatan izin/keterangan (opsional)..." value="${currentAtt.notes}">
+          <input type="text" class="note-input" data-nis="${studentKey}" placeholder="Catatan izin/keterangan (opsional)..." value="${currentAtt.notes}">
         </div>
       `;
 
@@ -577,12 +583,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnHadir = card.querySelector('.btn-hadir');
       btnHadir.addEventListener('click', () => {
         // Jika sudah hadir, klik ulang membatalkan menjadi Alpa
-        if (state.manualAttendance[student.nis].status === 'Hadir') {
-          state.manualAttendance[student.nis].status = 'Alpa';
+        if (state.manualAttendance[studentKey].status === 'Hadir') {
+          state.manualAttendance[studentKey].status = 'Alpa';
         } else {
-          state.manualAttendance[student.nis].status = 'Hadir';
+          state.manualAttendance[studentKey].status = 'Hadir';
         }
-        updateCardVisual(card, student.nis);
+        updateCardVisual(card, studentKey);
         updateManualSummary();
       });
 
@@ -590,19 +596,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnIzin = card.querySelector('.btn-izin');
       btnIzin.addEventListener('click', () => {
         // Jika sudah izin, klik ulang membatalkan menjadi Alpa
-        if (state.manualAttendance[student.nis].status === 'Izin') {
-          state.manualAttendance[student.nis].status = 'Alpa';
+        if (state.manualAttendance[studentKey].status === 'Izin') {
+          state.manualAttendance[studentKey].status = 'Alpa';
         } else {
-          state.manualAttendance[student.nis].status = 'Izin';
+          state.manualAttendance[studentKey].status = 'Izin';
         }
-        updateCardVisual(card, student.nis);
+        updateCardVisual(card, studentKey);
         updateManualSummary();
       });
 
       // Note input event
       const noteInput = card.querySelector('.note-input');
       noteInput.addEventListener('input', (e) => {
-        state.manualAttendance[student.nis].notes = e.target.value;
+        state.manualAttendance[studentKey].notes = e.target.value;
       });
 
       drumbandStudentsGrid.appendChild(card);
@@ -673,9 +679,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!dateVal) return showToast('Pilih tanggal kegiatan terlebih dahulu!', 'error');
 
     const records = state.manualStudents.map(s => {
-      const att = state.manualAttendance[s.nis] || { status: 'Alpa', notes: '' };
+      const studentKey = String(s.nisn || s.nis || '').trim();
+      const att = state.manualAttendance[studentKey] || { status: 'Alpa', notes: '' };
       return {
-        nis: s.nis,
+        nisn: studentKey,
+        nis: studentKey,
         studentName: s.name,
         class: s.class,
         status: att.status, // Hadir, Izin, atau Alpa otomatis
@@ -838,7 +846,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div>
             <h4 style="font-size: 0.9rem; font-weight: 700; color: #0f172a;">${item.studentName}</h4>
-            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">NIS: ${item.nis} • Kelas ${item.class} • <span style="color: #059669;">${item.method === 'qr_scan' ? '📱 Scan QR' : '✍️ Manual Guru'}</span></p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">NISN: ${item.nisn || item.nis} • Kelas ${item.class} • <span style="color: #059669;">${item.method === 'qr_scan' ? '📱 Scan QR' : '✍️ Manual Guru'}</span></p>
           </div>
         </div>
         <div style="text-align: right;">
@@ -951,7 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
       list.forEach(s => {
         const opt = document.createElement('option');
         opt.value = s.nis;
-        opt.textContent = `${s.name} (${s.class}) - NIS: ${s.nis}`;
+        opt.textContent = `${s.name} (${s.class}) - NISN: ${s.nisn || s.nis}`;
         manualStudentSelect.appendChild(opt);
       });
       manualNotesInput.value = 'HP habis baterai / lupa bawa HP';
@@ -1214,12 +1222,13 @@ document.addEventListener('DOMContentLoaded', () => {
       tr.style.borderBottom = '1px solid var(--border)';
       const statusColor = r.status === 'Hadir' ? '#10b981' : r.status === 'Izin' ? '#3b82f6' : '#ef4444';
       const timeStr = new Date(r.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      const studentNis = String(r.nisn || r.nis || '').trim();
 
       tr.innerHTML = `
         <td style="padding: 0.65rem 0.85rem;">${idx + 1}</td>
         <td style="padding: 0.65rem 0.85rem; font-weight: 600;">${r.date}</td>
         <td style="padding: 0.65rem 0.85rem;">${r.ekskulName || r.ekskulId}</td>
-        <td style="padding: 0.65rem 0.85rem; font-family: monospace;">${r.nis}</td>
+        <td style="padding: 0.65rem 0.85rem; font-family: monospace;">${studentNis}</td>
         <td style="padding: 0.65rem 0.85rem; font-weight: 700;">${r.studentName}</td>
         <td style="padding: 0.65rem 0.85rem;">${r.class}</td>
         <td style="padding: 0.65rem 0.85rem;">
@@ -1244,12 +1253,12 @@ document.addEventListener('DOMContentLoaded', () => {
   btnExportCsv.addEventListener('click', () => {
     if (state.rekapData.length === 0) return alert('Tidak ada data untuk diekspor!');
 
-    const headers = ['No', 'Tanggal', 'Ekstrakurikuler', 'NIS', 'Nama Siswa', 'Kelas', 'Status', 'Metode', 'Waktu', 'Catatan'];
+    const headers = ['No', 'Tanggal', 'Ekstrakurikuler', 'NISN', 'Nama Siswa', 'Kelas', 'Status', 'Metode', 'Waktu', 'Catatan'];
     const rows = state.rekapData.map((r, i) => [
       i + 1,
       r.date,
       `"${r.ekskulName || r.ekskulId}"`,
-      `"${r.nis}"`,
+      `"=""${String(r.nisn || r.nis || '').trim()}"""`, // Formula ="008..." menjaga angka 0 tidak hilang di Excel
       `"${r.studentName}"`,
       `"${r.class}"`,
       r.status,
@@ -1278,10 +1287,61 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch('/api/students');
       allMasterStudents = await res.json();
+      updateClassDropdowns();
       renderSiswaMaster();
     } catch (err) {
       console.error('Error loading siswa master:', err);
       showToast('Gagal memuat data siswa', 'error');
+    }
+  }
+
+  // Helper: Update Dynamic Class Dropdowns from Student Data / Sheets
+  function updateClassDropdowns() {
+    const classes = new Set();
+    allMasterStudents.forEach(s => {
+      if (s.class && s.class.trim()) classes.add(s.class.trim());
+    });
+    state.manualStudents.forEach(s => {
+      if (s.class && s.class.trim()) classes.add(s.class.trim());
+    });
+
+    const sortedClasses = Array.from(classes).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+    // 1. Tab 1 Filter Kelas
+    if (drumbandClassFilter) {
+      const cur = drumbandClassFilter.value;
+      drumbandClassFilter.innerHTML = '<option value="all">Semua Kelas</option>';
+      sortedClasses.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c.toLowerCase().startsWith('kelas') ? c : `Kelas ${c}`;
+        drumbandClassFilter.appendChild(opt);
+      });
+      drumbandClassFilter.value = sortedClasses.includes(cur) ? cur : 'all';
+    }
+
+    // 2. Tab 4 Filter Kelas
+    if (siswaMasterClassFilter) {
+      const cur = siswaMasterClassFilter.value;
+      siswaMasterClassFilter.innerHTML = '<option value="all">Semua Kelas</option>';
+      sortedClasses.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c.toLowerCase().startsWith('kelas') ? c : `Kelas ${c}`;
+        siswaMasterClassFilter.appendChild(opt);
+      });
+      siswaMasterClassFilter.value = sortedClasses.includes(cur) ? cur : 'all';
+    }
+
+    // 3. Datalist Auto-Complete Modal Input Siswa
+    const classListSuggestions = document.getElementById('classListSuggestions');
+    if (classListSuggestions) {
+      classListSuggestions.innerHTML = '';
+      sortedClasses.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        classListSuggestions.appendChild(opt);
+      });
     }
   }
 
@@ -1298,9 +1358,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const classFilter = siswaMasterClassFilter ? siswaMasterClassFilter.value : 'all';
 
     const filtered = allMasterStudents.filter(s => {
-      const matchQuery = s.name.toLowerCase().includes(q) || s.nis.includes(q) || s.class.toLowerCase().includes(q);
+      const studentNis = String(s.nisn || s.nis || '').toLowerCase();
+      const matchQuery = s.name.toLowerCase().includes(q) || studentNis.includes(q) || s.class.toLowerCase().includes(q);
       const matchEkskul = ekskulFilter === 'all' || s.ekskuls.includes(ekskulFilter);
-      const matchClass = classFilter === 'all' || s.class.startsWith(classFilter);
+      const matchClass = classFilter === 'all' || s.class === classFilter;
       return matchQuery && matchEkskul && matchClass;
     });
 
@@ -1343,6 +1404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSiswaPaginationNav(total, siswaPagination.totalPages, siswaPagination.currentPage);
 
     pagedStudents.forEach(s => {
+      const studentKey = String(s.nisn || s.nis || '').trim();
       const tr = document.createElement('tr');
       tr.style.borderBottom = '1px solid var(--border)';
       
@@ -1355,16 +1417,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }).join('') || '<span style="color: var(--text-muted); font-size: 0.8rem; font-style: italic;">Belum memilih ekskul</span>';
 
       tr.innerHTML = `
-        <td style="padding: 0.75rem; font-family: monospace; font-weight: 700; color: #1e293b;">${s.nis}</td>
+        <td style="padding: 0.75rem; font-family: monospace; font-weight: 700; color: #1e293b;">${studentKey}</td>
         <td style="padding: 0.75rem; font-weight: 700;">${s.name}</td>
         <td style="padding: 0.75rem;">${s.gender === 'L' ? '<span style="color: #2563eb; font-weight: 600;">L</span>' : '<span style="color: #db2777; font-weight: 600;">P</span>'}</td>
         <td style="padding: 0.75rem; font-weight: 600;">${s.class}</td>
         <td style="padding: 0.75rem;">${ekskulBadges}</td>
         <td style="padding: 0.75rem; text-align: center; white-space: nowrap;">
-          <button class="btn btn-outline btn-edit-student" data-nis="${s.nis}" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; margin-right: 4px;">
+          <button class="btn btn-outline btn-edit-student" data-nis="${studentKey}" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; margin-right: 4px;">
             ✏️ Edit
           </button>
-          <button class="btn btn-outline btn-delete-student" data-nis="${s.nis}" data-name="${s.name}" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; color: #dc2626; border-color: #fca5a5;">
+          <button class="btn btn-outline btn-delete-student" data-nis="${studentKey}" data-name="${s.name}" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; color: #dc2626; border-color: #fca5a5;">
             🗑️ Hapus
           </button>
         </td>
@@ -1557,8 +1619,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Edit Mode
       studentFormMode.value = 'edit';
       studentModalTitle.textContent = `✏️ Edit Data Siswa: ${student.name}`;
-      studentInputNis.value = student.nis;
-      studentInputNis.disabled = true; // NIS cannot be changed in edit mode
+      studentInputNis.value = student.nisn || student.nis;
+      studentInputNis.disabled = true; // NISN cannot be changed in edit mode
       studentInputName.value = student.name;
       studentInputClass.value = student.class;
       document.querySelector(`input[name="studentGender"][value="${student.gender || 'L'}"]`).checked = true;
@@ -1574,7 +1636,6 @@ document.addEventListener('DOMContentLoaded', () => {
       studentInputClass.value = '';
       document.querySelector('input[name="studentGender"][value="L"]').checked = true;
       
-      // If currently filtered by a specific ekskul in Tab 4, pre-check that ekskul!
       const currentFilteredEkskul = (siswaMasterEkskulFilter && siswaMasterEkskulFilter.value !== 'all') 
         ? [siswaMasterEkskulFilter.value] 
         : (state.currentTab === 'tab-drumband' ? [state.selectedManualEkskulId] : []);
@@ -1590,6 +1651,28 @@ document.addEventListener('DOMContentLoaded', () => {
   btnCloseStudentModal.addEventListener('click', () => studentModal.classList.remove('active'));
   btnCancelStudentModal.addEventListener('click', () => studentModal.classList.remove('active'));
 
+  const btnSyncFromSheets = document.getElementById('btnSyncFromSheets');
+  if (btnSyncFromSheets) {
+    btnSyncFromSheets.addEventListener('click', async () => {
+      btnSyncFromSheets.disabled = true;
+      btnSyncFromSheets.textContent = '⏳ Menyinkronkan...';
+      try {
+        const res = await fetch('/api/sync/pull', { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Gagal sinkronisasi');
+        showToast(data.message, 'success');
+        await loadSiswaMaster();
+        await loadEkskuls();
+        if (state.currentTab === 'tab-drumband') await loadManualStudents();
+      } catch (err) {
+        showToast(`Gagal: ${err.message}`, 'error');
+      } finally {
+        btnSyncFromSheets.disabled = false;
+        btnSyncFromSheets.textContent = '🔄 Sinkron dari Sheet';
+      }
+    });
+  }
+
   // Save Student (Add / Edit)
   formStudent.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -1602,7 +1685,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkedEkskuls = Array.from(document.querySelectorAll('input[name="studentEkskulItem"]:checked')).map(c => c.value);
 
     if (!nis || !name || !className) {
-      return alert('NIS, Nama Siswa, dan Kelas wajib diisi!');
+      return alert('NISN, Nama Siswa, dan Kelas wajib diisi!');
     }
 
     btnSubmitStudent.disabled = true;
@@ -1615,7 +1698,8 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            nis,
+            nisn: nis,
+            nis: nis,
             name,
             gender,
             class: className,
@@ -1627,6 +1711,7 @@ document.addEventListener('DOMContentLoaded', () => {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            nisn: nis,
             name,
             gender,
             class: className,
@@ -1636,20 +1721,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const text = await res.text();
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        throw new Error(`Server respon: ${text.slice(0, 120)}`);
-      }
+      try { data = JSON.parse(text); } catch(e) { throw new Error(`Respon server: ${text.slice(0, 100)}`); }
       if (!res.ok) throw new Error(data.error || 'Gagal menyimpan data siswa');
 
       studentModal.classList.remove('active');
-      showToast(data.message || 'Data siswa berhasil disimpan!', 'success');
-      playSuccessChime();
+      showToast(mode === 'add' ? `Siswa ${name} (NISN: ${nis}) berhasil ditambahkan!` : `Data siswa ${name} berhasil diperbarui!`, 'success');
 
-      // Refresh student master and current attendance list
       await loadSiswaMaster();
-      loadManualStudents();
+      if (state.currentTab === 'tab-drumband') await loadManualStudents();
     } catch (err) {
       alert(err.message);
     } finally {
@@ -1660,7 +1739,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Delete Student
   async function deleteStudent(nis, name) {
-    if (!confirm(`Apakah Anda yakin ingin menghapus siswa:\n\n"${name}" (NIS: ${nis})\n\ndari pangkalan data madrasah?`)) {
+    if (!confirm(`Apakah Anda yakin ingin menghapus siswa:\n\n"${name}" (NISN: ${nis})\n\ndari pangkalan data madrasah?`)) {
       return;
     }
 

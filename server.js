@@ -240,21 +240,33 @@ app.get('/api/students', (req, res) => {
   res.json(students);
 });
 
+// API: Get Unique Classes from Student Data
+app.get('/api/classes', (req, res) => {
+  const db = readDB();
+  const classes = [...new Set(db.students.map(s => s.class && s.class.trim()).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  res.json(classes);
+});
+
 // API: Add New Student / Member
 app.post('/api/students', (req, res) => {
-  const { nis, name, gender = 'L', class: className, ekskuls = [] } = req.body;
-  if (!nis || !name || !className) {
-    return res.status(400).json({ error: 'NIS, Nama Siswa, dan Kelas wajib diisi.' });
+  const rawNisn = req.body.nisn || req.body.nis;
+  const { name, gender = 'L', class: className, ekskuls = [] } = req.body;
+  if (!rawNisn || !name || !className) {
+    return res.status(400).json({ error: 'NISN, Nama Siswa, dan Kelas wajib diisi.' });
   }
 
+  const nisn = String(rawNisn).trim(); // Selalu perlakukan NISN sebagai String (0 di depan tidak hilang)
+
   const db = readDB();
-  const existing = db.students.find(s => s.nis.trim() === nis.trim());
+  const existing = db.students.find(s => (s.nisn && s.nisn === nisn) || (s.nis && s.nis === nisn));
   if (existing) {
-    return res.status(409).json({ error: `Siswa dengan NIS "${nis}" sudah terdaftar atas nama ${existing.name}.` });
+    return res.status(409).json({ error: `Siswa dengan NISN "${nisn}" sudah terdaftar atas nama ${existing.name}.` });
   }
 
   const newStudent = {
-    nis: nis.trim(),
+    nisn,
+    nis: nisn, // Alias untuk kompatibilitas
     name: name.trim(),
     gender: gender === 'P' ? 'P' : 'L',
     class: className.trim(),
@@ -268,22 +280,27 @@ app.post('/api/students', (req, res) => {
 
   res.json({
     success: true,
-    message: `Siswa ${newStudent.name} (NIS: ${newStudent.nis}) berhasil ditambahkan.`,
+    message: `Siswa ${newStudent.name} (NISN: ${newStudent.nisn}) berhasil ditambahkan.`,
     student: newStudent
   });
 });
 
 // API: Edit Student / Member
 app.put('/api/students/:nis', (req, res) => {
-  const { nis } = req.params;
-  const { name, gender, class: className, ekskuls } = req.body;
+  const targetNis = String(req.params.nis).trim();
+  const { name, gender, class: className, ekskuls, nisn: updatedNisn } = req.body;
 
   const db = readDB();
-  const index = db.students.findIndex(s => s.nis.trim() === nis.trim());
+  const index = db.students.findIndex(s => (s.nisn && s.nisn === targetNis) || (s.nis && s.nis === targetNis));
   if (index === -1) {
-    return res.status(404).json({ error: `Siswa dengan NIS "${nis}" tidak ditemukan.` });
+    return res.status(404).json({ error: `Siswa dengan NISN "${targetNis}" tidak ditemukan.` });
   }
 
+  if (updatedNisn) {
+    const cleanNisn = String(updatedNisn).trim();
+    db.students[index].nisn = cleanNisn;
+    db.students[index].nis = cleanNisn;
+  }
   if (name) db.students[index].name = name.trim();
   if (gender) db.students[index].gender = gender === 'P' ? 'P' : 'L';
   if (className) db.students[index].class = className.trim();
@@ -300,14 +317,14 @@ app.put('/api/students/:nis', (req, res) => {
 
 // API: Delete Student / Member
 app.delete('/api/students/:nis', (req, res) => {
-  const { nis } = req.params;
+  const targetNis = String(req.params.nis).trim();
   const db = readDB();
-  const student = db.students.find(s => s.nis.trim() === nis.trim());
+  const student = db.students.find(s => (s.nisn && s.nisn === targetNis) || (s.nis && s.nis === targetNis));
   if (!student) {
-    return res.status(404).json({ error: `Siswa dengan NIS "${nis}" tidak ditemukan.` });
+    return res.status(404).json({ error: `Siswa dengan NISN "${targetNis}" tidak ditemukan.` });
   }
 
-  db.students = db.students.filter(s => s.nis.trim() !== nis.trim());
+  db.students = db.students.filter(s => (s.nisn && s.nisn !== targetNis) && (s.nis && s.nis !== targetNis));
   writeDB(db);
 
   res.json({
@@ -429,7 +446,8 @@ app.post('/api/attendance/manual', (req, res) => {
   db.attendances = db.attendances.filter(a => !(a.ekskulId === ekskulId && a.date === date));
 
   const newRecords = records.map(r => {
-    const student = db.students.find(s => s.nis === r.nis);
+    const studentNis = String(r.nisn || r.nis || '').trim();
+    const student = db.students.find(s => (s.nisn && s.nisn === studentNis) || (s.nis && s.nis === studentNis));
     // Aturan bisnis: Hanya ada 'Hadir' dan 'Izin'. Jika tidak diklik guru, otomatis 'Alpa'.
     let finalStatus = 'Alpa';
     if (r.status === 'Hadir') finalStatus = 'Hadir';
@@ -441,7 +459,8 @@ app.post('/api/attendance/manual', (req, res) => {
       ekskulId,
       ekskulName: ekskul.name,
       date,
-      nis: r.nis,
+      nisn: studentNis,
+      nis: studentNis, // Kompatibel
       studentName: student ? student.name : r.studentName || 'Siswa',
       class: student ? student.class : r.class || '-',
       gender: student ? student.gender : '-',
@@ -663,9 +682,10 @@ app.post('/api/attendance/scan', (req, res) => {
   }
 
   // Verify student exists and is enrolled in this extracurricular
-  const student = db.students.find(s => s.nis.trim() === nis.trim());
+  const targetNis = String(nis).trim();
+  const student = db.students.find(s => (s.nisn && s.nisn === targetNis) || (s.nis && s.nis === targetNis));
   if (!student) {
-    return res.status(404).json({ error: `Siswa dengan NIS "${nis}" tidak terdaftar dalam sistem.` });
+    return res.status(404).json({ error: `Siswa dengan NISN "${targetNis}" tidak terdaftar dalam sistem.` });
   }
 
   if (!student.ekskuls.includes(session.ekskulId)) {
@@ -675,10 +695,11 @@ app.post('/api/attendance/scan', (req, res) => {
   }
 
   // Check duplicate attendance for today
+  const studentKey = student.nisn || student.nis;
   const alreadyAttended = db.attendances.find(a =>
     a.ekskulId === session.ekskulId &&
     a.date === session.date &&
-    a.nis === student.nis
+    ((a.nisn && a.nisn === studentKey) || (a.nis && a.nis === studentKey))
   );
 
   if (alreadyAttended) {
@@ -696,7 +717,8 @@ app.post('/api/attendance/scan', (req, res) => {
     ekskulId: session.ekskulId,
     ekskulName: session.ekskulName,
     date: session.date,
-    nis: student.nis,
+    nisn: studentKey,
+    nis: studentKey,
     studentName: student.name,
     class: student.class,
     gender: student.gender,
@@ -798,7 +820,8 @@ app.get('/api/rekap', (req, res) => {
     const q = search.toLowerCase();
     list = list.filter(a =>
       a.studentName.toLowerCase().includes(q) ||
-      a.nis.includes(q) ||
+      (a.nisn && a.nisn.toLowerCase().includes(q)) ||
+      (a.nis && a.nis.toLowerCase().includes(q)) ||
       a.class.toLowerCase().includes(q)
     );
   }
@@ -823,6 +846,59 @@ app.get('/api/rekap', (req, res) => {
     },
     records: list
   });
+});
+
+// API: Sync pull data from Google Sheets into application database
+app.post('/api/sync/pull', async (req, res) => {
+  if (!GS_WEBAPP_URL) {
+    return res.status(400).json({ error: 'GS_WEBAPP_URL belum dikonfigurasi.' });
+  }
+  try {
+    const fetchRes = await fetch(`${GS_WEBAPP_URL}?action=getAll`);
+    const json = await fetchRes.json();
+    if (!json.success || !json.data) {
+      throw new Error(json.error || 'Gagal mengambil data dari Google Sheets.');
+    }
+    const db = readDB();
+    if (json.data.ekskuls && json.data.ekskuls.length > 0) {
+      db.ekskuls = json.data.ekskuls.map(e => ({
+        id: e.id_ekskul || e.id,
+        name: e.nama_ekstrakurikuler || e.name,
+        pembimbing: e.guru_pembimbing || e.pembimbing,
+        jadwal: e.jadwal_rutin || e.jadwal,
+        lokasi: e.lokasi_latihan || e.lokasi,
+        method: e.metode__manual___qr_ || e.method || 'manual',
+        icon: e.ikon_emoji || e.icon || '⭐',
+        color: e.warna_tema || e.color || '#059669',
+        badge: (e.metode__manual___qr_ || e.method) === 'qr' ? 'Presensi Mandiri via QR Code' : 'Presensi Manual oleh Guru'
+      }));
+    }
+    if (json.data.students && json.data.students.length > 0) {
+      db.students = json.data.students.map(s => {
+        const nisnVal = String(s.nisn || s.nis || '').trim();
+        const ekskulList = typeof s.ekskul_diikuti__pisahkan_koma_ === 'string'
+          ? s.ekskul_diikuti__pisahkan_koma_.split(',').map(x => x.trim()).filter(Boolean)
+          : (Array.isArray(s.ekskuls) ? s.ekskuls : []);
+        return {
+          nisn: nisnVal,
+          nis: nisnVal,
+          name: s.nama_lengkap_siswa || s.name,
+          gender: s.jenis_kelamin__l_p_ || s.gender || 'L',
+          class: s.kelas || s.class || '',
+          ekskuls: ekskulList
+        };
+      });
+    }
+    writeDB(db);
+    res.json({
+      success: true,
+      message: `Sinkronisasi berhasil! Memuat ${db.students.length} siswa dan ${db.ekskuls.length} ekskul dari Google Sheets.`,
+      studentsCount: db.students.length,
+      ekskulsCount: db.ekskuls.length
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Start server locally

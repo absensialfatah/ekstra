@@ -75,9 +75,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Populate dropdown
     studentSelect.innerHTML = '<option value="">-- Pilih Nama Anda --</option>';
     enrolledStudents.forEach(s => {
+      const studentNis = String(s.nisn || s.nis || '').trim();
       const opt = document.createElement('option');
-      opt.value = s.nis;
-      opt.textContent = `${s.name} (${s.class})`;
+      opt.value = studentNis;
+      opt.textContent = `${s.name} (${s.class}) - ${studentNis}`;
       studentSelect.appendChild(opt);
     });
 
@@ -105,13 +106,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateCountdown();
     timerInterval = setInterval(updateCountdown, 1000);
 
-    // Check remember NIS from localStorage
-    const savedNis = localStorage.getItem('mts_extra_nis');
+    // Check remember NISN from localStorage
+    const savedNis = localStorage.getItem('mts_extra_nisn') || localStorage.getItem('mts_extra_nis');
     if (savedNis) {
-      const match = enrolledStudents.find(s => s.nis === savedNis);
+      const match = enrolledStudents.find(s => (s.nisn && s.nisn === savedNis) || s.nis === savedNis);
       if (match) {
-        studentSelect.value = match.nis;
-        studentNisInput.value = match.nis;
+        const studentNis = String(match.nisn || match.nis || '').trim();
+        studentSelect.value = studentNis;
+        studentNisInput.value = studentNis;
         selectStudent(match);
       }
     }
@@ -129,9 +131,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   function selectStudent(student) {
     selectedStudent = student;
     if (student) {
+      const studentNis = String(student.nisn || student.nis || '').trim();
       studentIdentityPreview.style.display = 'block';
       previewName.textContent = student.name;
-      previewClass.textContent = `NIS: ${student.nis} • Kelas: ${student.class} • ${student.gender === 'L' ? 'Laki-laki' : 'Perempuan'}`;
+      previewClass.textContent = `NISN: ${studentNis} • Kelas: ${student.class} • ${student.gender === 'L' ? 'Laki-laki' : 'Perempuan'}`;
       previewAvatar.textContent = student.name.charAt(0).toUpperCase();
       btnSubmitCheckin.disabled = false;
     } else {
@@ -143,15 +146,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   studentSelect.addEventListener('change', (e) => {
     const nis = e.target.value;
     studentNisInput.value = nis;
-    const found = enrolledStudents.find(s => s.nis === nis);
+    const found = enrolledStudents.find(s => (s.nisn && s.nisn === nis) || s.nis === nis);
     selectStudent(found || null);
   });
 
   studentNisInput.addEventListener('input', (e) => {
     const query = e.target.value.trim().toLowerCase();
-    const found = enrolledStudents.find(s => s.nis.toLowerCase() === query);
+    const found = enrolledStudents.find(s => 
+      (s.nisn && s.nisn.toLowerCase() === query) || 
+      (s.nis && s.nis.toLowerCase() === query)
+    );
     if (found) {
-      studentSelect.value = found.nis;
+      studentSelect.value = String(found.nisn || found.nis).trim();
       selectStudent(found);
     } else {
       studentSelect.value = '';
@@ -174,7 +180,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         body: JSON.stringify({
           sessionId,
           token,
-          nis: selectedStudent.nis
+          nis: String(selectedStudent.nisn || selectedStudent.nis || '').trim(),
+          nisn: String(selectedStudent.nisn || selectedStudent.nis || '').trim()
         })
       });
 
@@ -193,13 +200,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      // Save NIS to localStorage for next time
-      localStorage.setItem('mts_extra_nis', selectedStudent.nis);
+      // Save NISN to localStorage for next time
+      const studentNis = String(selectedStudent.nisn || selectedStudent.nis || '').trim();
+      localStorage.setItem('mts_extra_nisn', studentNis);
+      localStorage.setItem('mts_extra_nis', studentNis);
 
       // Render digital receipt
       if (timerInterval) clearInterval(timerInterval);
       receiptName.textContent = selectedStudent.name;
-      receiptNisClass.textContent = `${selectedStudent.nis} (${selectedStudent.class})`;
+      receiptNisClass.textContent = `${studentNis} (${selectedStudent.class})`;
       receiptEkskul.textContent = sessionData.ekskulName;
       receiptTime.textContent = new Date(resData.record.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
 
