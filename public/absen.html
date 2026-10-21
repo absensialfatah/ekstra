@@ -70,35 +70,35 @@
         </div>
       </div>
 
-      <!-- Student Input Form -->
+      <!-- Student Input Form (Wajib Ketik NISN Sendiri) -->
       <form id="studentCheckinForm" onsubmit="return false;">
         <div style="margin-bottom: 1.25rem;">
-          <label for="studentSelect" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: #1e293b;">
-            Pilih Nama Anda:
+          <label for="studentNisInput" style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; color: #1e293b;">
+            Masukkan NISN Anda:
           </label>
-          <select id="studentSelect" class="select-input" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; border-radius: 10px;">
-            <option value="">-- Pilih Nama dari Daftar Anggota --</option>
-          </select>
+          <input type="text" id="studentNisInput" class="input-search" placeholder="Ketik 10 digit NISN Anda..." inputmode="numeric" autocomplete="off" autofocus style="width: 100%; padding: 0.85rem 1rem; font-size: 1.05rem; border-radius: 12px; letter-spacing: 0.04em; font-weight: 600;">
+          <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.4rem;">
+            💡 <em>Ketik NISN sendiri untuk melatih hafalan identitas kesiswaan Anda.</em>
+          </p>
         </div>
 
-        <div style="margin-bottom: 1.25rem;">
-          <label for="studentNisInput" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.4rem; color: #1e293b;">
-            Atau Masukkan NISN:
-          </label>
-          <input type="text" id="studentNisInput" class="input-search" placeholder="Contoh: 0081234567" inputmode="numeric" style="width: 100%; padding: 0.75rem; font-size: 0.95rem; border-radius: 10px;">
-        </div>
-
-        <!-- Student Identity Card Preview -->
-        <div id="studentIdentityPreview" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+        <!-- Student Identity Card Preview (Tampil Otomatis Saat NISN Cocok) -->
+        <div id="studentIdentityPreview" style="display: none; background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 14px; padding: 1rem; margin-bottom: 1.5rem; transition: all 0.2s ease;">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <div id="previewAvatar" style="width: 42px; height: 42px; border-radius: 50%; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+            <div id="previewAvatar" style="width: 44px; height: 44px; border-radius: 50%; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem; box-shadow: 0 2px 4px rgba(5,150,105,0.2);">
               A
             </div>
             <div>
-              <h4 id="previewName" style="font-size: 0.95rem; font-weight: 700; color: #0f172a;">Ahmad Rifai</h4>
-              <p id="previewClass" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">NISN: 0081234567 • Kelas: 8A</p>
+              <div style="font-size: 0.72rem; color: #047857; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">Data Siswa Ditemukan:</div>
+              <h4 id="previewName" style="font-size: 1rem; font-weight: 800; color: #065f46; line-height: 1.2;">Ahmad Rifai</h4>
+              <p id="previewClass" style="font-size: 0.82rem; color: #047857; font-weight: 600; margin-top: 2px;">NISN: 0081234567 • Kelas: 8A</p>
             </div>
           </div>
+        </div>
+
+        <!-- Not Found Hint -->
+        <div id="studentNotFoundHint" style="display: none; background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 12px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.8rem; color: #b91c1c;">
+          ⚠️ NISN belum ditemukan pada daftar anggota ekskul ini. Mohon cek kembali nomor NISN yang Anda ketik.
         </div>
 
         <button type="submit" class="btn btn-primary btn-lg" id="btnSubmitCheckin" style="width: 100%; border-radius: 12px; padding: 0.9rem; font-size: 1.05rem;" disabled>
@@ -157,6 +157,6 @@
 
   </div>
 
-  <script src="/js/student.js"></script>
+  <script src="/js/student.js?v=2"></script>
 </body>
 </html>

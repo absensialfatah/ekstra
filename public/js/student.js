@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const formSessionDate = document.getElementById('formSessionDate');
   const formTimerPill = document.getElementById('formTimerPill');
 
-  const studentSelect = document.getElementById('studentSelect');
   const studentNisInput = document.getElementById('studentNisInput');
   const studentIdentityPreview = document.getElementById('studentIdentityPreview');
+  const studentNotFoundHint = document.getElementById('studentNotFoundHint');
   const previewAvatar = document.getElementById('previewAvatar');
   const previewName = document.getElementById('previewName');
   const previewClass = document.getElementById('previewClass');
@@ -72,16 +72,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const studRes = await fetch(`/api/students?ekskul=${sessionData.ekskulId}`);
     enrolledStudents = await studRes.json();
 
-    // Populate dropdown
-    studentSelect.innerHTML = '<option value="">-- Pilih Nama Anda --</option>';
-    enrolledStudents.forEach(s => {
-      const studentNis = String(s.nisn || s.nis || '').trim();
-      const opt = document.createElement('option');
-      opt.value = studentNis;
-      opt.textContent = `${s.name} (${s.class}) - ${studentNis}`;
-      studentSelect.appendChild(opt);
-    });
-
     // Setup Header Info
     formEkskulBadge.textContent = `${sessionData.ekskulId === 'voli' ? '🏐' : '🏸'} ${sessionData.ekskulName}`;
     formEkskulTitle.textContent = `Presensi ${sessionData.ekskulName}`;
@@ -106,33 +96,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateCountdown();
     timerInterval = setInterval(updateCountdown, 1000);
 
-    // Check remember NISN from localStorage
-    const savedNis = localStorage.getItem('mts_extra_nisn') || localStorage.getItem('mts_extra_nis');
-    if (savedNis) {
-      const match = enrolledStudents.find(s => (s.nisn && s.nisn === savedNis) || s.nis === savedNis);
-      if (match) {
-        const studentNis = String(match.nisn || match.nis || '').trim();
-        studentSelect.value = studentNis;
-        studentNisInput.value = studentNis;
-        selectStudent(match);
-      }
-    }
-
-    // Switch to Form state
+    // Switch to Form state (Input NISN selalu kosong agar siswa terlatih menghapal & mengetik NISN sendiri)
     stateLoading.style.display = 'none';
     stateForm.style.display = 'block';
 
+    if (studentNisInput) {
+      studentNisInput.value = '';
+      setTimeout(() => studentNisInput.focus(), 300);
+    }
+
   } catch (err) {
     console.error('Error initializing student scan page:', err);
-    showError('Koneksi Gagal', 'Gagal terhubung ke server MTs Al Fatah. Pastikan HP terhubung ke jaringan Wi-Fi madrasah.');
+    showError('Koneksi Gagal', 'Gagal terhubung ke server MTs Al Fatah. Pastikan HP terhubung ke internet.');
   }
 
-  // Handle Student Selection
+  // Handle Student Selection via Typed NISN
   function selectStudent(student) {
     selectedStudent = student;
     if (student) {
       const studentNis = String(student.nisn || student.nis || '').trim();
       studentIdentityPreview.style.display = 'block';
+      if (studentNotFoundHint) studentNotFoundHint.style.display = 'none';
       previewName.textContent = student.name;
       previewClass.textContent = `NISN: ${studentNis} • Kelas: ${student.class} • ${student.gender === 'L' ? 'Laki-laki' : 'Perempuan'}`;
       previewAvatar.textContent = student.name.charAt(0).toUpperCase();
@@ -143,25 +127,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  studentSelect.addEventListener('change', (e) => {
-    const nis = e.target.value;
-    studentNisInput.value = nis;
-    const found = enrolledStudents.find(s => (s.nisn && s.nisn === nis) || s.nis === nis);
-    selectStudent(found || null);
-  });
-
+  // Real-time search by NISN as student types
   studentNisInput.addEventListener('input', (e) => {
     const query = e.target.value.trim().toLowerCase();
+    if (!query) {
+      selectStudent(null);
+      if (studentNotFoundHint) studentNotFoundHint.style.display = 'none';
+      return;
+    }
+
     const found = enrolledStudents.find(s => 
       (s.nisn && s.nisn.toLowerCase() === query) || 
       (s.nis && s.nis.toLowerCase() === query)
     );
+
     if (found) {
-      studentSelect.value = String(found.nisn || found.nis).trim();
       selectStudent(found);
+      if (studentNotFoundHint) studentNotFoundHint.style.display = 'none';
     } else {
-      studentSelect.value = '';
       selectStudent(null);
+      // Tampilkan hint jika sudah mengetik 4 digit atau lebih tapi belum cocok
+      if (query.length >= 4 && studentNotFoundHint) {
+        studentNotFoundHint.style.display = 'block';
+      } else if (studentNotFoundHint) {
+        studentNotFoundHint.style.display = 'none';
+      }
     }
   });
 
