@@ -18,9 +18,9 @@
       "purpose": "any maskable"
     },
     {
-      "src": "/images/logo.jpg",
+      "src": "/images/logo.webp",
       "sizes": "192x192 512x512",
-      "type": "image/jpeg",
+      "type": "image/webp",
       "purpose": "any"
     }
   ]

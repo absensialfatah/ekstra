@@ -15,7 +15,7 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/images/icon.svg">
   <link rel="icon" type="image/svg+xml" href="/images/icon.svg">
-  <link rel="icon" type="image/jpeg" href="/images/logo.jpg">
+  <link rel="icon" type="image/webp" href="/images/logo.webp">
 
   <link rel="stylesheet" href="/css/style.css?v=3">
 </head>
@@ -25,7 +25,7 @@
   <header class="top-header">
     <div class="header-container">
       <a href="/" class="brand-wrapper">
-        <img src="/images/logo.jpg" alt="Logo MTs Al Fatah" class="brand-logo" id="headerLogo">
+        <img src="/images/logo.webp" alt="Logo MTs Al Fatah" class="brand-logo" id="headerLogo">
         <div class="brand-text">
           <h1>MTs Al Fatah - Presensi Ekskul</h1>
           <p>Sistem Presensi Lapangan & QR Dinamis Terintegrasi</p>
@@ -35,10 +35,6 @@
         <button class="btn btn-primary btn-header-ekskul" id="btnOpenAddEkskulModal" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
           + Tambah Ekskul
         </button>
-        <div class="ip-badge ip-badge-header" id="lanIpBadge" title="Alamat akses untuk HP siswa di jaringan yang sama">
-          <span class="pulse-dot"></span>
-          <span id="serverIpText">Menghubungkan...</span>
-        </div>
 
         <!-- 3-Dots Kebab Menu Button (Pilih Menu di HP & Layar Sentuh) -->
         <div class="kebab-menu-container" id="kebabMenuContainer">
@@ -517,6 +513,7 @@
             <label for="siswaMasterEkskulFilter" style="font-size: 0.85rem; font-weight: 600;">Ekskul:</label>
             <select id="siswaMasterEkskulFilter" class="select-input" style="font-weight: 600; min-width: 200px;">
               <option value="all">Semua Ekstrakurikuler</option>
+              <option value="none">⚠️ Tidak Mengikuti Ekskul</option>
             </select>
 
             <label for="siswaMasterClassFilter" style="font-size: 0.85rem; font-weight: 600;">Kelas:</label>

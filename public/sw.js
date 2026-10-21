@@ -1,5 +1,5 @@
 // Service Worker for Sistem Presensi MTs Al Fatah
-const CACHE_NAME = 'mts-presensi-shell-v3';
+const CACHE_NAME = 'mts-presensi-shell-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -7,7 +7,7 @@ const STATIC_ASSETS = [
   '/css/style.css',
   '/js/app.js',
   '/js/student.js',
-  '/images/logo.jpg',
+  '/images/logo.webp',
   '/images/icon.svg',
   '/manifest.json'
 ];

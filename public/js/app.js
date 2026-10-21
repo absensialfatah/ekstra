@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Cache DOM Elements
-  const serverIpText = document.getElementById('serverIpText');
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -187,9 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch('/api/info');
       state.info = await res.json();
-      serverIpText.textContent = `Akses Wi-Fi Siswa: ${state.info.baseUrl}`;
     } catch (err) {
-      serverIpText.textContent = 'Server: Offline / Standalone';
+      console.warn('Could not load system info:', err);
     }
   }
 
@@ -299,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // D. Populate Siswa Master Filter Select
       const prevSelectedSiswaEkskul = siswaMasterEkskulFilter ? siswaMasterEkskulFilter.value : 'all';
       if (siswaMasterEkskulFilter) {
-        siswaMasterEkskulFilter.innerHTML = '<option value="all">Semua Ekstrakurikuler</option>';
+        siswaMasterEkskulFilter.innerHTML = '<option value="all">Semua Ekstrakurikuler</option><option value="none">⚠️ Tidak Mengikuti Ekskul</option>';
         state.ekskuls.forEach(e => {
           const opt = document.createElement('option');
           opt.value = e.id;
@@ -1359,8 +1357,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const filtered = allMasterStudents.filter(s => {
       const studentNis = String(s.nisn || s.nis || '').toLowerCase();
-      const matchQuery = s.name.toLowerCase().includes(q) || studentNis.includes(q) || s.class.toLowerCase().includes(q);
-      const matchEkskul = ekskulFilter === 'all' || s.ekskuls.includes(ekskulFilter);
+      const matchQuery = s.name.toLowerCase().includes(q) || studentNis.includes(q) || (s.class && s.class.toLowerCase().includes(q));
+      
+      let matchEkskul = true;
+      if (ekskulFilter === 'none') {
+        matchEkskul = !s.ekskuls || s.ekskuls.length === 0;
+      } else if (ekskulFilter !== 'all') {
+        matchEkskul = Array.isArray(s.ekskuls) && s.ekskuls.includes(ekskulFilter);
+      }
+
       const matchClass = classFilter === 'all' || s.class === classFilter;
       return matchQuery && matchEkskul && matchClass;
     });
@@ -1372,14 +1377,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (siswaMasterCount) {
-      siswaMasterCount.textContent = `Total: ${total} dari ${allMasterStudents.length} siswa`;
+      if (ekskulFilter === 'none') {
+        siswaMasterCount.innerHTML = `<span style="color: #dc2626; font-weight: 700;">⚠️ ${total} siswa</span> belum ikut ekskul (dari ${allMasterStudents.length} total)`;
+      } else {
+        siswaMasterCount.textContent = `Total: ${total} dari ${allMasterStudents.length} siswa`;
+      }
     }
 
     siswaMasterTableBody.innerHTML = '';
     if (total === 0) {
-      const msg = (state.students && state.students.length === 0)
+      let msg = (allMasterStudents.length === 0)
         ? 'Belum ada data siswa terdaftar. Silakan klik tombol <strong>"➕ Tambah Siswa Baru"</strong> di atas untuk mendaftarkan anggota.'
         : 'Tidak ada siswa yang sesuai dengan kriteria pencarian / filter.';
+      if (ekskulFilter === 'none' && allMasterStudents.length > 0) {
+        msg = '🎉 Hebat! Semua siswa telah terdaftar dan mengikuti kegiatan ekstrakurikuler.';
+      }
       siswaMasterTableBody.innerHTML = `
         <tr>
           <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
@@ -1636,7 +1648,7 @@ document.addEventListener('DOMContentLoaded', () => {
       studentInputClass.value = '';
       document.querySelector('input[name="studentGender"][value="L"]').checked = true;
 
-      const currentFilteredEkskul = (siswaMasterEkskulFilter && siswaMasterEkskulFilter.value !== 'all')
+      const currentFilteredEkskul = (siswaMasterEkskulFilter && siswaMasterEkskulFilter.value !== 'all' && siswaMasterEkskulFilter.value !== 'none')
         ? [siswaMasterEkskulFilter.value]
         : (state.currentTab === 'tab-drumband' ? [state.selectedManualEkskulId] : []);
 

@@ -39,6 +39,7 @@ app.use((req, res, next) => {
                        req.url.endsWith('.svg') ||
                        req.url.endsWith('.png') ||
                        req.url.endsWith('.jpg') ||
+                       req.url.endsWith('.webp') ||
                        req.url.endsWith('.ico');
 
   if (!req.url.startsWith('/api') && !isStaticFile) {
@@ -232,8 +233,10 @@ app.get('/api/students', (req, res) => {
   const { ekskul } = req.query;
   const db = readDB();
   let students = db.students;
-  if (ekskul && ekskul !== 'all') {
-    students = students.filter(s => s.ekskuls.includes(ekskul));
+  if (ekskul === 'none') {
+    students = students.filter(s => !s.ekskuls || s.ekskuls.length === 0);
+  } else if (ekskul && ekskul !== 'all') {
+    students = students.filter(s => Array.isArray(s.ekskuls) && s.ekskuls.includes(ekskul));
   }
   // Sort alphabetically by name
   students.sort((a, b) => a.name.localeCompare(b.name));
