@@ -20,11 +20,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // Vercel Serverless Function URL normalizer
 app.use((req, res, next) => {
-  if (req.url === '/api/index.js' || req.url === '/api' || req.url === '/api/') {
+  if (req.url === '/api/[...all]' || req.url === '/api/index.js' || req.url === '/api' || req.url === '/api/') {
     const raw = req.headers['x-matched-path'] || req.headers['x-forwarded-uri'] || req.originalUrl;
-    if (raw && raw !== '/api/index.js') {
+    if (raw && !raw.includes('[...all]') && raw !== '/api/index.js') {
       req.url = raw;
     }
+  }
+  // Ensure requests routed to catch-all without /api prefix still match our /api routes
+  if (!req.url.startsWith('/api') && !req.url.startsWith('/css') && !req.url.startsWith('/js') && !req.url.startsWith('/images') && req.url !== '/' && !req.url.endsWith('.html')) {
+    req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
   }
   next();
 });

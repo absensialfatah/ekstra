@@ -178,7 +178,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
       });
 
-      const resData = await response.json();
+      const text = await response.text();
+      let resData = {};
+      try {
+        resData = JSON.parse(text);
+      } catch (e) {
+        throw new Error(`Server respon: ${text.slice(0, 100)}`);
+      }
 
       if (!response.ok) {
         alert(resData.error || 'Presensi gagal.');

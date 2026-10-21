@@ -521,7 +521,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      let data = {};
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(`Server respon: ${text.slice(0, 120)}`);
+      }
       if (!res.ok) throw new Error(data.error || 'Gagal menyimpan.');
 
       showToast(`Presensi berhasil disimpan! (${data.summary.hadir} Hadir, ${data.summary.izin} Izin, ${data.summary.alpa} Alpa)`, 'success');
@@ -860,7 +866,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      let data = {};
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(`Server respon: ${text.slice(0, 120)}`);
+      }
       if (!res.ok) throw new Error(data.error || 'Gagal menambahkan ekskul');
 
       addEkskulModal.classList.remove('active');
@@ -1208,7 +1220,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      data = await res.json();
+      const text = await res.text();
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(`Server respon: ${text.slice(0, 120)}`);
+      }
       if (!res.ok) throw new Error(data.error || 'Gagal menyimpan data siswa');
 
       studentModal.classList.remove('active');
