@@ -61,7 +61,7 @@ function setupDatabase() {
       name: SHEETS.SISWA,
       color: "#2563eb", // Royal Blue
       headers: [
-        "NIS", 
+        "NISN", 
         "Nama Lengkap Siswa", 
         "Jenis Kelamin (L/P)", 
         "Kelas", 
@@ -78,7 +78,7 @@ function setupDatabase() {
         "Waktu Presensi", 
         "ID Ekskul", 
         "Nama Ekstrakurikuler", 
-        "NIS", 
+        "NISN", 
         "Nama Siswa", 
         "Kelas", 
         "Status (Hadir / Izin / Alpa)", 
@@ -129,6 +129,13 @@ function setupDatabase() {
       // Berikan margin minimal
       const currentWidth = sheet.getColumnWidth(i);
       sheet.setColumnWidth(i, Math.max(currentWidth + 25, 120));
+    }
+
+    // Set format kolom NISN sebagai Plain Text (@) agar angka 0 di depan tidak hilang
+    if (schema.name === SHEETS.SISWA) {
+      sheet.getRange("A:A").setNumberFormat("@");
+    } else if (schema.name === SHEETS.PRESENSI) {
+      sheet.getRange("F:F").setNumberFormat("@");
     }
   });
 
@@ -278,7 +285,7 @@ function doPost(e) {
         nowTime,
         ekskulId,
         ekskulName,
-        r.nis,
+        "'" + String(r.nisn || r.nis || '').trim(), // Petik satu memastikan angka 0 di depan tetap utuh
         r.studentName,
         r.class,
         r.status, // Hadir, Izin, atau Alpa otomatis
@@ -308,7 +315,7 @@ function doPost(e) {
         nowTime,
         r.ekskulId,
         r.ekskulName,
-        r.nis,
+        "'" + String(r.nisn || r.nis || '').trim(), // Simpan format text murni
         r.studentName,
         r.class,
         "Hadir",
@@ -327,7 +334,7 @@ function doPost(e) {
       const sheet = ss.getSheetByName(SHEETS.SISWA);
       const s = postData.student;
       sheet.appendRow([
-        s.nis,
+        "'" + String(s.nisn || s.nis || '').trim(), // Angka 0 di depan NISN tidak hilang
         s.name,
         s.gender,
         s.class,
@@ -428,7 +435,8 @@ function doPost(e) {
  */
 function getSheetDataAsJson(sheet) {
   if (!sheet || sheet.getLastRow() <= 1) return [];
-  const data = sheet.getDataRange().getValues();
+  // Gunakan getDisplayValues() agar string dengan 0 di depan (misal: 0081234567) dibaca persis teksnya
+  const data = sheet.getDataRange().getDisplayValues();
   const headers = data[0];
   const rows = data.slice(1);
 
@@ -439,6 +447,9 @@ function getSheetDataAsJson(sheet) {
       const key = header.toLowerCase().replace(/[^a-z0-9]/g, '_');
       obj[key] = row[index];
     });
+    // Alias nis & nisn agar kompatibel di kedua sisi
+    if (obj.nisn && !obj.nis) obj.nis = obj.nisn;
+    if (obj.nis && !obj.nisn) obj.nisn = obj.nis;
     return obj;
   });
 }

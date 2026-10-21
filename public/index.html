@@ -43,7 +43,11 @@
         <!-- 3-Dots Kebab Menu Button (Pilih Menu di HP & Layar Sentuh) -->
         <div class="kebab-menu-container" id="kebabMenuContainer">
           <button type="button" class="btn-kebab" id="btnKebabMenu" aria-label="Menu Pilihan Presensi" title="Buka Menu Presensi">
-            <span>⋮</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <circle cx="12" cy="5" r="2.2" />
+              <circle cx="12" cy="12" r="2.2" />
+              <circle cx="12" cy="19" r="2.2" />
+            </svg>
           </button>
           
           <!-- Dropdown Menu -->
@@ -137,16 +141,20 @@
       <div class="card">
         <div class="card-header">
           <div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
+            <div class="manual-ekskul-header-bar">
               <h2 class="card-title" id="manualEkskulHeaderTitle" style="margin: 0;">
                 <span>🥁</span> Drumband Bahana Gita
               </h2>
-              <select id="manualEkskulSelect" class="select-input" style="font-weight: 700; padding: 0.35rem 0.75rem; font-size: 0.88rem;">
-                <!-- Populated dynamically with all manual ekskuls -->
-              </select>
-              <button type="button" class="btn btn-outline" id="btnEditManualEkskul" title="Edit Informasi Ekskul Ini" style="padding: 0.35rem 0.65rem; font-size: 0.82rem;">✏️ Edit</button>
-              <button type="button" class="btn btn-outline" id="btnDeleteManualEkskul" title="Hapus Ekskul Ini" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; color: #dc2626; border-color: #fecaca;">🗑️ Hapus</button>
-              <button type="button" class="btn btn-primary" id="btnOpenAddEkskulModalTab1" style="padding: 0.35rem 0.75rem; font-size: 0.82rem;">➕ Tambah Ekskul</button>
+              <div class="manual-ekskul-controls-box">
+                <select id="manualEkskulSelect" class="select-input manual-ekskul-select">
+                  <!-- Populated dynamically with all manual ekskuls -->
+                </select>
+                <div class="manual-ekskul-btn-group">
+                  <button type="button" class="btn btn-outline btn-sm" id="btnEditManualEkskul" title="Edit Informasi Ekskul Ini">✏️ Edit</button>
+                  <button type="button" class="btn btn-outline btn-sm btn-delete-ekskul" id="btnDeleteManualEkskul" title="Hapus Ekskul Ini">🗑️ Hapus</button>
+                  <button type="button" class="btn btn-primary btn-sm" id="btnOpenAddEkskulModalTab1">➕ Tambah Ekskul</button>
+                </div>
+              </div>
             </div>
             <p class="card-subtitle">
               Siswa tidak membawa gawai. Guru cukup menandai siswa yang <strong>Hadir</strong> atau <strong>Izin</strong>. Siswa yang <em>tidak diklik otomatis tercatat Alpa</em>.
@@ -174,7 +182,7 @@
               <p style="font-weight: 700; color: #065f46;" id="drumbandTotalCount">0 Siswa</p>
             </div>
           </div>
-          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <div class="control-actions-row">
             <button class="btn btn-outline" id="btnResetAllAlpa" style="background: #ffffff;">
               ✕ Reset Semua ke Alpa
             </button>

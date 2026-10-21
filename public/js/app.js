@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gain.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.35);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // Toast Notification
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (manualEkskuls.length === 0) {
         const opt = document.createElement('option');
         opt.value = '';
-        opt.textContent = '-- Belum Ada Ekskul Manual (Klik + Tambah) --';
+        opt.textContent = '-- Belum Ada Ekskul --';
         manualEkskulSelect.appendChild(opt);
         state.selectedManualEkskulId = '';
       } else {
@@ -838,7 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const row = document.createElement('div');
       row.className = 'attendee-item';
       const timeFormatted = new Date(item.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      
+
       row.innerHTML = `
         <div class="attendee-info">
           <div style="width: 32px; height: 32px; border-radius: 50%; background: #10b981; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
@@ -888,7 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
           } else if (payload.event === 'SESSION_EXPIRED' || payload.event === 'SESSION_CLOSED') {
             showToast('Sesi absensi telah berakhir/ditutup.', 'info');
           }
-        } catch (err) {}
+        } catch (err) { }
       };
 
       state.sseSource.onerror = () => {
@@ -1063,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(`/api/ekskul/${id}`, { method: 'DELETE' });
       const text = await res.text();
       let data = {};
-      try { data = JSON.parse(text); } catch(e) { throw new Error(`Respon server: ${text.slice(0, 100)}`); }
+      try { data = JSON.parse(text); } catch (e) { throw new Error(`Respon server: ${text.slice(0, 100)}`); }
       if (!res.ok) throw new Error(data.error || 'Gagal menghapus ekskul');
 
       showToast(`Ekstrakurikuler "${name}" berhasil dihapus.`, 'info');
@@ -1407,7 +1407,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const studentKey = String(s.nisn || s.nis || '').trim();
       const tr = document.createElement('tr');
       tr.style.borderBottom = '1px solid var(--border)';
-      
+
       const ekskulBadges = (s.ekskuls || []).map(ekskulId => {
         const found = state.ekskuls.find(e => e.id === ekskulId);
         const name = found ? found.name : ekskulId;
@@ -1635,11 +1635,11 @@ document.addEventListener('DOMContentLoaded', () => {
       studentInputName.value = '';
       studentInputClass.value = '';
       document.querySelector('input[name="studentGender"][value="L"]').checked = true;
-      
-      const currentFilteredEkskul = (siswaMasterEkskulFilter && siswaMasterEkskulFilter.value !== 'all') 
-        ? [siswaMasterEkskulFilter.value] 
+
+      const currentFilteredEkskul = (siswaMasterEkskulFilter && siswaMasterEkskulFilter.value !== 'all')
+        ? [siswaMasterEkskulFilter.value]
         : (state.currentTab === 'tab-drumband' ? [state.selectedManualEkskulId] : []);
-      
+
       populateStudentEkskulsCheckboxes(currentFilteredEkskul);
       btnSubmitStudent.textContent = 'Tambah Siswa';
     }
@@ -1721,7 +1721,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const text = await res.text();
-      try { data = JSON.parse(text); } catch(e) { throw new Error(`Respon server: ${text.slice(0, 100)}`); }
+      try { data = JSON.parse(text); } catch (e) { throw new Error(`Respon server: ${text.slice(0, 100)}`); }
       if (!res.ok) throw new Error(data.error || 'Gagal menyimpan data siswa');
 
       studentModal.classList.remove('active');
