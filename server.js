@@ -651,7 +651,7 @@ app.post('/api/attendance/manual', (req, res) => {
 
 // API: Start QR Session (for Voli & Bulutangkis)
 app.post('/api/session/start', async (req, res) => {
-  const { ekskulId, durationMinutes = 30, dynamicRotation = true } = req.body;
+  const { ekskulId, durationMinutes = 30, dynamicRotation = false } = req.body;
   const db = readDB();
   const ekskul = db.ekskuls.find(e => e.id === ekskulId);
   if (!ekskul) {
