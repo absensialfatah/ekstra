@@ -887,7 +887,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   btnStartQrSession.addEventListener('click', async () => {
     const ekskulId = state.selectedQrEkskulId;
-    const durationMinutes = qrDurationSelect.value;
+    const durationMinutes = qrDurationSelect ? (parseInt(qrDurationSelect.value, 10) || 30) : 30;
     const dynamicRotation = dynamicRotationToggle.checked;
 
     btnStartQrSession.disabled = true;
