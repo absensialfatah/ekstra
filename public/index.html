@@ -535,7 +535,8 @@
               <span>👥</span> Data Anggota & Ekskul
             </h2>
             <p class="card-subtitle">
-              Pusat pengelolaan terpadu ekstrakurikuler madrasah (tambah, edit, jadwal & pembimbing) serta data anggota siswa.
+              Pusat pengelolaan terpadu ekstrakurikuler madrasah (tambah, edit, jadwal & pembimbing) serta pangkalan
+              data anggota siswa.
             </p>
           </div>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -585,14 +586,14 @@
           </div>
         </div>
 
-        <!-- Bagian 2: Data Anggota Siswa -->
+        <!-- Bagian 2: Pangkalan Data Anggota Siswa -->
         <div id="sectionMasterSiswa">
           <div
             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
             <div>
               <h3
                 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0;">
-                👥 Data Anggota Siswa
+                👥 Pangkalan Data Anggota Siswa
               </h3>
               <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0.2rem 0 0 0;">
                 Daftar siswa madrasah beserta ekstrakurikuler yang diikuti.
@@ -825,18 +826,29 @@
           <label style="display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem;">Pilih Ikon
             Emoji:</label>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="emojiPickerList">
-            <button type="button" class="btn btn-outline emoji-choice active" data-emoji="🥁">🥁</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏐">🏐</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏸">🏸</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="⚽">⚽</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏕️">🏕️</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🎨">🎨</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="📖">📖</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🕌">🕌</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🥋">🥋</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏃">🏃</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🎤">🎤</button>
-            <button type="button" class="btn btn-outline emoji-choice" data-emoji="⭐">⭐</button>
+            <button type="button" class="btn btn-outline emoji-choice active" data-emoji="🥁" title="Drumband">🥁</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏐" title="Bola Voli">🏐</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏸" title="Bulu Tangkis">🏸</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="⚽" title="Sepak Bola / Futsal">⚽</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏕️" title="Pramuka">🏕️</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🎨" title="Seni / Kaligrafi">🎨</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="📖" title="Hadroh / Tilawah">📖</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🕌" title="Rohis / Keagamaan">🕌</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🥋" title="Silat / Bela Diri">🥋</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏃" title="Atletik / Lari">🏃</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🎤" title="Paduan Suara / Vokal">🎤</button>
+            <!-- Baru: Tata Boga -->
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🍳" title="Tata Boga (Memasak)">🍳</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="👩‍🍳" title="Tata Boga (Chef / Koki)">👩‍🍳</button>
+            <!-- Baru: Tata Rias -->
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="💄" title="Tata Rias (Kosmetik / Make-up)">💄</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🪞" title="Tata Rias (Cermin Rias)">🪞</button>
+            <!-- Baru: OSIS -->
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="👔" title="OSIS (Seragam / Pengurus Formal)">👔</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🏛️" title="OSIS (Organisasi / Lembaga)">🏛️</button>
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="🎖️" title="OSIS (Lencana / Kepemimpinan)">🎖️</button>
+            <!-- Lainnya / Bintang -->
+            <button type="button" class="btn btn-outline emoji-choice" data-emoji="⭐" title="Lainnya">⭐</button>
           </div>
         </div>
 
@@ -945,7 +957,7 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Scripts -->
-  <script src="/js/app.js?v=6"></script>
+  <script src="/js/app.js?v=7"></script>
 </body>
 
 </html>
