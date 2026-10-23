@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const receiptTime = document.getElementById('receiptTime');
   const btnDoneClose = document.getElementById('btnDoneClose');
 
+  const btnReloadError = document.getElementById('btnReloadError');
+  const btnCloseError = document.getElementById('btnCloseError');
+  const closePageHint = document.getElementById('closePageHint');
+  const successCloseHint = document.getElementById('successCloseHint');
+
   const studentDeviceLockedHint = document.getElementById('studentDeviceLockedHint');
   const deviceLockedMessage = document.getElementById('deviceLockedMessage');
 
@@ -253,7 +258,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (studentDeviceLockedHint && resData.error && resData.error.includes('Anti-Titip Absen')) {
           studentDeviceLockedHint.style.display = 'block';
           if (deviceLockedMessage) deviceLockedMessage.innerHTML = resData.error;
+          alert(resData.error);
+          btnSubmitCheckin.disabled = false;
+          btnSubmitCheckin.textContent = '✓ Konfirmasi Hadir Sekarang';
+          return;
         }
+
+        // Jika sesi sudah kadaluarsa atau token QR berubah (Anti-Cheating)
+        if (response.status === 403 && resData.error && (resData.error.includes('Token') || resData.error.includes('kadaluarsa') || resData.error.includes('habis') || resData.error.includes('ditutup'))) {
+          showError('Presensi Tidak Berhasil', resData.error);
+          return;
+        }
+
         alert(resData.error || 'Presensi gagal.');
         btnSubmitCheckin.disabled = false;
         btnSubmitCheckin.textContent = '✓ Konfirmasi Hadir Sekarang';
@@ -287,8 +303,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  btnDoneClose.addEventListener('click', () => {
-    window.location.href = '/';
-  });
+  if (btnReloadError) {
+    btnReloadError.addEventListener('click', () => {
+      window.location.reload();
+    });
+  }
+
+  if (btnCloseError) {
+    btnCloseError.addEventListener('click', () => {
+      window.close();
+      if (closePageHint) {
+        closePageHint.style.display = 'block';
+      }
+    });
+  }
+
+  if (btnDoneClose) {
+    btnDoneClose.addEventListener('click', () => {
+      window.close();
+      if (successCloseHint) {
+        successCloseHint.style.display = 'block';
+      }
+      btnDoneClose.disabled = true;
+      btnDoneClose.textContent = '✓ Presensi Tersimpan (Tutup Tab)';
+    });
+  }
 });
 

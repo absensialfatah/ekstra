@@ -45,12 +45,30 @@
       <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: #dc2626; font-weight: 700; margin-bottom: 0.5rem;" id="errorTitle">
         Sesi Tidak Valid
       </h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem;" id="errorMessage">
+      <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;" id="errorMessage">
         QR Code ini telah kadaluarsa atau tidak valid. Silakan lakukan pemindaian ulang pada layar Guru Pembimbing.
       </p>
-      <a href="/" class="btn btn-outline" style="width: 100%;">
-        Buka Halaman Utama
-      </a>
+
+      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--text-muted); text-align: left; line-height: 1.5;">
+        <strong style="color: #1e293b; display: block; margin-bottom: 0.35rem;">💡 Petunjuk Siswa:</strong>
+        <ul style="margin: 0; padding-left: 1.2rem;">
+          <li>Silakan minta Guru Pembimbing menampilkan QR Code terbaru lalu scan ulang.</li>
+          <li>Jika masih mengalami kendala atau waktu sesi habis, silakan melapor ke <strong>Guru Pembimbing</strong> untuk absensi manual.</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+        <button type="button" class="btn btn-primary" id="btnReloadError" style="width: 100%; border-radius: 10px;">
+          🔄 Coba Lagi / Muat Ulang
+        </button>
+        <button type="button" class="btn btn-outline" id="btnCloseError" style="width: 100%; border-radius: 10px;">
+          ✕ Tutup Halaman Ini
+        </button>
+      </div>
+
+      <p id="closePageHint" style="display: none; font-size: 0.76rem; color: var(--text-muted); margin-top: 0.75rem;">
+        ℹ️ Silakan tutup tab atau jendela browser ini di HP Anda.
+      </p>
     </div>
 
     <!-- Active Form State -->
@@ -156,13 +174,16 @@
         Selamat beraktivitas dan berlatih dengan semangat!
       </p>
 
-      <button class="btn btn-outline" id="btnDoneClose" style="width: 100%;">
-        Selesai
+      <button type="button" class="btn btn-outline" id="btnDoneClose" style="width: 100%;">
+        ✓ Selesai
       </button>
+      <p id="successCloseHint" style="display: none; font-size: 0.78rem; color: #047857; margin-top: 0.75rem; font-weight: 600;">
+        ✓ Presensi Anda telah tersimpan. Silakan tutup tab browser ini di HP Anda.
+      </p>
     </div>
 
   </div>
 
-  <script src="/js/student.js?v=3"></script>
+  <script src="/js/student.js?v=4"></script>
 </body>
 </html>
