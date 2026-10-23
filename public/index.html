@@ -293,15 +293,6 @@
         <!-- Session Generator Controls (When Session is INACTIVE) -->
         <div id="sessionSetupBox" class="control-bar" style="background: #f8fafc;">
           <div class="control-group">
-            <label for="qrDurationSelect" style="font-weight: 600; font-size: 0.88rem;">Batas Waktu Sesi:</label>
-            <select id="qrDurationSelect" class="select-input">
-              <option value="5">5 Menit (Super Ketat)</option>
-              <option value="10">10 Menit (Direkomendasikan)</option>
-              <option value="15" selected>15 Menit (Standar Lapangan)</option>
-              <option value="30">30 Menit (Sesi Santai)</option>
-            </select>
-          </div>
-          <div class="control-group">
             <label
               style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; cursor: pointer; font-weight: 600;">
               <input type="checkbox" id="dynamicRotationToggle" checked
@@ -328,7 +319,7 @@
               </div>
 
               <div class="timer-pill" id="qrTimerDisplay">
-                ⏱️ Sisa Waktu: 15:00
+                ⏱️ Sisa Waktu: 30:00
               </div>
 
               <div class="qr-image-frame" id="qrCodeContainer">
@@ -731,7 +722,7 @@
           style="background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text-muted);">&times;</button>
       </div>
       <div class="timer-pill" id="fsTimerDisplay" style="margin-bottom: 1rem;">
-        ⏱️ Sisa Waktu: 15:00
+        ⏱️ Sisa Waktu: 30:00
       </div>
       <div
         style="background: #ffffff; padding: 1.5rem; border-radius: 16px; display: inline-block; box-shadow: var(--shadow-lg); border: 2px dashed #cbd5e1;">
