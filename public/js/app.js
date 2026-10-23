@@ -1179,7 +1179,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (methodRadio) methodRadio.checked = true;
 
       state.selectedNewEmoji = ekskul.icon || '⭐';
-      emojiChoiceBtns.forEach(b => {
+      document.querySelectorAll('.emoji-choice').forEach(b => {
         b.classList.toggle('active', b.getAttribute('data-emoji') === state.selectedNewEmoji);
       });
 
@@ -1199,7 +1199,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (methodRadio) methodRadio.checked = true;
 
       state.selectedNewEmoji = defaultMethod === 'qr' ? '🏐' : '🥁';
-      emojiChoiceBtns.forEach(b => {
+      document.querySelectorAll('.emoji-choice').forEach(b => {
         b.classList.toggle('active', b.getAttribute('data-emoji') === state.selectedNewEmoji);
       });
 
@@ -1235,13 +1235,24 @@ document.addEventListener('DOMContentLoaded', () => {
   btnCloseAddEkskulModal.addEventListener('click', () => addEkskulModal.classList.remove('active'));
   btnCancelAddEkskul.addEventListener('click', () => addEkskulModal.classList.remove('active'));
 
-  emojiChoiceBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      emojiChoiceBtns.forEach(b => b.classList.remove('active'));
+  const emojiPickerContainer = document.getElementById('emojiPickerList');
+  if (emojiPickerContainer) {
+    emojiPickerContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.emoji-choice');
+      if (!btn) return;
+      document.querySelectorAll('.emoji-choice').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       state.selectedNewEmoji = btn.getAttribute('data-emoji');
     });
-  });
+  } else {
+    emojiChoiceBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.emoji-choice').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.selectedNewEmoji = btn.getAttribute('data-emoji');
+      });
+    });
+  }
 
   formAddEkskul.addEventListener('submit', async (e) => {
     e.preventDefault();
